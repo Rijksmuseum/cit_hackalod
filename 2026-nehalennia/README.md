@@ -37,7 +37,7 @@ We use a subset of Nehalennia-related images from two datasets in the [NDE Datas
 
 | Source | Dataset | Used for |
 |--------|---------|----------|
-| Rijksmuseum | <https://id.rijksmuseum.nl/260250> | Historical prints of the Nehalennia altars 🔍 |
+| Rijksmuseum | <https://id.rijksmuseum.nl/260250> | Historical prints of the Nehalennia altars |
 | Rijksmuseum van Oudheden (RMO) | <https://rmo.cithosting.nl/nde/dataset.jsonld> | Object records and images of the altars, inscription data |
 
  **To verify**
@@ -63,7 +63,7 @@ We use a subset of Nehalennia-related images from two datasets in the [NDE Datas
 - [`FastAPI`](https://fastapi.tiangolo.com/) + `uvicorn`: form endpoint, matching, image generation, print job
 - [`rapidfuzz`](https://github.com/rapidfuzz/RapidFuzz): fuzzy string matching for occupations
 - HTML/CSS/JS: front-end form (no framework required)
-- Optional: a ZPL conversion helper such as [`zebrafy`](https://pypi.org/project/zebrafy/) 🔍 *(evaluate, or write our own `^GF` encoder)*
+- Optional: a ZPL conversion helper such as [`zebrafy`](https://pypi.org/project/zebrafy/) *(evaluate, or write our own `^GF` encoder)*
 
 ---
 
@@ -95,7 +95,7 @@ We use a subset of Nehalennia-related images from two datasets in the [NDE Datas
 
 This is the most open part of the design. The proposed approach is a layered one, going from strict to lenient:
 
-1. **Build the trade list from the source data.** Using `rdflib`, extract the inscriptions (or inscription transcriptions/descriptions) from the RMO records and identify the trades that appear, for example *negotiator salarius* (salt trader), *negotiator cretarius* (pottery trader) or *navicularius* (shipper). 🔍 *Check whether inscriptions are available as structured data or only as free text; this determines whether this step is automated or curated by hand.*
+1. **Build the trade list from the source data.** Using `rdflib`, extract the inscriptions (or inscription transcriptions/descriptions) from the RMO records and identify the trades that appear, for example *negotiator salarius* (salt trader), *negotiator cretarius* (pottery trader) or *navicularius* (shipper). *Check whether inscriptions are available as structured data or only as free text; this determines whether this step is automated or curated by hand.*
 2. **Curate a small mapping file** (`occupations.json`) linking each Roman trade to modern Dutch and English synonyms and broader categories. For example, *navicularius* → "schipper, kapitein, logistiek, transport". This file is small enough to maintain by hand and is where most of the "fun" is decided.
 3. **Match the participant's input**:
    - normalise the input (lowercase, strip, basic Dutch/English handling);
@@ -186,9 +186,7 @@ PRINTER_MODE=dry-run uvicorn app.main:app --reload
 
 Then open <http://localhost:8000>.
 
-Configuration (printer address, label size, DPI, print mode) goes in environment variables or a `.env` file. 🔍 *Exact variable names to be decided.*
-
-> All code in this repository should be tested in a test environment, and with the actual printer and label stock, before it's used at the event.
+Configuration (printer address, label size, DPI, print mode) goes in environment variables or a `.env` file. *Exact variable names to be decided.*
 
 ---
 
