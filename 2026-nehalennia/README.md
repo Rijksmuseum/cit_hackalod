@@ -200,7 +200,6 @@ Participants enter their name and a personal wish, which counts as personal data
 - if anything is logged for debugging, leave out names and wishes;
 - if we want to keep examples (for example for a presentation), ask participants explicitly and separately.
 
-🔍 *Check with the Rijksmuseum privacy officer whether this is sufficient for use at a public event.*
 
 ---
 
