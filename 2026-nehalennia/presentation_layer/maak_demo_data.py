@@ -10,7 +10,7 @@ from pathlib import Path
 import pandas as pd
 
 HIER = Path(__file__).parent
-XLSX = HIER.parent / "data" / "out" / "rmo_nehalennia_colijnsplaat.xlsx"
+XLSX = HIER.parent / "data_layer" / "out" / "rmo_nehalennia_colijnsplaat.xlsx"
 UIT = HIER / "data" / "timeline.json"
 
 SEP = " | "  # the harvest joins repeated fields with this separator
