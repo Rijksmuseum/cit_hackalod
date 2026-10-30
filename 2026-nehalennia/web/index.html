@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verhaal · Een wens voor Nehalennia</title>
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/iosevka@5/400-italic.css">
+<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+<!-- duplicated in altaar.html; there is no templating step -->
+<header class="balk">
+  <a class="balk__merk" href="index.html">
+    <img class="clipart" src="assets/title.gif" alt="" width="500" height="300">
+    <span>Een wens voor Nehalennia</span>
+  </a>
+  <nav class="balk__nav" aria-label="Hoofdnavigatie">
+    <a href="index.html" aria-current="page">Verhaal</a>
+    <a href="altaar.html">Altaar</a>
+  </nav>
+</header>
+
+<div id="app" v-cloak>
+
+  <div class="kop">
+    <img class="clipart kop__clipart" src="assets/title.gif" alt="" width="500" height="300">
+    <div class="kop__tekst">
+      <p class="bovenschrift kop__bovenschrift">HackaLOD 2026</p>
+      <h1 class="kop__titel">Een wens voor<br>Nehalennia</h1>
+      <p class="kop__onderschrift">
+        Honderden Romeinse altaren, opgedragen aan een godin van de Scheldemonding
+        door handelaren die veilig overvoeren.
+      </p>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- 1. Verhaal -->
+    <section class="sectie verhaal" aria-labelledby="verhaal-kop">
+      <h2 class="sectie__kop" id="verhaal-kop">Het verhaal</h2>
+
+      <div class="verhaal__frame">
+        <ol class="stappen" role="tablist" aria-orientation="vertical" aria-label="Stappen in het verhaal">
+          <li v-for="(s, i) in stappen" :key="i">
+            <button class="stap" role="tab"
+                    :class="{ 'stap--actief': i === stap }"
+                    :aria-selected="i === stap"
+                    :tabindex="i === stap ? 0 : -1"
+                    :id="`stap-tab-${i}`"
+                    :aria-controls="`stap-paneel-${i}`"
+                    @click="stap = i"
+                    @keydown="stapToets($event, i)">
+              <span class="stap__nummer">{{ nummer(i) }}</span>
+              <span class="stap__titel">{{ s.titel }}</span>
+            </button>
+          </li>
+        </ol>
+
+        <article class="verhaal__inhoud" role="tabpanel"
+                 :id="`stap-paneel-${stap}`"
+                 :aria-labelledby="`stap-tab-${stap}`"
+                 tabindex="0">
+          <p class="verhaal__nummer">{{ nummer(stap) }}</p>
+          <h3 class="verhaal__titel">{{ huidigeStap.titel }}</h3>
+          <p class="verhaal__alinea" v-for="(p, i) in huidigeStap.tekst" :key="i">{{ p }}</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- 2. Tijdlijn -->
+    <section class="sectie tijdlijn" aria-labelledby="tijdlijn-kop">
+      <h2 class="sectie__kop" id="tijdlijn-kop">De tijdlijn</h2>
+      <p class="sectie__intro">
+        Kies een jaar om de objecten te zien. <strong>Let op:</strong> de jaartallen zijn
+        voor deze demo verzonnen, de objecten zijn echt.
+      </p>
+
+      <div class="jaren" role="tablist" aria-label="Jaren">
+        <button v-for="j in jaren" :key="j.jaar"
+                class="jaar" role="tab"
+                :class="{ 'jaar--actief': j.jaar === actiefJaar, 'jaar--leeg': !j.objecten.length }"
+                :aria-selected="j.jaar === actiefJaar"
+                :tabindex="j.jaar === actiefJaar ? 0 : -1"
+                @click="kiesJaar(j.jaar)"
+                @keydown="jaarToets($event, j.jaar)">
+          {{ j.jaar }}
+          <span class="jaar__aantal" aria-hidden="true">{{ j.objecten.length }}</span>
+        </button>
+      </div>
+
+      <div class="tijdlijn__inhoud" role="tabpanel" aria-live="polite">
+        <p class="tijdlijn__onderschrift">{{ jaar.onderschrift }}</p>
+
+        <p class="tijdlijn__leeg" v-if="!jaar.objecten.length">
+          Geen objecten in {{ jaar.jaar }}.
+        </p>
+
+        <div v-else>
+          <ul class="objecten">
+            <li class="object" v-for="o in zichtbareObjecten" :key="o.id">
+              <div class="object__beeld">
+                <img v-if="!o.mislukt" :src="o.afbeelding" :alt="o.titel"
+                     loading="lazy" decoding="async" @error="beeldMislukt(o, $event)">
+                <p class="object__geen-beeld" v-else>Afbeelding niet beschikbaar</p>
+              </div>
+              <div class="object__tekst">
+                <h3 class="object__titel">{{ o.titel }}</h3>
+                <dl class="object__velden">
+                  <div class="object__veld" v-if="o.objectnaam">
+                    <dt>Object</dt><dd>{{ o.objectnaam }}</dd>
+                  </div>
+                  <div class="object__veld" v-if="o.materiaal">
+                    <dt>Materiaal</dt><dd>{{ o.materiaal }}</dd>
+                  </div>
+                  <div class="object__veld" v-if="o.vindplaats">
+                    <dt>Vindplaats</dt><dd>{{ o.vindplaats }}</dd>
+                  </div>
+                </dl>
+                <a class="object__bron" :href="o.bronLink" target="_blank" rel="noopener">
+                  {{ o.bronNaam }} ↗
+                </a>
+              </div>
+            </li>
+          </ul>
+
+          <nav class="blader" v-if="totaalPaginas > 1" aria-label="Paginering">
+            <button class="blader__knop" :disabled="pagina === 1" @click="blader(-1)">← Vorige</button>
+            <span class="blader__stand">Pagina {{ pagina }} van {{ totaalPaginas }}</span>
+            <button class="blader__knop" :disabled="pagina === totaalPaginas" @click="blader(1)">Volgende →</button>
+          </nav>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="voet">
+    <p>
+      Objecten en afbeeldingen:
+      <span class="voet__bron" v-for="b in bronnen"><a :href="b.url" target="_blank" rel="noopener">{{ b.naam }}</a> ({{ b.licentie }})</span>
+    </p>
+    <p class="voet__demo">Demo voor HackaLOD 2026 · de jaartallen in de tijdlijn zijn verzonnen.</p>
+  </footer>
+
+</div>
+
+<noscript>
+  <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten te tonen.</p>
+</noscript>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
