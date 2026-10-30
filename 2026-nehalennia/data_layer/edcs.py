@@ -8,14 +8,16 @@ from pathlib import Path
 
 import pandas as pd
 
-WORKBOOK = Path("enrichment/edcs_nehalennia_analyse.xlsx")
+WORKBOOK = Path("source/edcs_nehalennia_analyse.xlsx")
 SHEET = "Inscripties"
 ID_COLUMN = "EDCS ID"
 TEXT_COLUMN = "Inscription text"
+TRANSLATION_COLUMN = "Nederlandse vertaling (concept)"
 MONUMENT_URL = "https://edcs.hist.uzh.ch/monument/{}"  
 
-MIN_SCORE = 0.78
+MIN_SCORE = 0.5
 MIN_LENGTH = 10  
+SEP = " | "
 
 _CORRECTION = re.compile(r"<[^<>]*?=([^<>]*)>")  
 _EXPANSION = re.compile(r"\([^()]*\)")  
@@ -46,28 +48,40 @@ def load(workbook=WORKBOOK):
     return frame[frame["normalised"].str.len() > 0].reset_index(drop=True)
 
 
-def best_match(text, inscriptions):
+def matches(text, inscriptions):
     needle = normalise(text)
     if len(needle) < MIN_LENGTH:
-        return None, None
-    score, edcs_id = max(
-        (difflib.SequenceMatcher(None, needle, normalised).ratio(), edcs_id)
-        for normalised, edcs_id in zip(inscriptions["normalised"], inscriptions[ID_COLUMN])
+        return []
+    scored = sorted(
+        ((difflib.SequenceMatcher(None, needle, normalised).ratio(), edcs_id)
+         for normalised, edcs_id in zip(inscriptions["normalised"], inscriptions[ID_COLUMN])),
+        reverse=True,
     )
-    return (edcs_id, round(score, 3)) if score >= MIN_SCORE else (None, round(score, 3))
+    return [(edcs_id, round(score, 3)) for score, edcs_id in scored if score >= MIN_SCORE]
 
 
 def enrich(frame, column="inscripties", workbook=WORKBOOK, progress=True):
     inscriptions = load(workbook)
-    matches = [best_match(text, inscriptions) for text in frame[column]]
+    found = [matches(text, inscriptions) for text in frame[column]]
+    translations = {
+        edcs_id: text
+        for edcs_id, text in zip(inscriptions[ID_COLUMN], inscriptions[TRANSLATION_COLUMN])
+        if isinstance(text, str)
+    }
+
+    def joined(values):
+        return SEP.join(values) or None
 
     frame = frame.copy()
-    frame["edcs_id"] = [edcs_id for edcs_id, _ in matches]
-    frame["edcs_pid"] = frame["edcs_id"].map(monument_url)
-    frame["edcs_score"] = [score for _, score in matches]
+    frame["edcs_id"] = [joined(i for i, _ in hits) for hits in found]
+    frame["edcs_pid"] = [joined(monument_url(i) for i, _ in hits) for hits in found]
+    frame["edcs_score"] = [joined(f"{s:.3f}" for _, s in hits) for hits in found]
+    frame["edcs_count"] = [len(hits) for hits in found]
+    frame["edcs_vertaling"] = [translations.get(hits[0][0]) if hits else None for hits in found]
 
     if progress:
-        texts = frame[column].notna().sum()
-        print(f"{frame['edcs_id'].notna().sum()} of {texts} inscriptions matched to"
-              f" {frame['edcs_id'].nunique()} of {len(inscriptions)} EDCS entries", flush=True)
+        sizes = [len(hits) for hits in found if hits]
+        print(f"{len(sizes)} of {frame[column].notna().sum()} inscriptions matched at"
+              f" >={MIN_SCORE:.0%}, {sum(sizes) / len(sizes):.0f} candidates each on average,"
+              f" worst {max(sizes)} of {len(inscriptions)}", flush=True)
     return frame

@@ -33,12 +33,14 @@ QUERIES = {
 }
 
 FIELDS = {
-    "object": "Objectnaam",
+    "objectnummer": "recordnumber",
+    "titel": "Titel",
+    "objectnaam": "Objectnaam",
     "periode": "Periode",
-    "datum_van": "datebegin",
-    "datum_tot": "dateend",
+    "datering_datum_start": "datebegin",
+    "datering_datum_end": "dateend",
     "vindplaats": "Vindplaats",
-    "inscripties": "Inscripties",
+    "inscripties_text": "Inscripties",
     "beschrijving": "Beschrijving",
     "bron": "europeana_provider",
 }
@@ -164,7 +166,7 @@ def fetch(queries=QUERIES, cache_dir=Path("out"), progress=True):
     for column in ("gevonden_datum_van", "gevonden_datum_tot"):
         frame[column] = pd.array(frame[column].tolist(), dtype="Int64")
 
-    frame = edcs.enrich(frame, progress=progress)
+    frame = edcs.enrich(frame, column="inscripties_text", progress=progress)
 
     image_frame = pd.DataFrame(images)
     image_frame = image_frame[["pid"] + [c for c in image_frame.columns if c != "pid"]]
