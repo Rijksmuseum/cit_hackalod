@@ -1,0 +1,55 @@
+{
+  "_let_op": "Concepttekst. Geschreven op basis van data/verhaal.json; feiten en jaartallen nog door een specialist te controleren.",
+  "perioden": [
+    {
+      "kort": "200",
+      "titel": "Een heiligdom aan de kust",
+      "beeld": "assets/tijdlijn/200.jpg",
+      "beeldtekst": "Rond het jaar 200: het land reikt ver de zee in. Op de kustheuvel staat het heiligdom van Nehalennia.",
+      "tekst": [
+        "In de Romeinse tijd is de kust van Zeeland een andere dan nu. Bij Domburg en bij het latere Colijnsplaat staat een heiligdom voor Nehalennia, een inheemse godin die over de overtocht waakt.",
+        "Handelaren en schippers die veilig van of naar Britannia varen, laten er een altaar achter als dank. Op de steen staat wie ze zijn en vaak wat ze verhandelen."
+      ]
+    },
+    {
+      "kort": "17de eeuw",
+      "titel": "De zee geeft stenen terug",
+      "beeld": "assets/tijdlijn/17de.jpg",
+      "beeldtekst": "De zee heeft het land al ver teruggenomen; van het heiligdom is bijna niets meer te zien.",
+      "tekst": [
+        "Eeuwen later is het heiligdom bij Domburg verdwenen onder de golven. In 1647 spoelt na een storm een deel van de altaren vrij op het strand.",
+        "Het is de eerste keer dat geleerden de stenen echt te zien krijgen. De namen en de Latijnse opschriften worden overgeschreven en beginnen aan hun tocht door de boeken."
+      ]
+    },
+    {
+      "kort": "18de eeuw",
+      "titel": "Verzameld en beschreven",
+      "beeld": "assets/tijdlijn/18de.jpg",
+      "beeldtekst": "Alleen de rand van het oude land is nog te zien; wat er lag, is verzwolgen.",
+      "tekst": [
+        "De kustlijn schuift verder op. Wat bij laag water boven komt, wordt opgeraapt en beschreven door verzamelaars en oudheidkundigen.",
+        "De stenen worden bewaard in huizen, kerken en kabinetten, ver van de plek waar ze ooit stonden. Het verhaal van de vondsten raakt verspreid."
+      ]
+    },
+    {
+      "kort": "20ste eeuw",
+      "titel": "1970: de netten komen vol boven",
+      "beeld": "assets/tijdlijn/20ste.jpg",
+      "beeldtekst": "Op de bodem van de Oosterschelde liggen de brokken van een tweede heiligdom.",
+      "tekst": [
+        "Vissers op de Oosterschelde bij Colijnsplaat halen in 1970 brokken steen op in hun netten. Het blijkt een tweede heiligdom, nog grotendeels intact op de bodem.",
+        "In de jaren erna worden honderden fragmenten geborgen. Het is de grootste vondst van Romeinse altaren in Nederland."
+      ]
+    },
+    {
+      "kort": "Vandaag",
+      "titel": "Open data en een eigen altaar",
+      "beeld": "assets/tijdlijn/vandaag.jpg",
+      "beeldtekst": "De zee heeft het land van toen ingenomen, maar de stenen zijn bewaard en worden nu opnieuw gelezen.",
+      "tekst": [
+        "Het grootste deel van de vondst ligt in het Rijksmuseum van Oudheden in Leiden, met stukken in Zeeuwse collecties. De objecten zijn beschreven als open data.",
+        "Daardoor kun je de handel van bijna tweeduizend jaar geleden nu doorzoeken op beroep, en er zelf een altaar bij bouwen."
+      ]
+    }
+  ]
+}
