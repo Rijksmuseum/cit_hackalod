@@ -176,66 +176,6 @@
     filter: blur(8px);
   }
 }
-.film {
-  max-width: var(--wrap);
-  margin: clamp(2rem, 5vw, 3.5rem) auto 0;
-  padding: 0 var(--gutter);
-}
-.film__kader {
-  position: relative;
-  aspect-ratio: 806/180;
-  border-radius: var(--radius) var(--radius) 4px 4px;
-  background: var(--surface-1);
-  box-shadow: inset 0 0 0 1px var(--line-strong), 0 0 0 6px var(--surface-0), 0 0 0 7px var(--accent-deep), 0 24px 50px rgba(0, 0, 0, 0.45);
-  overflow: hidden;
-}
-.film__video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-.film__pauze {
-  position: absolute;
-  right: 0.7rem;
-  bottom: 0.7rem;
-  display: grid;
-  place-items: center;
-  width: 2.3rem;
-  height: 2.3rem;
-  padding: 0;
-  border: 1px solid var(--line-strong);
-  border-radius: 50%;
-  background: rgba(21, 18, 15, 0.75);
-  color: var(--accent);
-  cursor: pointer;
-  transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
-}
-.film__pauze:hover {
-  border-color: var(--accent);
-  transform: scale(1.08);
-}
-.film__pauze svg {
-  width: 0.9rem;
-  height: 0.9rem;
-}
-.film__pauze .icoon-speel {
-  display: none;
-}
-.film__pauze[aria-pressed=true] .icoon-speel {
-  display: block;
-}
-.film__pauze[aria-pressed=true] .icoon-pauze {
-  display: none;
-}
-.film__onderschrift {
-  margin: 1rem 0 0;
-  text-align: center;
-  font-style: italic;
-  font-size: 0.95rem;
-  color: var(--mute);
-}
-
 .verhaal__frame {
   display: grid;
   grid-template-columns: 19rem 1fr;
@@ -1409,7 +1349,6 @@ img {
 }
 .sectie__intro {
   margin: -0.6rem 0 2rem;
-  max-width: 38rem;
   color: var(--mute);
   font-size: 1.05rem;
 }

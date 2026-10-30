@@ -12,7 +12,7 @@
 <link rel="preload" href="assets/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SourceSerif4-Light.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/main.css?v=10">
+<link rel="stylesheet" href="css/main.css?v=12">
 </head>
 <body>
 
@@ -72,24 +72,6 @@
 
   <div class="golven" aria-hidden="true"><div class="golven__baan"></div></div>
 
-  <!-- Film: de kust door de eeuwen heen. Bron: assets/film/ (mp4 + webm), zie README. -->
-  <section class="film js-reveal" aria-label="Film">
-    <div class="film__kader">
-      <video class="film__video" id="film" autoplay muted loop playsinline preload="metadata"
-             poster="assets/film/nehalennia-kust-poster.jpg"
-             aria-label="Doorsnede van de Zeeuwse kust van ± 200 tot 2026: het land met het heiligdom verdwijnt geleidelijk onder de zee.">
-        <source src="assets/film/nehalennia-kust.webm" type="video/webm">
-        <source src="assets/film/nehalennia-kust.mp4" type="video/mp4">
-      </video>
-      <button class="film__pauze" id="filmPauze" type="button" aria-pressed="false" aria-label="Film pauzeren">
-        <svg class="icoon-pauze" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2" width="3.5" height="12" rx="1"/><rect x="9.5" y="2" width="3.5" height="12" rx="1"/></svg>
-        <svg class="icoon-speel" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2l10 6-10 6z"/></svg>
-      </button>
-    </div>
-    <p class="film__onderschrift">De kust door de eeuwen heen, van ± 200 tot nu.</p>
-  </section>
-
-  <div class="golven" aria-hidden="true"><div class="golven__baan"></div></div>
 
   <!-- II. Tijdlijn: vijf perioden (data/perioden.json) -->
   <section class="sectie tijdlijn js-reveal" id="tijdlijn" aria-labelledby="tijdlijn-kop">
@@ -354,9 +336,8 @@
   <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten en de altaarbouwer te tonen.</p>
 </noscript>
 
-<script src="js/reveal.js?v=10" defer></script>
-<script src="js/film.js?v=10" defer></script>
-<script type="module" src="js/app.js?v=10"></script>
-<script src="js/altaar.js?v=10" defer></script>
+<script src="js/reveal.js?v=12" defer></script>
+<script type="module" src="js/app.js?v=12"></script>
+<script src="js/altaar.js?v=12" defer></script>
 </body>
 </html>
