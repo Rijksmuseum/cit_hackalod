@@ -1,0 +1,134 @@
+@use 'tokens';
+@use 'balk';
+@use 'kop';
+@use 'verhaal';
+@use 'tijdlijn';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-0);
+  color: var(--text);
+  font-family: var(--serif);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+// petite-vue strips this once it has mounted
+[v-cloak] {
+  display: none;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 400;
+  color: var(--foam);
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--accent-bright);
+    text-decoration: underline;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--surface-0);
+}
+
+// The clipart is black line art on transparent, so it has to be recoloured to
+// read on the dark background. The chain aims at --accent; it cannot read the
+// custom property, so refit it with tint_filter.py if the accent changes.
+.clipart {
+  filter: invert(44.5%) sepia(100%) saturate(2958%) hue-rotate(335deg)
+    brightness(142%) contrast(249%);
+}
+
+// The altar page has no content yet; hold the viewport open so it does not
+// collapse to a bare bar.
+.altaar {
+  min-height: 70vh;
+}
+
+// A small uppercase accent label above a heading.
+.bovenschrift {
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.sectie {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 5rem) var(--gutter) 0;
+
+  &__kop {
+    margin: 0 0 1.4rem;
+    font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  }
+
+  &__intro {
+    margin: -0.6rem 0 2rem;
+    max-width: 38rem;
+    color: var(--mute);
+    font-size: 1.05rem;
+  }
+}
+
+.voet {
+  margin-top: clamp(4rem, 9vw, 8rem);
+  background: var(--surface-1);
+  border-top: 1px solid var(--line);
+
+  p {
+    max-width: var(--wrap);
+    margin: 0 auto;
+    padding-inline: var(--gutter);
+    font-family: var(--sans);
+    font-size: 0.85rem;
+    color: var(--mute);
+  }
+
+  p:first-child {
+    padding-top: 2.5rem;
+  }
+
+  p:last-child {
+    padding-bottom: 2.5rem;
+  }
+
+  &__bron:not(:last-child)::after {
+    content: ', ';
+  }
+
+  &__demo {
+    margin-top: 0.4rem;
+    opacity: 0.75;
+  }
+}
