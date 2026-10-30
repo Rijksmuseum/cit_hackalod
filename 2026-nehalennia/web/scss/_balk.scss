@@ -13,7 +13,7 @@
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    font-family: var(--sans);
+    font-family: var(--display); // Source Code Pro, the mono
     font-size: 0.82rem;
     font-weight: var(--halfvet);
     letter-spacing: 0.04em;
@@ -48,7 +48,7 @@
       padding: 0.4rem 0.9rem;
       border: 1px solid transparent;
       border-radius: 999px;
-      font-family: var(--sans);
+      font-family: var(--display); // Source Code Pro, the mono
       font-size: 0.85rem;
       font-weight: var(--halfvet);
       color: var(--mute);

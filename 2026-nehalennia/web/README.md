@@ -14,15 +14,16 @@ type have since moved away from it:
   built around `#202327`.
 - **Accent** — vermilion `#ff5533`, with `--accent-bright` for hover and
   `--op-accent` for text on a filled accent surface.
-- **Type** — [Anybody](https://fonts.google.com/specimen/Anybody), one variable
-  family (weight 100–900, width 50–150). Headings use `font-stretch: var(--breed)`
-  at 125% and weight 500; everything else sits at normal width.
+- **Type** — Source Serif 4 for running text, Source Code Pro for headings. Same
+  Adobe superfamily, both variable (weight 200–900), both **self-hosted** from
+  `assets/fonts/` with the `@font-face` rules in `scss/_fonts.scss`. SIL OFL 1.1,
+  licence in `assets/fonts/OFL.txt`. Two weights carry the page: `--licht` (300)
+  for running text and `--halfvet` (600) for headings and UI.
 
-  This stands in for **ABC Ginto**, which was the first choice but is a paid
-  Dinamo typeface with no free CDN. If a licence covering web use turns up, drop
-  the woff2 files in `assets/fonts/`, add the `@font-face` rules and repoint the
-  three font tokens — the width axis is the only thing that would need rethinking,
-  since Ginto splits that across two families (Ginto and Ginto Nord).
+  **ABC Ginto** was considered and dropped: it is a paid Dinamo typeface with no
+  free CDN, and the trial licence does not cover public web use. If a licence
+  covering web use turns up, add its `@font-face` rules to `_fonts.scss` and
+  repoint the three font tokens.
 
 `--foam` / `--text` / `--mute` still carry their original names and a slight
 teal tint, left over from the sea palette.
@@ -41,6 +42,36 @@ python3 -m http.server 8000
 ```
 
 Then open <http://localhost:8000/>.
+
+## Hosting
+
+Static, no build step — `css/main.css` is committed and every path is relative,
+so the directory can be dropped on any static host, including under a subpath.
+
+Deployed on **Cloudflare Pages**, connected to this (private) repo so the repo
+stays private. Settings, when wiring it up:
+
+| | |
+|---|---|
+| Framework preset | None |
+| Build command | *(leave empty)* |
+| Build output directory | `2026-nehalennia/web` |
+| Root directory | *(leave empty — repo root)* |
+
+Connecting a `Rijksmuseum` repo needs an org admin to approve the Cloudflare
+GitHub app once. Netlify works identically if that approval stalls; it reads the
+same `_headers` file, it just needs the output directory set in its own UI.
+
+The site is **link-only**: `_headers` sends `X-Robots-Tag: noindex, nofollow`
+for every path, and both HTML files carry a matching `<meta name="robots">`.
+There is deliberately no `robots.txt` — a `Disallow` would stop crawlers
+fetching the pages at all, so they would never see the `noindex` and could still
+list the URL from an inbound link. Remove both the header and the meta tags to
+make it indexable, but settle the three open items under *Still to do* and the
+design credit above before doing that.
+
+`js/app.js` still pulls petite-vue from unpkg and the card images come from RMO,
+so the hosted page needs internet just like the local one.
 
 ## Regenerating
 
@@ -108,13 +139,15 @@ visible: three empty years (1950, 1979, 1989), two years with 25+ objects
 - The RMO image proxy rate-limits when a grid loads at once, and a few images are
   genuinely 403. `beeldMislukt()` in `js/app.js` retries twice, then shows a
   placeholder, so neither case shows a broken-image icon.
-- petite-vue (unpkg), Iosevka (jsDelivr / Fontsource) and the images (RMO) are
-  all remote, so **the page needs internet**. Worth knowing before demoing on
-  venue wifi; self-hosting all three is the fix if that turns out to be a
-  problem. Iosevka is not on Google Fonts, hence Fontsource — four stylesheets,
-  for 400, 600, 700 and 400-italic.
-- `assets/title.gif` is black line art, so it is flipped with `filter: invert(1)`
-  to read on the dark background. A light-on-dark original would drop that.
+- The fonts are self-hosted, but **petite-vue (unpkg) and the images (RMO) are
+  still remote**, so the page needs internet. Worth knowing before demoing on
+  venue wifi; vendoring petite-vue is a one-file fix, the images less so.
+- `assets/title.gif` is black line art, recoloured towards the accent by the
+  filter chain on `.clipart`. The chain cannot read `var(--accent)` — refit it
+  with `tint_filter.py` if the accent changes, and note it renders a little off
+  (see that script's docstring).
+- **`css/main.css` is generated.** Edit `scss/`, then recompile. Anything written
+  straight into `css/main.css` is wiped by the next `sass` run.
 - `<template v-if>` / `<template v-for>` are avoided: petite-vue does not document
   support for them. Use a real element with `v-if` instead.
 

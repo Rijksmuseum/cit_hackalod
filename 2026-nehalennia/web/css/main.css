@@ -87,7 +87,7 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  font-family: var(--sans);
+  font-family: var(--display);
   font-size: 0.82rem;
   font-weight: var(--halfvet);
   letter-spacing: 0.04em;
@@ -116,7 +116,7 @@
   padding: 0.4rem 0.9rem;
   border: 1px solid transparent;
   border-radius: 999px;
-  font-family: var(--sans);
+  font-family: var(--display);
   font-size: 0.85rem;
   font-weight: var(--halfvet);
   color: var(--mute);
@@ -256,10 +256,10 @@
   font-size: 0.95rem;
   line-height: 1.35;
 }
-.stap:hover {
+.stap:hover:not(.stap--actief) {
   color: var(--foam);
 }
-.stap:hover .stap__nummer {
+.stap:hover:not(.stap--actief) .stap__nummer {
   border-color: var(--accent);
   color: var(--accent-bright);
 }

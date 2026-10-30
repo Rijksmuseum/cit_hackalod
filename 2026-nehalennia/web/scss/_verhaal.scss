@@ -89,7 +89,9 @@
     line-height: 1.35;
   }
 
-  &:hover {
+  // The active step already has a filled accent circle, so it must not pick up
+  // the hover treatment: excluded here rather than overridden afterwards.
+  &:hover:not(.stap--actief) {
     color: var(--foam);
 
     .stap__nummer {
