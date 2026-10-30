@@ -1,6 +1,7 @@
 """Harvest object records from the Rijksmuseum van Oudheden (RMO).
 * the CollectionConnection search API, which returns XML
 * the public object page, scraped for Verwerving (acquisition), which the API omits
+* `edcs`, which matches the transcriptions to the Clauss/Slaby inscription database
 
 Responses are cached , so only the first run hits the servers.
 """
@@ -14,6 +15,8 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import pandas as pd
+
+import edcs
 
 API_URL = "http://api.rmo.nl:17521/"
 IMAGE_BASE = "https://www.rmo.nl/imageproxy/"
@@ -160,6 +163,8 @@ def fetch(queries=QUERIES, cache_dir=Path("out"), progress=True):
     frame = pd.DataFrame(rows)
     for column in ("gevonden_datum_van", "gevonden_datum_tot"):
         frame[column] = pd.array(frame[column].tolist(), dtype="Int64")
+
+    frame = edcs.enrich(frame, progress=progress)
 
     image_frame = pd.DataFrame(images)
     image_frame = image_frame[["pid"] + [c for c in image_frame.columns if c != "pid"]]
