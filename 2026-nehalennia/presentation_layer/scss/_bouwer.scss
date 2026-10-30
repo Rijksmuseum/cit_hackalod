@@ -19,7 +19,7 @@
 .bouwer .stage, .bouwer .controls { background:var(--panel); border:1px solid var(--line); border-radius:10px; }
 .bouwer .stage { padding:10px; }
 .bouwer .controls { padding:18px; }
-.bouwer canvas { width:100%; height:auto; display:block; border-radius:6px; touch-action:none; cursor:default; }
+.bouwer canvas { width:100%; height:auto; display:block; border-radius:6px; touch-action:pan-y; cursor:default; }  /* verticaal scrollen blijft mogelijk; slepen van een figuur blokkeert het (zie altaar.js) */
 .bouwer .row { margin-bottom:18px; }
 .bouwer .rowhead { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
 .bouwer__grid h2 { font-family:var(--serif); letter-spacing:.08em; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin:22px 0 6px; font-weight:400; }

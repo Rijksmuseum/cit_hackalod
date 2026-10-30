@@ -750,10 +750,9 @@
   height: auto;
   display: block;
   border-radius: 6px;
-  touch-action: none;
+  touch-action: pan-y;
   cursor: default;
-}
-
+} /* verticaal scrollen blijft mogelijk; slepen van een figuur blokkeert het (zie altaar.js) */
 .bouwer .row {
   margin-bottom: 18px;
 }
