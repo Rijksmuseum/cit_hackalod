@@ -120,3 +120,32 @@
     grid-template-columns: 1fr;
   }
 }
+
+// Playful touches: the step circle wobbles on hover, the first paragraph opens
+// with a carved drop cap, and the text fades in whenever the step changes.
+.stap:hover:not(.stap--actief) .stap__nummer {
+  animation: wiebel 0.5s var(--ease);
+}
+
+.verhaal__inhoud {
+  animation: inschuiven 0.5s var(--ease);
+
+  .verhaal__titel + .verhaal__alinea::first-letter {
+    float: left;
+    margin: 0.05em 0.12em 0 0;
+    font-family: var(--display);
+    font-size: 3.4em;
+    line-height: 0.85;
+    font-weight: 700;
+    color: var(--accent);
+  }
+}
+
+@keyframes wiebel {
+  25% { transform: rotate(-12deg) scale(1.08); }
+  75% { transform: rotate(10deg) scale(1.08); }
+}
+
+@keyframes inschuiven {
+  from { opacity: 0; transform: translateX(0.8rem); }
+}

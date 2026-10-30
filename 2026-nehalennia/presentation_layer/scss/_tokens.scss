@@ -1,39 +1,36 @@
 :root {
-  // surfaces, dark to light: one hue, hsl(214 10% …), --surface-2 is #202327
-  --surface-0: #0d0e0f;
-  --surface-1: #16181b;
-  --surface-2: #202327;
-  --surface-3: #2d3237;
-  --surface-4: #424851;
+  // Surfaces, from the altar builder: warm dark stone, dark to light.
+  --surface-0: #1c1915; // page
+  --surface-1: #15120f; // fields, wells, footer
+  --surface-2: #26221c; // panels
+  --surface-3: #322d25;
+  --surface-4: #3a342b;
 
-  --line: rgba(216, 222, 230, 0.13);
-  --line-strong: rgba(216, 222, 230, 0.28);
+  --line: rgba(239, 230, 214, 0.13);
+  --line-strong: rgba(239, 230, 214, 0.28);
 
   // type
-  --foam: #f1f5f1;
-  --text: #d3dedb;
-  --mute: #93aaab;
+  --foam: #f6efe2;
+  --text: #efe6d6;
+  --mute: #a89d8a;
 
-  // accents: one hue, hsl(10 100% …), stepped in lightness
-  --accent: #ff5533;
-  --accent-bright: #ff8870; // hover
-  --accent-deep: #bb361b; // decorative only, too dark for body text on --surface-0
-  --op-accent: #240a03; // text on a filled accent surface
+  // accent: the gold of the builder, stepped in lightness
+  --accent: #c9a46a;
+  --accent-bright: #e3c48c; // hover
+  --accent-deep: #8a6d3f; // decorative only
+  --op-accent: #1c1915; // text on a filled accent surface
 
-  // Source Serif 4 for running text, weight 200-900 plus an optical size axis
-  // the browser drives off the font size. Source Code Pro sets the headings
-  // against it: same Adobe superfamily, so the two share proportions.
-  --display: 'Source Code Pro', ui-monospace, 'SF Mono', Menlo, monospace;
+  // Cinzel (inscription capitals) for headings, Source Serif 4 for running text.
+  --display: 'Cinzel', 'Trajan Pro', 'Palatino Linotype', Georgia, serif;
   --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   --sans: 'Source Serif 4', Georgia, 'Times New Roman', serif;
 
-  // the two weights the page runs on: light for running text, semibold for headings
   --licht: 300;
   --halfvet: 600;
 
   --gutter: clamp(1.25rem, 4vw, 3.5rem);
-  --wrap: 82rem;
-  --radius: 6px;
+  --wrap: 72rem;
+  --radius: 8px;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 
   color-scheme: dark;

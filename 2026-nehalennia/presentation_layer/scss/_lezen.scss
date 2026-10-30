@@ -1,0 +1,56 @@
+.lezen {
+  &__lijst {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  &__item {
+    position: relative;
+    padding: 1rem 1.2rem 1rem 3.4rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface-2);
+    transition: border-color 0.25s, transform 0.3s var(--ease);
+
+    // a little scroll icon instead of a bullet
+    &::before {
+      content: '§';
+      position: absolute;
+      left: 1.1rem;
+      top: 0.85rem;
+      font-family: var(--display);
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+
+    &:hover {
+      border-color: var(--accent-deep);
+      transform: translateX(4px);
+    }
+  }
+
+  &__ref {
+    margin: 0;
+    color: var(--text);
+  }
+
+  &__noot {
+    margin: 0.3rem 0 0;
+    font-size: 0.85rem;
+    color: var(--mute);
+  }
+
+  &__let-op {
+    margin-top: 1.4rem;
+    padding: 0.8rem 1rem;
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    background: var(--surface-1);
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--mute);
+  }
+}

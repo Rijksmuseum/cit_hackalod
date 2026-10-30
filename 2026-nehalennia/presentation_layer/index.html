@@ -3,156 +3,360 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Een wens voor Nehalennia</title>
+<title>Nehalennia · Een wens voor de godin van de Scheldemonding</title>
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="noindex, nofollow">
+<link rel="preload" href="assets/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SourceSerif4-Light.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/SourceSerif4-SemiBold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/main.css">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="css/main.css?v=2">
 </head>
 <body>
 
-<!-- duplicated in altaar.html; there is no templating step -->
-<header class="balk">
-  <a class="balk__merk" href="index.html">
-    <span>HACKALOD 2026 |</span>
-    <span class="balk__cit">Rijksmuseum CIT</span>
-  </a>
-  <nav class="balk__nav" aria-label="Hoofdnavigatie">
-    <a href="index.html" aria-current="page">Verhaal</a>
-    <a href="altaar.html">Altaar</a>
-  </nav>
+<!-- Hero -->
+<header class="kop">
+  <p class="bovenschrift">HackaLOD 2026 · Rijksmuseum CIT</p>
+  <h1 class="kop__titel" aria-label="Nehalennia"><span class="kop__letter" style="--i:0;--tilt:-5deg">N</span><span class="kop__letter" style="--i:1;--tilt:5deg">E</span><span class="kop__letter" style="--i:2;--tilt:-5deg">H</span><span class="kop__letter" style="--i:3;--tilt:5deg">A</span><span class="kop__letter" style="--i:4;--tilt:-5deg">L</span><span class="kop__letter" style="--i:5;--tilt:5deg">E</span><span class="kop__letter" style="--i:6;--tilt:-5deg">N</span><span class="kop__letter" style="--i:7;--tilt:5deg">N</span><span class="kop__letter" style="--i:8;--tilt:-5deg">I</span><span class="kop__letter" style="--i:9;--tilt:5deg">A</span></h1>
+  <p class="kop__ondertitel">Een wens voor de godin van de Scheldemonding</p>
+  <p class="kop__onderschrift">
+    Honderden Romeinse altaren, opgedragen aan een godin van de Scheldemonding
+    door handelaren die veilig overvoeren.
+  </p>
 </header>
+
+<!-- Film. Vervang .film__plek door een <video controls> of <iframe>; houd de aspect-ratio op .film__kader. -->
+<section class="film js-reveal" aria-label="Film">
+  <div class="film__kader">
+    <div class="film__plek">
+      <span class="film__speel" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l16 9-16 9z"/></svg></span>
+      <span class="film__label">Filmpje volgt</span>
+    </div>
+  </div>
+</section>
+
+<div class="golven" aria-hidden="true"><div class="golven__baan"></div><svg class="golven__schip" viewBox="0 0 48 36" fill="none" stroke="#c9a46a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M24 3v22M24 5c8 3 13 10 14 18H24M24 8c-6 3-9 8-10 14h10"/><path d="M6 26h36l-5 7H11z" fill="#26221c"/></svg></div>
+
+<p class="laadfout" id="laadfout" hidden>
+  Het verhaal, de tijdlijn en de collectiestukken konden niet worden geladen. Open de pagina via een webserver
+  (<code>python3 -m http.server</code>, niet via file://) en controleer of unpkg.com bereikbaar is.
+</p>
 
 <div id="app" v-cloak>
 
-  <div class="kop">
-    <img class="clipart kop__clipart" src="assets/title.gif" alt="" width="500" height="300">
-    <div class="kop__tekst">
-      <p class="bovenschrift kop__bovenschrift">HackaLOD 2026</p>
-      <h1 class="kop__titel">Een wens voor<br>Nehalennia</h1>
-      <p class="kop__onderschrift">
-        Honderden Romeinse altaren, opgedragen aan een godin van de Scheldemonding
-        door handelaren die veilig overvoeren.
-      </p>
+  <!-- I. Verhaal -->
+  <section class="sectie verhaal js-reveal" id="verhaal" aria-labelledby="verhaal-kop">
+    <h2 class="sectie__kop" id="verhaal-kop"><span class="sectie__nr">I</span>Het verhaal</h2>
+
+    <div class="verhaal__frame">
+      <ol class="stappen" role="tablist" aria-orientation="vertical" aria-label="Stappen in het verhaal">
+        <li v-for="(s, i) in stappen" :key="i">
+          <button class="stap" role="tab"
+                  :class="{ 'stap--actief': i === stap }"
+                  :aria-selected="i === stap"
+                  :tabindex="i === stap ? 0 : -1"
+                  :id="`stap-tab-${i}`"
+                  :aria-controls="`stap-paneel-${i}`"
+                  @click="stap = i"
+                  @keydown="stapToets($event, i)">
+            <span class="stap__nummer">{{ nummer(i) }}</span>
+            <span class="stap__titel">{{ s.titel }}</span>
+          </button>
+        </li>
+      </ol>
+
+      <article class="verhaal__inhoud" role="tabpanel" :key="stap"
+               :id="`stap-paneel-${stap}`"
+               :aria-labelledby="`stap-tab-${stap}`"
+               tabindex="0">
+        <p class="verhaal__nummer">{{ nummer(stap) }}</p>
+        <h3 class="verhaal__titel">{{ huidigeStap.titel }}</h3>
+        <p class="verhaal__alinea" v-for="(p, i) in huidigeStap.tekst" :key="i">{{ p }}</p>
+      </article>
     </div>
-  </div>
+  </section>
 
-  <main>
+  <div class="golven" aria-hidden="true"><div class="golven__baan"></div></div>
 
-    <!-- 1. Verhaal -->
-    <section class="sectie verhaal" aria-labelledby="verhaal-kop">
-      <h2 class="sectie__kop" id="verhaal-kop">HET VERHAAL</h2>
-
-      <div class="verhaal__frame">
-        <ol class="stappen" role="tablist" aria-orientation="vertical" aria-label="Stappen in het verhaal">
-          <li v-for="(s, i) in stappen" :key="i">
-            <button class="stap" role="tab"
-                    :class="{ 'stap--actief': i === stap }"
-                    :aria-selected="i === stap"
-                    :tabindex="i === stap ? 0 : -1"
-                    :id="`stap-tab-${i}`"
-                    :aria-controls="`stap-paneel-${i}`"
-                    @click="stap = i"
-                    @keydown="stapToets($event, i)">
-              <span class="stap__nummer">{{ nummer(i) }}</span>
-              <span class="stap__titel">{{ s.titel }}</span>
-            </button>
-          </li>
-        </ol>
-
-        <article class="verhaal__inhoud" role="tabpanel"
-                 :id="`stap-paneel-${stap}`"
-                 :aria-labelledby="`stap-tab-${stap}`"
-                 tabindex="0">
-          <p class="verhaal__nummer">{{ nummer(stap) }}</p>
-          <h3 class="verhaal__titel">{{ huidigeStap.titel }}</h3>
-          <p class="verhaal__alinea" v-for="(p, i) in huidigeStap.tekst" :key="i">{{ p }}</p>
-        </article>
-      </div>
-    </section>
-
-    <!-- 2. Tijdlijn -->
-    <section class="sectie tijdlijn" aria-labelledby="tijdlijn-kop">
-      <h2 class="sectie__kop" id="tijdlijn-kop">DE TIJDLIJN</h2>
-      <p class="sectie__intro">
-        Kies een jaar om de objecten te zien. <strong>Let op:</strong> de jaartallen zijn
-        voor deze demo verzonnen, de objecten zijn echt.
-      </p>
-
-      <div class="jaren" role="tablist" aria-label="Jaren">
-        <button v-for="j in jaren" :key="j.jaar"
-                class="jaar" role="tab"
-                :class="{ 'jaar--actief': j.jaar === actiefJaar, 'jaar--leeg': !j.objecten.length }"
-                :aria-selected="j.jaar === actiefJaar"
-                :tabindex="j.jaar === actiefJaar ? 0 : -1"
-                @click="kiesJaar(j.jaar)"
-                @keydown="jaarToets($event, j.jaar)">
-          {{ j.jaar }}
-          <span class="jaar__aantal" aria-hidden="true">{{ j.objecten.length }}</span>
-        </button>
-      </div>
-
-      <div class="tijdlijn__inhoud" role="tabpanel" aria-live="polite">
-        <p class="tijdlijn__onderschrift">{{ jaar.onderschrift }}</p>
-
-        <p class="tijdlijn__leeg" v-if="!jaar.objecten.length">
-          Geen objecten in {{ jaar.jaar }}.
-        </p>
-
-        <div v-else>
-          <ul class="objecten">
-            <li class="object" v-for="o in zichtbareObjecten" :key="o.id">
-              <div class="object__beeld">
-                <img v-if="!o.mislukt" :src="o.afbeelding" :alt="o.titel"
-                     loading="lazy" decoding="async" @error="beeldMislukt(o, $event)">
-                <p class="object__geen-beeld" v-else>Afbeelding niet beschikbaar</p>
-              </div>
-              <div class="object__tekst">
-                <h3 class="object__titel">{{ o.titel }}</h3>
-                <dl class="object__velden">
-                  <div class="object__veld" v-if="o.objectnaam">
-                    <dt>Object</dt><dd>{{ o.objectnaam }}</dd>
-                  </div>
-                  <div class="object__veld" v-if="o.materiaal">
-                    <dt>Materiaal</dt><dd>{{ o.materiaal }}</dd>
-                  </div>
-                  <div class="object__veld" v-if="o.vindplaats">
-                    <dt>Vindplaats</dt><dd>{{ o.vindplaats }}</dd>
-                  </div>
-                </dl>
-                <a class="object__bron" :href="o.bronLink" target="_blank" rel="noopener">
-                  {{ o.bronNaam }} ↗
-                </a>
-              </div>
-            </li>
-          </ul>
-
-          <nav class="blader" v-if="totaalPaginas > 1" aria-label="Paginering">
-            <button class="blader__knop" :disabled="pagina === 1" @click="blader(-1)">← Vorige</button>
-            <span class="blader__stand">Pagina {{ pagina }} van {{ totaalPaginas }}</span>
-            <button class="blader__knop" :disabled="pagina === totaalPaginas" @click="blader(1)">Volgende →</button>
-          </nav>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="voet">
-    <p>
-      Objecten en afbeeldingen:
-      <span class="voet__bron" v-for="b in bronnen"><a :href="b.url" target="_blank" rel="noopener">{{ b.naam }}</a> ({{ b.licentie }})</span>
+  <!-- II. Tijdlijn -->
+  <section class="sectie tijdlijn js-reveal" id="tijdlijn" aria-labelledby="tijdlijn-kop">
+    <h2 class="sectie__kop" id="tijdlijn-kop"><span class="sectie__nr">II</span>De tijdlijn</h2>
+    <p class="sectie__intro">
+      Kies een jaar om de objecten te zien. <strong>Let op:</strong> de jaartallen zijn
+      voor deze demo verzonnen, de objecten zijn echt.
     </p>
-    <p class="voet__demo">Demo voor HackaLOD 2026 · de jaartallen in de tijdlijn zijn verzonnen.</p>
-  </footer>
+
+    <div class="jaren" role="tablist" aria-label="Jaren">
+      <button v-for="j in jaren" :key="j.jaar"
+              class="jaar" role="tab"
+              :class="{ 'jaar--actief': j.jaar === actiefJaar, 'jaar--leeg': !j.objecten.length }"
+              :aria-selected="j.jaar === actiefJaar"
+              :tabindex="j.jaar === actiefJaar ? 0 : -1"
+              @click="kiesJaar(j.jaar)"
+              @keydown="jaarToets($event, j.jaar)">
+        {{ j.jaar }}
+        <span class="jaar__aantal" aria-hidden="true">{{ j.objecten.length }}</span>
+      </button>
+    </div>
+
+    <div class="tijdlijn__inhoud" role="tabpanel" aria-live="polite">
+      <p class="tijdlijn__onderschrift">{{ jaar.onderschrift }}</p>
+
+      <p class="tijdlijn__leeg" v-if="!jaar.objecten.length">Geen objecten in {{ jaar.jaar }}.</p>
+
+      <div v-else>
+        <ul class="objecten">
+          <li class="object" v-for="o in zichtbareObjecten" :key="o.id">
+            <div class="object__beeld">
+              <img v-if="!o.mislukt" :src="o.afbeelding" :alt="o.titel"
+                   loading="lazy" decoding="async" @error="beeldMislukt(o, $event)">
+              <p class="object__geen-beeld" v-else>Afbeelding niet beschikbaar</p>
+            </div>
+            <div class="object__tekst">
+              <h3 class="object__titel">{{ o.titel }}</h3>
+              <dl class="object__velden">
+                <div class="object__veld" v-if="o.objectnaam"><dt>Object</dt><dd>{{ o.objectnaam }}</dd></div>
+                <div class="object__veld" v-if="o.materiaal"><dt>Materiaal</dt><dd>{{ o.materiaal }}</dd></div>
+                <div class="object__veld" v-if="o.vindplaats"><dt>Vindplaats</dt><dd>{{ o.vindplaats }}</dd></div>
+              </dl>
+              <a class="object__bron" :href="o.bronLink" target="_blank" rel="noopener">{{ o.bronNaam }} ↗</a>
+            </div>
+          </li>
+        </ul>
+
+        <nav class="blader" v-if="totaalPaginas > 1" aria-label="Paginering">
+          <button class="blader__knop" :disabled="pagina === 1" @click="blader(-1)">← Vorige</button>
+          <span class="blader__stand">Pagina {{ pagina }} van {{ totaalPaginas }}</span>
+          <button class="blader__knop" :disabled="pagina === totaalPaginas" @click="blader(1)">Volgende →</button>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <div class="golven" aria-hidden="true"><div class="golven__baan"></div></div>
+
+  <!-- III. Collectiestukken -->
+  <section class="sectie collectie js-reveal" id="collectie" aria-labelledby="collectie-kop">
+    <h2 class="sectie__kop" id="collectie-kop"><span class="sectie__nr">III</span>De collectiestukken</h2>
+    <p class="sectie__intro">Alle objecten uit de tijdlijn bij elkaar. Klik op een stuk voor de details, of laat je verrassen.</p>
+
+    <div class="filters" role="group" aria-label="Filter op soort object">
+      <button v-for="f in filters" :key="f.sleutel" class="filter"
+              :class="{ 'filter--actief': f.sleutel === soort }"
+              :aria-pressed="f.sleutel === soort"
+              @click="kiesSoort(f.sleutel)">
+        {{ f.label }}<span class="filter__aantal">{{ f.aantal }}</span>
+      </button>
+      <button class="filter filter--verras" @click="verras()">Verras me</button>
+    </div>
+    <p class="collectie__teller" aria-live="polite">{{ getoondeStukken.length }} van {{ gefilterdeStukken.length }} stukken</p>
+
+    <ul class="stukken">
+      <li class="stuk" v-for="o in getoondeStukken" :key="o.id">
+        <button class="stuk__knop" @click="open(o)">
+          <span class="stuk__beeld">
+            <img v-if="!o.mislukt" :src="o.afbeelding" :alt="naam(o)" loading="lazy" decoding="async" @error="beeldMislukt(o, $event)">
+            <span class="stuk__geen" v-else>Afbeelding niet beschikbaar</span>
+          </span>
+          <span class="stuk__tekst">
+            <span class="stuk__soort">{{ o.objectnaam || 'object' }}</span>
+            <span class="stuk__titel">{{ naam(o) }}</span>
+            <span class="stuk__plaats" v-if="o.vindplaats">{{ o.vindplaats }}</span>
+          </span>
+        </button>
+      </li>
+    </ul>
+
+    <div class="meer" v-if="getoondeStukken.length < gefilterdeStukken.length">
+      <button class="knop knop--spook" @click="toonMeer()">Toon meer</button>
+    </div>
+
+    <dialog class="lichtbak" id="lichtbak" aria-label="Details van het object" @click="sluitOpAchtergrond($event)">
+      <template v-if="gekozen">
+        <div class="lichtbak__beeld">
+          <img v-if="!gekozen.mislukt" :src="gekozen.afbeelding" :alt="naam(gekozen)" @error="beeldMislukt(gekozen, $event)">
+          <p class="stuk__geen" v-else>Afbeelding niet beschikbaar</p>
+        </div>
+        <div class="lichtbak__tekst">
+          <p class="bovenschrift">{{ gekozen.objectnaam || 'object' }}</p>
+          <h3 class="lichtbak__titel">{{ naam(gekozen) }}</h3>
+          <dl class="object__velden">
+            <div class="object__veld" v-if="gekozen.materiaal"><dt>Materiaal</dt><dd>{{ gekozen.materiaal }}</dd></div>
+            <div class="object__veld" v-if="gekozen.vindplaats"><dt>Vindplaats</dt><dd>{{ gekozen.vindplaats }}</dd></div>
+            <div class="object__veld"><dt>Bron</dt><dd>{{ gekozen.bronNaam }}</dd></div>
+          </dl>
+          <div class="lichtbak__acties">
+            <a class="knop" :href="gekozen.bronLink" target="_blank" rel="noopener">Bekijk bij de bron ↗</a>
+            <button class="knop knop--spook" @click="sluit()">Sluiten</button>
+          </div>
+        </div>
+      </template>
+    </dialog>
+  </section>
 
 </div>
 
+<div class="golven" aria-hidden="true"><div class="golven__baan"></div></div>
+
+<!-- IV. Altaarbouwer (js/altaar.js) -->
+<section class="sectie bouwer js-reveal" id="bouwer" aria-labelledby="bouwer-kop">
+  <h2 class="sectie__kop" id="bouwer-kop"><span class="sectie__nr">IV</span>Bouw je eigen Nehalennia-altaar</h2>
+  <p class="sectie__intro">Een Romeins votiefaltaar voor de godin Nehalennia. Kies een altaar, sleep figuren in de nis en laat je naam in de steen hakken.</p>
+  <div class="bouwer__grid">
+  <section class="stage"><canvas id="altar" aria-label="Nehalennia-altaar met jouw opschrift"></canvas></section>
+  <section class="controls">
+    <div class="row">
+      <div class="rowhead">
+        <label>Kies je altaar</label>
+        <div class="ghosts">
+          <button id="leeg" class="ghost" title="Haalt alle figuren en het opschrift weg"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg> Leegmaken</button>
+          <button id="herstel" class="ghost" title="Zet de figuren en het opschrift van dit altaar terug"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8a5.5 5.5 0 1 0 1.8-4.1"/><path d="M2.5 2.5v3h3"/></svg> Herstel</button>
+        </div>
+      </div>
+      <div class="altaren" id="altaren"></div>
+      <p class="hint">Als je van altaar wisselt, keren de figuren terug naar het gekozen altaar.</p>
+    </div>
+
+    <div class="row">
+      <label>Kies een figuur</label>
+      <div class="palette" id="palette"></div>
+      <p class="hint">Klik een figuur aan en sleep hem. Scrollen op de figuur werkt ook voor de grootte.</p>
+      <div class="figbar">
+        <div class="sizebox"><label for="schaal">Grootte</label><input type="range" id="schaal" min="40" max="170" value="100" disabled></div>
+        <div class="tools">
+          <button id="spiegel" disabled>Spiegel</button>
+          <button id="dupliceer" disabled>Dupliceer</button>
+          <button id="verwijder" disabled>Verwijder</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <label for="naam">Jouw naam</label>
+      <input type="text" id="naam" maxlength="40" placeholder="Typ je naam" autocomplete="off">
+      <div class="latin" id="latin"></div>
+      <div class="chips" aria-label="Voorbeelden uit echte inscripties">
+        <button class="chip" data-naam="Dacinus Liffionis filius" title="Naam uit een echte Nehalennia-inscriptie (EDH HD065355)">Dacinus Liffionis filius</button>
+        <button class="chip" data-naam="Vegisonius Martinus" title="Naam uit een echte Nehalennia-inscriptie (EDCS-09401497)">Vegisonius Martinus</button>
+        <button class="chip" data-naam="Quartius Reditus" title="Naam uit een echte Nehalennia-inscriptie (EDCS)">Quartius Reditus</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <label>Opschrift</label>
+      <div class="field"><label for="aanhef">Aanhef</label><select id="aanhef"></select></div>
+      <div class="field"><label for="herkomst">Herkomst (optioneel)</label><select id="herkomst"></select></div>
+      <div class="field"><label for="beroep">Beroep of functie (optioneel)</label><select id="beroep"></select></div>
+      <div class="field"><label for="reden">Reden (optioneel)</label><select id="reden"></select></div>
+      <div class="field"><label for="se">Voor wie (optioneel)</label><select id="se"><option value="">Geen</option><option value="1">pro se et suis — voor mij en de mijnen</option></select></div>
+      <div class="field"><label for="formule">Slotformule</label><select id="formule"></select></div>
+    </div>
+
+    <div class="row">
+      <label for="verweer">Verweerd</label>
+      <input type="range" id="verweer" min="0" max="100" value="45">
+      <p class="hint">Slijtage, putjes en afgebroken stukjes in de steen (0 = nieuw).</p>
+    </div>
+
+    <div class="row">
+      <label>Opslaan, delen en afdrukken</label>
+      <div class="tools sharebtns">
+        <button class="primary" id="dl">Download als afbeelding (PNG)</button>
+        <button class="primary" id="shStory">Deel als story (9:16)</button>
+        <button class="primary" id="shPost">Deel als post (4:5)</button>
+        <button class="primary" id="lblOpen">Label afdrukken (36 × 89 mm)</button>
+      </div>
+      <p class="hint" id="shareMsg"></p>
+      <p class="hint">Op een telefoon opent “Deel” het deelmenu: kies Instagram, TikTok, Snapchat, WhatsApp enzovoort.</p>
+    </div>
+
+    <h2>Vertaling</h2>
+    <div class="translation" id="vertaling"></div>
+  </section>
+</div>
+  <dialog id="lblDlg">
+  <img id="lblImg" alt="Voorbeeld van het label">
+  <div class="side">
+    <h3>Label 36 × 89 mm</h3>
+    <label class="check"><input type="checkbox" id="lblBw" checked> <span>Zwart-wit (voor thermische labelprinters)</span></label>
+    <div class="field"><label for="lblOr">Richting</label><select id="lblOr"><option value="port">Staand (36 mm breed)</option><option value="land">Liggend (89 × 36, voor drivers die zo voeden)</option></select></div>
+    <div class="tools"><button class="primary" id="lblPrint">Afdrukken</button> <button id="lblSave">Download PNG</button> <button id="lblClose">Sluiten</button></div>
+    <p class="hint">Kies in het printvenster het papierformaat van je labelprinter, schaal 100% en geen marges. Eerst testen op een enkel label.</p>
+  </div>
+</dialog>
+</section>
+
+<div class="golven" aria-hidden="true"><div class="golven__baan"></div></div>
+
+<!-- V. Meer lezen -->
+<section class="sectie lezen js-reveal" id="lezen" aria-labelledby="lezen-kop">
+  <h2 class="sectie__kop" id="lezen-kop"><span class="sectie__nr">V</span>Meer lezen</h2>
+  <ul class="lezen__lijst">
+    <li class="lezen__item">
+      <p class="lezen__ref">Stuart, P. &amp; Bogaers, J.E.S. (2001), <i>Nehalennia: Roman Votive Stones from the Oosterschelde</i>. Leiden: Rijksmuseum van Oudheden.</p>
+      <p class="lezen__noot">Standaardwerk over de stenen van Colijnsplaat.</p>
+    </li>
+    <li class="lezen__item">
+      <p class="lezen__ref">Hondius-Crone, A. (1955), <i>The Temple of Nehalennia at Domburg</i>. Amsterdam: Allard Pierson Stichting.</p>
+      <p class="lezen__noot">Over het heiligdom bij Domburg.</p>
+    </li>
+    <li class="lezen__item">
+      <p class="lezen__ref"><a href="https://db.edcs.eu/epigr/epi.php?s_language=en" target="_blank" rel="noopener">Epigraphik-Datenbank Clauss/Slaby (EDCS) ↗</a></p>
+      <p class="lezen__noot">Inscripties; de formules en beroepen in de bouwer komen hieruit.</p>
+    </li>
+    <li class="lezen__item">
+      <p class="lezen__ref"><a href="https://edh.ub.uni-heidelberg.de/" target="_blank" rel="noopener">Epigraphic Database Heidelberg (EDH) ↗</a></p>
+      <p class="lezen__noot">Inscripties met commentaar en vertaling.</p>
+    </li>
+    <li class="lezen__item">
+      <p class="lezen__ref"><a href="https://www.rmo.nl/" target="_blank" rel="noopener">Rijksmuseum van Oudheden ↗</a></p>
+      <p class="lezen__noot">Bewaarplaats van het grootste deel van de vondst.</p>
+    </li>
+  </ul>
+  <p class="lezen__let-op">Concept: titels, jaartallen en uitgevers zijn nog niet gecontroleerd. Controleer ze voordat de lijst gepubliceerd wordt.</p>
+</section>
+
+<!-- Colofon -->
+<footer class="colofon" id="colofon">
+  <div class="colofon__motto">
+    <p class="titel" aria-label="V S L M">V · S · L · M</p>
+    <p>Votum solvit libens merito — de gelofte gaarne en naar verdienste ingelost.</p>
+  </div>
+  <div class="colofon__raster">
+    <div>
+      <h3>Colofon</h3>
+      <p>Gemaakt voor HackaLOD 2026 in Middelburg door team Rijksmuseum Collectie IT. [Namen teamleden nog toevoegen.]</p>
+    </div>
+    <div>
+      <h3>Bronnen</h3>
+      <ul>
+        <li>Objecten en afbeeldingen: <a href="https://www.rmo.nl/" target="_blank" rel="noopener">Rijksmuseum van Oudheden</a> (CC BY)</li>
+        <li>Inscripties: EDCS en EDH</li>
+        <li>[Rechten van de altaarfoto's in de bouwer nog bevestigen.]</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Techniek</h3>
+      <p>Lettertypen Source Serif 4 en Cinzel (SIL OFL). Interactie met petite-vue en canvas. Geen cookies, geen tracking.</p>
+    </div>
+    <div>
+      <h3>Licentie</h3>
+      <p>CC0, team Rijksmuseum Collectie IT. Demo voor HackaLOD 2026: de jaartallen in de tijdlijn zijn verzonnen.</p>
+    </div>
+  </div>
+  <div class="colofon__onder">
+    <span>© HackaLOD 2026 · Rijksmuseum CIT</span>
+  </div>
+</footer>
+
+<style id="pageStyle"></style>
+<div id="printArea"></div>
+
 <noscript>
-  <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten te tonen.</p>
+  <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten en de altaarbouwer te tonen.</p>
 </noscript>
 
-<script type="module" src="js/app.js"></script>
+<script src="js/reveal.js?v=2" defer></script>
+<script type="module" src="js/app.js?v=2"></script>
+<script src="js/altaar.js?v=2" defer></script>
 </body>
 </html>
