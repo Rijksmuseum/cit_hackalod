@@ -12,7 +12,7 @@
 <link rel="preload" href="assets/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SourceSerif4-Light.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/main.css?v=4">
+<link rel="stylesheet" href="css/main.css?v=10">
 </head>
 <body>
 
@@ -22,33 +22,18 @@
   <h1 class="kop__titel" aria-label="Nehalennia"><span class="kop__letter" style="--i:0;--tilt:-5deg">N</span><span class="kop__letter" style="--i:1;--tilt:5deg">E</span><span class="kop__letter" style="--i:2;--tilt:-5deg">H</span><span class="kop__letter" style="--i:3;--tilt:5deg">A</span><span class="kop__letter" style="--i:4;--tilt:-5deg">L</span><span class="kop__letter" style="--i:5;--tilt:5deg">E</span><span class="kop__letter" style="--i:6;--tilt:-5deg">N</span><span class="kop__letter" style="--i:7;--tilt:5deg">N</span><span class="kop__letter" style="--i:8;--tilt:-5deg">I</span><span class="kop__letter" style="--i:9;--tilt:5deg">A</span></h1>
   <p class="kop__ondertitel">Een wens voor de godin van de Scheldemonding</p>
   <p class="kop__onderschrift">
-    Honderden Romeinse altaren, opgedragen aan een godin van de Scheldemonding
-    door handelaren die veilig overvoeren.
+    Ruim 160 Romeinse altaren voor een Zeeuwse godin.<br>De zee nam ze, en gaf ze terug.
   </p>
 </header>
 
-<!-- Film: de kust door de eeuwen heen. Bron: assets/film/ (mp4 + webm), zie README. -->
-<section class="film js-reveal" aria-label="Film">
-  <div class="film__kader">
-    <video class="film__video" id="film" autoplay muted loop playsinline preload="metadata"
-           poster="assets/film/nehalennia-kust-poster.jpg"
-           aria-label="Doorsnede van de Zeeuwse kust van ± 200 tot 2026: het land met het heiligdom verdwijnt geleidelijk onder de zee.">
-      <source src="assets/film/nehalennia-kust.webm" type="video/webm">
-      <source src="assets/film/nehalennia-kust.mp4" type="video/mp4">
-    </video>
-    <button class="film__pauze" id="filmPauze" type="button" aria-pressed="false" aria-label="Film pauzeren">
-      <svg class="icoon-pauze" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2" width="3.5" height="12" rx="1"/><rect x="9.5" y="2" width="3.5" height="12" rx="1"/></svg>
-      <svg class="icoon-speel" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2l10 6-10 6z"/></svg>
-    </button>
-  </div>
-  <p class="film__onderschrift">De kust door de eeuwen heen, van ± 200 tot nu.</p>
-</section>
+
 
 <div class="golven" aria-hidden="true"><div class="golven__baan"></div><svg class="golven__schip" viewBox="0 0 48 36" fill="none" stroke="#c9a46a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M24 3v22M24 5c8 3 13 10 14 18H24M24 8c-6 3-9 8-10 14h10"/><path d="M6 26h36l-5 7H11z" fill="#26221c"/></svg></div>
 
 <p class="laadfout" id="laadfout" hidden>
   Het verhaal, de tijdlijn en de collectiestukken konden niet worden geladen. Open de pagina via een webserver
   (<code>python3 -m http.server</code>, niet via file://) en controleer of unpkg.com bereikbaar is.
+  <br><small>Technische melding: <code id="laadfoutDetail">geen (het script is niet gestart)</code></small>
 </p>
 
 <div id="app" v-cloak>
@@ -87,57 +72,60 @@
 
   <div class="golven" aria-hidden="true"><div class="golven__baan"></div></div>
 
-  <!-- II. Tijdlijn -->
-  <section class="sectie tijdlijn js-reveal" id="tijdlijn" aria-labelledby="tijdlijn-kop">
-    <h2 class="sectie__kop" id="tijdlijn-kop"><span class="sectie__nr">II</span>De tijdlijn</h2>
-    <p class="sectie__intro">
-      Kies een jaar om de objecten te zien. <strong>Let op:</strong> de jaartallen zijn
-      voor deze demo verzonnen, de objecten zijn echt.
-    </p>
-
-    <div class="jaren" role="tablist" aria-label="Jaren">
-      <button v-for="j in jaren" :key="j.jaar"
-              class="jaar" role="tab"
-              :class="{ 'jaar--actief': j.jaar === actiefJaar, 'jaar--leeg': !j.objecten.length }"
-              :aria-selected="j.jaar === actiefJaar"
-              :tabindex="j.jaar === actiefJaar ? 0 : -1"
-              @click="kiesJaar(j.jaar)"
-              @keydown="jaarToets($event, j.jaar)">
-        {{ j.jaar }}
-        <span class="jaar__aantal" aria-hidden="true">{{ j.objecten.length }}</span>
+  <!-- Film: de kust door de eeuwen heen. Bron: assets/film/ (mp4 + webm), zie README. -->
+  <section class="film js-reveal" aria-label="Film">
+    <div class="film__kader">
+      <video class="film__video" id="film" autoplay muted loop playsinline preload="metadata"
+             poster="assets/film/nehalennia-kust-poster.jpg"
+             aria-label="Doorsnede van de Zeeuwse kust van ± 200 tot 2026: het land met het heiligdom verdwijnt geleidelijk onder de zee.">
+        <source src="assets/film/nehalennia-kust.webm" type="video/webm">
+        <source src="assets/film/nehalennia-kust.mp4" type="video/mp4">
+      </video>
+      <button class="film__pauze" id="filmPauze" type="button" aria-pressed="false" aria-label="Film pauzeren">
+        <svg class="icoon-pauze" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2" width="3.5" height="12" rx="1"/><rect x="9.5" y="2" width="3.5" height="12" rx="1"/></svg>
+        <svg class="icoon-speel" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2l10 6-10 6z"/></svg>
       </button>
     </div>
+    <p class="film__onderschrift">De kust door de eeuwen heen, van ± 200 tot nu.</p>
+  </section>
 
-    <div class="tijdlijn__inhoud" role="tabpanel" aria-live="polite">
-      <p class="tijdlijn__onderschrift">{{ jaar.onderschrift }}</p>
+  <div class="golven" aria-hidden="true"><div class="golven__baan"></div></div>
 
-      <p class="tijdlijn__leeg" v-if="!jaar.objecten.length">Geen objecten in {{ jaar.jaar }}.</p>
+  <!-- II. Tijdlijn: vijf perioden (data/perioden.json) -->
+  <section class="sectie tijdlijn js-reveal" id="tijdlijn" aria-labelledby="tijdlijn-kop">
+    <h2 class="sectie__kop" id="tijdlijn-kop"><span class="sectie__nr">II</span>De tijdlijn</h2>
+    <p class="sectie__intro">Kies een periode en zie hoe de kust en het heiligdom door de eeuwen veranderden.</p>
 
-      <div v-else>
-        <ul class="objecten">
-          <li class="object" v-for="o in zichtbareObjecten" :key="o.id">
-            <div class="object__beeld">
-              <img v-if="!o.mislukt" :src="o.afbeelding" :alt="o.titel"
-                   loading="lazy" decoding="async" @error="beeldMislukt(o, $event)">
-              <p class="object__geen-beeld" v-else>Afbeelding niet beschikbaar</p>
-            </div>
-            <div class="object__tekst">
-              <h3 class="object__titel">{{ o.titel }}</h3>
-              <dl class="object__velden">
-                <div class="object__veld" v-if="o.objectnaam"><dt>Object</dt><dd>{{ o.objectnaam }}</dd></div>
-                <div class="object__veld" v-if="o.materiaal"><dt>Materiaal</dt><dd>{{ o.materiaal }}</dd></div>
-                <div class="object__veld" v-if="o.vindplaats"><dt>Vindplaats</dt><dd>{{ o.vindplaats }}</dd></div>
-              </dl>
-              <a class="object__bron" :href="o.bronLink" target="_blank" rel="noopener">{{ o.bronNaam }} ↗</a>
-            </div>
-          </li>
-        </ul>
+    <ol class="tijdas" role="tablist" aria-label="Perioden" :style="{ '--voortgang': voortgang }">
+      <li v-for="(p, i) in perioden" :key="i">
+        <button class="periode-knop" role="tab"
+                :class="{ 'periode-knop--actief': i === periode, 'periode-knop--bereikt': i <= periode }"
+                :aria-selected="i === periode"
+                :tabindex="i === periode ? 0 : -1"
+                :id="`periode-tab-${i}`"
+                :aria-controls="`periode-paneel-${i}`"
+                @click="periode = i"
+                @keydown="periodeToets($event, i)">
+          <span class="periode-knop__punt" aria-hidden="true"></span>
+          <span class="periode-knop__naam">{{ p.kort }}</span>
+        </button>
+      </li>
+    </ol>
 
-        <nav class="blader" v-if="totaalPaginas > 1" aria-label="Paginering">
-          <button class="blader__knop" :disabled="pagina === 1" @click="blader(-1)">← Vorige</button>
-          <span class="blader__stand">Pagina {{ pagina }} van {{ totaalPaginas }}</span>
-          <button class="blader__knop" :disabled="pagina === totaalPaginas" @click="blader(1)">Volgende →</button>
-        </nav>
+    <div class="periode" role="tabpanel" :key="periode"
+         :id="`periode-paneel-${periode}`" :aria-labelledby="`periode-tab-${periode}`" tabindex="0">
+      <figure class="periode__beeld">
+        <div class="periode__kader"><img :src="huidigePeriode.beeld" alt=""></div>
+        <figcaption class="periode__beeldtekst">{{ huidigePeriode.beeldtekst }}</figcaption>
+      </figure>
+      <div class="periode__tekst">
+        <div>
+          <p class="periode__nummer">{{ huidigePeriode.kort }}</p>
+          <h3 class="periode__titel">{{ huidigePeriode.titel }}</h3>
+        </div>
+        <div>
+          <p class="periode__alinea" v-for="(t, i) in huidigePeriode.tekst" :key="i">{{ t }}</p>
+        </div>
       </div>
     </div>
   </section>
@@ -334,13 +322,13 @@
   <div class="colofon__raster">
     <div>
       <h3>Colofon</h3>
-      <p>Gemaakt voor HackaLOD 2026 in Middelburg door team Rijksmuseum Collectie IT. [Namen teamleden nog toevoegen.]</p>
+      <p>Gemaakt voor HackaLOD 2026 in Middelburg door team Rijksmuseum Collectie IT:
+        <a href="https://www.linkedin.com/in/dignavannielen/" target="_blank" rel="noopener">Digna van Nielen</a>, <a href="https://www.linkedin.com/in/jeroen-de-meester-3ba6b2b/" target="_blank" rel="noopener">Jeroen De Meester</a>, <a href="https://www.linkedin.com/in/fricke-oosten-62a34b4a/" target="_blank" rel="noopener">Fricke Oosten</a> en <a href="https://www.linkedin.com/in/minh-phuong-tran-b71524131/" target="_blank" rel="noopener">Minh Phuong Tran</a>.</p>
     </div>
     <div>
       <h3>Bronnen</h3>
       <ul>
-        <li>Objecten en afbeeldingen: <a href="https://www.rmo.nl/" target="_blank" rel="noopener">Rijksmuseum van Oudheden</a> (CC0)</li>
-        <li><a href="https://www.rijksmuseum.nl/nl/collectie" target="_blank" rel="noopener">Rijksmuseum Amsterdam</a> (CC BY)</li>
+        <li>Objecten en afbeeldingen: <a href="https://www.rmo.nl/" target="_blank" rel="noopener">Rijksmuseum van Oudheden</a> (CC0), <a href="https://www.rijksmuseum.nl/" target="_blank" rel="noopener">Rijksmuseum Amsterdam</a> (public domain)</li>
         <li>Inscripties: EDCS en EDH</li>
         <li>[Rechten van de altaarfoto's in de bouwer nog bevestigen.]</li>
       </ul>
@@ -351,7 +339,7 @@
     </div>
     <div>
       <h3>Licentie</h3>
-      <p>CC0, team Rijksmuseum Collectie IT. Demo voor HackaLOD 2026: de jaartallen in de tijdlijn zijn verzonnen.</p>
+      <p>CC0, team Rijksmuseum Collectie IT. Demo voor HackaLOD 2026; de teksten bij de tijdlijn zijn concept.</p>
     </div>
   </div>
   <div class="colofon__onder">
@@ -366,9 +354,9 @@
   <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten en de altaarbouwer te tonen.</p>
 </noscript>
 
-<script src="js/reveal.js?v=4" defer></script>
-<script src="js/film.js?v=4" defer></script>
-<script type="module" src="js/app.js?v=4"></script>
-<script src="js/altaar.js?v=4" defer></script>
+<script src="js/reveal.js?v=10" defer></script>
+<script src="js/film.js?v=10" defer></script>
+<script type="module" src="js/app.js?v=10"></script>
+<script src="js/altaar.js?v=10" defer></script>
 </body>
 </html>

@@ -2,7 +2,6 @@ const PETITE_VUE = 'https://unpkg.com/petite-vue@0.4.1/dist/petite-vue.es.js'
 
 async function start() {
   const { createApp } = await import(PETITE_VUE)
-  const PER_PAGINA = 8
   const MAX_POGINGEN = 2
 
 
@@ -32,9 +31,10 @@ async function start() {
     })
   }
 
-  const [tijdlijn, verhaal] = await Promise.all([
+  const [tijdlijn, verhaal, perioden] = await Promise.all([
     laad('data/timeline.json'),
     laad('data/verhaal.json'),
+    laad('data/perioden.json'),
   ])
 
   // The RMO image proxy rate-limits when a whole grid loads at once, and a few
@@ -46,7 +46,8 @@ async function start() {
     }
   }
 
-  // every object once, for the collection overview (an object can only be in one year)
+  // every object once, for the collection overview (the years in timeline.json are
+  // demo data and are not shown any more)
   const alleStukken = tijdlijn.jaren.flatMap((j) => j.objecten)
   const SOORTEN = [
     { sleutel: 'alle', label: 'Alles', hoort: () => true },
@@ -56,8 +57,6 @@ async function start() {
     { sleutel: 'overig', label: 'Overig', hoort: (o) => !['altaar', 'bouwfragment', 'glasnegatief'].includes(o.objectnaam) },
   ]
   const STUKKEN_PER_KEER = 12
-
-  const eersteGevuld = tijdlijn.jaren.find((j) => j.objecten.length) ?? tijdlijn.jaren[0]
 
   createApp({
     // --- verhaal ---
@@ -74,36 +73,20 @@ async function start() {
     },
 
 
-    // --- tijdlijn ---
-    jaren: tijdlijn.jaren,
-    bronnen: tijdlijn.bronnen,
-    actiefJaar: eersteGevuld.jaar,
-    pagina: 1,
-    perPagina: PER_PAGINA,
-
-    get jaar() {
-      return this.jaren.find((j) => j.jaar === this.actiefJaar)
+    // --- tijdlijn: vijf perioden ---
+    perioden: perioden.perioden,
+    periode: 0,
+    get huidigePeriode() {
+      return this.perioden[this.periode]
     },
-    get totaalPaginas() {
-      return Math.max(1, Math.ceil(this.jaar.objecten.length / this.perPagina))
+    get voortgang() {
+      return this.periode / (this.perioden.length - 1)
     },
-    get zichtbareObjecten() {
-      const start = (this.pagina - 1) * this.perPagina
-      return this.jaar.objecten.slice(start, start + this.perPagina)
-    },
-    kiesJaar(jaar) {
-      this.actiefJaar = jaar
-      this.pagina = 1
-    },
-    blader(richting) {
-      this.pagina = Math.min(this.totaalPaginas, Math.max(1, this.pagina + richting))
-    },
-    jaarToets(event, jaar) {
-      const i = this.jaren.findIndex((j) => j.jaar === jaar)
-      const volgende = volgendeIndex(event, i, this.jaren.length)
+    periodeToets(event, i) {
+      const volgende = volgendeIndex(event, i, this.perioden.length)
       if (volgende === null) return
-      this.kiesJaar(this.jaren[volgende].jaar)
-      richtFocus(event, '.jaren', volgende)
+      this.periode = volgende
+      richtFocus(event, '.tijdas', volgende)
     },
 
     /** Retry a failed image twice with a growing delay, then show a placeholder. */
@@ -170,5 +153,6 @@ async function start() {
 // as a file:// URL, where fetch() is blocked), say so instead of showing nothing.
 start().catch((fout) => {
   console.error(fout)
+  document.getElementById('laadfoutDetail').textContent = String(fout && fout.message ? fout.message : fout)
   document.getElementById('laadfout').hidden = false
 })

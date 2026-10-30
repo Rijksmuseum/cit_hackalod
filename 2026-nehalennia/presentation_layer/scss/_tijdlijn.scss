@@ -1,234 +1,197 @@
-// The year rail
-.jaren {
+// The timeline: five periods on a horizontal axis. Click one to see the
+// coast at that time and read what happened.
+.tijdas {
+  position: relative;
   display: flex;
-  gap: 0.35rem;
-  padding: 0.75rem 0;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
-  border-block: 1px solid var(--line);
+  justify-content: space-between;
+  margin: 2.2rem 0 0;
+  padding: 0;
+  list-style: none;
 
-  &::-webkit-scrollbar {
-    display: none;
+  // the axis, and the gold part that fills up to the active period
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 1.15rem;
+    left: 10%; // centre of the first of five equal columns
+    height: 2px;
+    border-radius: 2px;
+  }
+
+  &::before {
+    right: 10%;
+    background: var(--line-strong);
+  }
+
+  &::after {
+    width: calc(80% * var(--voortgang, 0));
+    background: var(--accent);
+    transition: width 0.6s var(--ease);
+  }
+
+  li {
+    flex: 1 1 0;
+    display: flex;
+    justify-content: center;
   }
 }
 
-.jaar {
-  flex: none;
-  scroll-snap-align: center;
-  display: flex;
-  align-items: baseline;
-  gap: 0.35rem;
-  padding: 0.4rem 0.8rem;
-  border: 1px solid transparent;
-  border-radius: 999px;
+.periode-knop {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+  padding: 0;
+  border: 0;
   background: none;
   font-family: var(--sans);
-  font-size: 0.88rem;
-  font-variant-numeric: tabular-nums;
+  font-size: 0.95rem;
   color: var(--mute);
   cursor: pointer;
-  transition: background 0.2s var(--ease), border-color 0.2s var(--ease),
-    color 0.2s var(--ease);
+  transition: color 0.25s var(--ease);
 
-  &__aantal {
-    font-size: 0.68rem;
-    opacity: 0.7;
+  &__punt {
+    display: grid;
+    place-items: center;
+    width: 2.3rem;
+    height: 2.3rem;
+    border: 2px solid var(--line-strong);
+    border-radius: 50%;
+    background: var(--surface-0);
+    transition: background 0.25s var(--ease), border-color 0.25s var(--ease),
+      transform 0.35s var(--ease);
+
+    &::after {
+      content: '';
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background: var(--line-strong);
+      transition: background 0.25s var(--ease);
+    }
+  }
+
+  &__naam {
+    font-family: var(--display);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
 
   &:hover {
-    border-color: var(--accent);
-    color: var(--accent-bright);
+    color: var(--foam);
+
+    .periode-knop__punt {
+      border-color: var(--accent);
+      transform: scale(1.12) rotate(8deg);
+    }
   }
 
-  // years without objects stay clickable: the empty state is part of the demo
-  &--leeg {
-    opacity: 0.4;
+  // periods up to and including the active one are lit
+  &--bereikt .periode-knop__punt {
+    border-color: var(--accent);
+
+    &::after {
+      background: var(--accent);
+    }
   }
 
   &--actief {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--op-accent);
-    font-weight: var(--halfvet);
-    opacity: 1;
+    color: var(--accent-bright);
 
-    &:hover {
-      background: var(--accent-bright);
-      border-color: var(--accent-bright);
-      color: var(--op-accent);
+    .periode-knop__punt {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 6px rgba(201, 164, 106, 0.18);
+
+      &::after {
+        background: var(--op-accent);
+      }
     }
   }
 }
 
-.tijdlijn {
-  &__inhoud {
-    padding-top: 2rem;
-  }
-
-  &__onderschrift {
-    margin: 0 0 1.5rem;
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 1.05rem;
-    color: var(--mute);
-  }
-
-  &__leeg {
-    margin: 0;
-    padding: 4rem 1rem;
-    border: 1px dashed var(--line-strong);
-    border-radius: var(--radius);
-    text-align: center;
-    font-family: var(--sans);
-    color: var(--mute);
-  }
-}
-
-// Object cards
-.objecten {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-  gap: 2rem 1.5rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.object {
-  display: flex;
-  flex-direction: column;
+.periode {
+  margin-top: 2.5rem;
+  animation: inschuiven 0.5s var(--ease);
 
   &__beeld {
-    position: relative;
-    display: grid;
-    place-items: center;
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    border-radius: var(--radius);
-    background: var(--surface-3);
-    isolation: isolate;
+    margin: 0;
+  }
 
-    // the hairline the reference site puts over its images
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
-      pointer-events: none;
-    }
+  &__kader {
+    aspect-ratio: 806 / 180;
+    border-radius: var(--radius) var(--radius) 4px 4px;
+    background: var(--surface-1);
+    box-shadow: inset 0 0 0 1px var(--line-strong), 0 0 0 5px var(--surface-0),
+      0 0 0 6px var(--accent-deep);
+    overflow: hidden;
 
     img {
+      display: block;
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      display: block;
-      filter: brightness(0.9) saturate(0.95);
-      transition: transform 0.7s var(--ease), filter 0.4s;
+      object-fit: contain;
     }
   }
 
-  &:hover &__beeld img {
-    transform: scale(1.04);
-    filter: none;
-  }
-
-  &__geen-beeld {
-    margin: 0;
-    padding: 1rem;
+  &__beeldtekst {
+    margin: 1.4rem 0 0;
+    font-style: italic;
+    font-size: 0.95rem;
     text-align: center;
-    font-family: var(--sans);
-    font-size: 0.76rem;
     color: var(--mute);
   }
 
   &__tekst {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    padding: 0.9rem 0.1rem 0;
+    display: grid;
+    grid-template-columns: minmax(14rem, 1fr) 2fr;
+    gap: 1rem clamp(1.5rem, 4vw, 3rem);
+    margin-top: 2rem;
+    padding: clamp(1.5rem, 3vw, 2.2rem);
+    border-radius: var(--radius);
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  &__nummer {
+    margin: 0;
+    font-style: italic;
+    color: var(--accent);
   }
 
   &__titel {
-    margin: 0 0 0.5rem;
-    font-family: var(--serif);
-    font-size: 1.08rem;
-    line-height: 1.35;
-    color: var(--foam);
+    margin: 0.3rem 0 0;
+    font-size: clamp(1.4rem, 2.8vw, 1.9rem);
   }
 
-  &__velden {
-    margin: 0 0 0.7rem;
-    font-family: var(--sans);
-    font-size: 0.8rem;
-    color: var(--mute);
-  }
-
-  &__veld {
-    display: flex;
-    gap: 0.4rem;
-
-    dt {
-      flex: none;
-      width: 5.5rem;
-      opacity: 0.7;
-    }
-
-    dd {
-      margin: 0;
-    }
-  }
-
-  &__bron {
-    margin-top: auto;
-    font-family: var(--sans);
-    font-size: 0.76rem;
-    font-weight: var(--halfvet);
+  &__alinea {
+    margin: 0 0 1rem;
+    max-width: 38rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--text);
   }
 }
 
-// Paging
-.blader {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.25rem;
-  margin-top: 2.5rem;
-
-  &__knop {
-    padding: 0.55rem 1.1rem;
-    border: 1px solid var(--line-strong);
-    border-radius: 999px;
-    background: transparent;
-    font-family: var(--sans);
-    font-size: 0.85rem;
-    font-weight: var(--halfvet);
-    color: var(--foam);
-    cursor: pointer;
-    transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
-
-    &:hover:not(:disabled) {
-      border-color: var(--accent);
-      color: var(--accent-bright);
-    }
-
-    &:disabled {
-      opacity: 0.3;
-      cursor: default;
-    }
-  }
-
-  &__stand {
-    font-family: var(--sans);
-    font-size: 0.85rem;
-    font-variant-numeric: tabular-nums;
-    color: var(--mute);
-  }
-}
-
-@media (max-width: 30rem) {
-  .objecten {
+@media (max-width: 52rem) {
+  .periode__tekst {
     grid-template-columns: 1fr;
   }
+}
+
+// five periods do not fit side by side on a phone: show the number only
+@media (max-width: 34rem) {
+  .periode-knop__naam {
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    white-space: normal;
+    text-align: center;
+    max-width: 4.2rem;
+  }
+
 }
