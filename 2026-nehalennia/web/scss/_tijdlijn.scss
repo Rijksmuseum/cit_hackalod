@@ -50,7 +50,7 @@
     background: var(--accent);
     border-color: var(--accent);
     color: var(--op-accent);
-    font-weight: 600;
+    font-weight: var(--halfvet);
     opacity: 1;
 
     &:hover {
@@ -184,7 +184,7 @@
     margin-top: auto;
     font-family: var(--sans);
     font-size: 0.76rem;
-    font-weight: 600;
+    font-weight: var(--halfvet);
   }
 }
 
@@ -203,7 +203,7 @@
     background: transparent;
     font-family: var(--sans);
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: var(--halfvet);
     color: var(--foam);
     cursor: pointer;
     transition: border-color 0.25s var(--ease), color 0.25s var(--ease);

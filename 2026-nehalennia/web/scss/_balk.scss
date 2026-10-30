@@ -12,10 +12,10 @@
   &__merk {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.4rem;
     font-family: var(--sans);
     font-size: 0.82rem;
-    font-weight: 600;
+    font-weight: var(--halfvet);
     letter-spacing: 0.04em;
     color: var(--foam);
     text-decoration: none;
@@ -31,6 +31,15 @@
     }
   }
 
+  // the second half of the brand, in the accent
+  &__cit {
+    color: var(--accent);
+  }
+
+  &__merk:hover &__cit {
+    color: var(--accent-bright);
+  }
+
   &__nav {
     display: flex;
     gap: 0.4rem;
@@ -41,7 +50,7 @@
       border-radius: 999px;
       font-family: var(--sans);
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: var(--halfvet);
       color: var(--mute);
       text-decoration: none;
       transition: border-color 0.2s var(--ease), color 0.2s var(--ease);

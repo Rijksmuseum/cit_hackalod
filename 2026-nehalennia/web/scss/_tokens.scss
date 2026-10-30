@@ -20,11 +20,16 @@
   --accent-deep: #bb361b; // decorative only, too dark for body text on --surface-0
   --op-accent: #240a03; // text on a filled accent surface
 
-  // Iosevka everywhere, falling back to the system sans. The three roles are kept
-  // apart so they can diverge again later.
-  --display: 'Iosevka', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --serif: 'Iosevka', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --sans: 'Iosevka', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  // Source Serif 4 for running text, weight 200-900 plus an optical size axis
+  // the browser drives off the font size. Source Code Pro sets the headings
+  // against it: same Adobe superfamily, so the two share proportions.
+  --display: 'Source Code Pro', ui-monospace, 'SF Mono', Menlo, monospace;
+  --serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --sans: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+
+  // the two weights the page runs on: light for running text, semibold for headings
+  --licht: 300;
+  --halfvet: 600;
 
   --gutter: clamp(1.25rem, 4vw, 3.5rem);
   --wrap: 82rem;

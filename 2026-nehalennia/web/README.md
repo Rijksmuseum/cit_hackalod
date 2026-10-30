@@ -14,7 +14,15 @@ type have since moved away from it:
   built around `#202327`.
 - **Accent** — vermilion `#ff5533`, with `--accent-bright` for hover and
   `--op-accent` for text on a filled accent surface.
-- **Type** — Iosevka for all three roles, falling back to the system sans.
+- **Type** — [Anybody](https://fonts.google.com/specimen/Anybody), one variable
+  family (weight 100–900, width 50–150). Headings use `font-stretch: var(--breed)`
+  at 125% and weight 500; everything else sits at normal width.
+
+  This stands in for **ABC Ginto**, which was the first choice but is a paid
+  Dinamo typeface with no free CDN. If a licence covering web use turns up, drop
+  the woff2 files in `assets/fonts/`, add the `@font-face` rules and repoint the
+  three font tokens — the width axis is the only thing that would need rethinking,
+  since Ginto splits that across two families (Ginto and Ginto Nord).
 
 `--foam` / `--text` / `--mute` still carry their original names and a slight
 teal tint, left over from the sea palette.
@@ -49,14 +57,20 @@ after editing anything under `scss/`.
 
 ## Layout
 
+Two pages, `Verhaal` and `Altaar`, linked by the bar at the top.
+
 | | |
 |---|---|
-| `index.html` | the whole page |
-| `js/app.js` | [petite-vue](https://github.com/vuejs/petite-vue) app, loaded from a CDN |
-| `scss/` | one partial per section |
+| `index.html` | Verhaal — the story steps and the timeline |
+| `altaar.html` | Altaar — intentionally empty, nothing built yet |
+| `js/app.js` | [petite-vue](https://github.com/vuejs/petite-vue) app, loaded from a CDN. Only `index.html` uses it |
+| `scss/` | one partial per block (`_balk`, `_kop`, `_verhaal`, `_tijdlijn`) |
 | `data/timeline.json` | generated — do not edit by hand |
 | `data/verhaal.json` | the five story steps, hand-written |
 | `maak_demo_data.py` | builds `timeline.json` |
+
+The top bar is duplicated in both HTML files — there is no templating step, so a
+change to the nav has to be made twice.
 
 ## What is fake, and what is real
 
@@ -81,9 +95,9 @@ visible: three empty years (1950, 1979, 1989), two years with 25+ objects
   it has not been checked by anyone who knows the material.
 - **`assets/title.gif` is a copy** of `../presentation/title.gif`, duplicated so
   the `web/` directory can be served on its own. Re-copy it if the original changes.
-- **The board is empty by design.** Three placeholder tabs are wired up; the panel
-  is blank. Dropping the real interaction in means filling `.bord__paneel` and
-  replacing `BORD_TABS` in `js/app.js`.
+- **`altaar.html` is empty by design.** It has the top bar and an empty `<main>`,
+  held open by a `min-height` so it does not collapse to a bare bar. No styles
+  and no JS of its own yet.
 - **Only RMO is in the data.** `bronNaam` / `bronLink` are per object and the
   footer reads from a `bronnen` list, so a multi-source set needs no UI changes.
 
