@@ -1,0 +1,120 @@
+.verhaal {
+  &__frame {
+    display: grid;
+    grid-template-columns: 19rem 1fr;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    border-radius: var(--radius);
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  &__inhoud {
+    min-height: 18rem;
+  }
+
+  &__nummer {
+    margin: 0;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--accent);
+  }
+
+  &__titel {
+    margin: 0.4rem 0 1.1rem;
+    font-size: clamp(1.7rem, 3.4vw, 2.4rem);
+  }
+
+  &__alinea {
+    margin: 0 0 1rem;
+    max-width: 38rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+}
+
+// The 01-05 rail, stacked vertically.
+.stappen {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  // the thread running through the numbers
+  &::before {
+    content: '';
+    position: absolute;
+    inset-block: 1.7rem;
+    left: 1.35rem;
+    width: 1px;
+    background: var(--line-strong);
+  }
+}
+
+.stap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  padding: 0.65rem 0.5rem;
+  border: 0;
+  background: none;
+  font-family: var(--sans);
+  text-align: left;
+  color: var(--mute);
+  cursor: pointer;
+  transition: color 0.25s var(--ease);
+
+  &__nummer {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--surface-0);
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    transition: background 0.25s var(--ease), border-color 0.25s var(--ease),
+      color 0.25s var(--ease);
+  }
+
+  &__titel {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  &:hover {
+    color: var(--foam);
+
+    .stap__nummer {
+      border-color: var(--accent);
+      color: var(--accent-bright);
+    }
+  }
+
+  &--actief {
+    color: var(--foam);
+
+    .stap__nummer {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--op-accent);
+    }
+
+    .stap__titel {
+      font-weight: 600;
+    }
+  }
+}
+
+@media (max-width: 52rem) {
+  .verhaal__frame {
+    grid-template-columns: 1fr;
+  }
+}

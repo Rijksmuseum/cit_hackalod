@@ -1,0 +1,70 @@
+// Top bar: brand on the left, the two pages on the right.
+.balk {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 1rem var(--gutter);
+  border-bottom: 1px solid var(--line);
+
+  &__merk {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--sans);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--foam);
+    text-decoration: none;
+
+    img {
+      width: 2.6rem;
+      height: auto;
+    }
+
+    &:hover {
+      color: var(--accent-bright);
+      text-decoration: none;
+    }
+  }
+
+  &__nav {
+    display: flex;
+    gap: 0.4rem;
+
+    a {
+      padding: 0.4rem 0.9rem;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--mute);
+      text-decoration: none;
+      transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
+
+      &:hover {
+        border-color: var(--accent);
+        color: var(--accent-bright);
+        text-decoration: none;
+      }
+
+      // the page you are on
+      &[aria-current='page'] {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--op-accent);
+      }
+    }
+  }
+}
+
+@media (max-width: 34rem) {
+  .balk {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
