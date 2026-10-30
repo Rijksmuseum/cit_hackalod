@@ -6,10 +6,13 @@
 <title>Nehalennia · Een wens voor de godin van de Scheldemonding</title>
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SourceSerif4-Light.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/main.css?v=2">
+<link rel="stylesheet" href="css/main.css?v=4">
 </head>
 <body>
 
@@ -24,14 +27,21 @@
   </p>
 </header>
 
-<!-- Film. Vervang .film__plek door een <video controls> of <iframe>; houd de aspect-ratio op .film__kader. -->
+<!-- Film: de kust door de eeuwen heen. Bron: assets/film/ (mp4 + webm), zie README. -->
 <section class="film js-reveal" aria-label="Film">
   <div class="film__kader">
-    <div class="film__plek">
-      <span class="film__speel" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l16 9-16 9z"/></svg></span>
-      <span class="film__label">Filmpje volgt</span>
-    </div>
+    <video class="film__video" id="film" autoplay muted loop playsinline preload="metadata"
+           poster="assets/film/nehalennia-kust-poster.jpg"
+           aria-label="Doorsnede van de Zeeuwse kust van ± 200 tot 2026: het land met het heiligdom verdwijnt geleidelijk onder de zee.">
+      <source src="assets/film/nehalennia-kust.webm" type="video/webm">
+      <source src="assets/film/nehalennia-kust.mp4" type="video/mp4">
+    </video>
+    <button class="film__pauze" id="filmPauze" type="button" aria-pressed="false" aria-label="Film pauzeren">
+      <svg class="icoon-pauze" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2" width="3.5" height="12" rx="1"/><rect x="9.5" y="2" width="3.5" height="12" rx="1"/></svg>
+      <svg class="icoon-speel" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2l10 6-10 6z"/></svg>
+    </button>
   </div>
+  <p class="film__onderschrift">De kust door de eeuwen heen, van ± 200 tot nu.</p>
 </section>
 
 <div class="golven" aria-hidden="true"><div class="golven__baan"></div><svg class="golven__schip" viewBox="0 0 48 36" fill="none" stroke="#c9a46a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M24 3v22M24 5c8 3 13 10 14 18H24M24 8c-6 3-9 8-10 14h10"/><path d="M6 26h36l-5 7H11z" fill="#26221c"/></svg></div>
@@ -329,7 +339,8 @@
     <div>
       <h3>Bronnen</h3>
       <ul>
-        <li>Objecten en afbeeldingen: <a href="https://www.rmo.nl/" target="_blank" rel="noopener">Rijksmuseum van Oudheden</a> (CC BY)</li>
+        <li>Objecten en afbeeldingen: <a href="https://www.rmo.nl/" target="_blank" rel="noopener">Rijksmuseum van Oudheden</a> (CC0)</li>
+        <li><a href="https://www.rijksmuseum.nl/nl/collectie" target="_blank" rel="noopener">Rijksmuseum Amsterdam</a> (CC BY)</li>
         <li>Inscripties: EDCS en EDH</li>
         <li>[Rechten van de altaarfoto's in de bouwer nog bevestigen.]</li>
       </ul>
@@ -355,8 +366,9 @@
   <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten en de altaarbouwer te tonen.</p>
 </noscript>
 
-<script src="js/reveal.js?v=2" defer></script>
-<script type="module" src="js/app.js?v=2"></script>
-<script src="js/altaar.js?v=2" defer></script>
+<script src="js/reveal.js?v=4" defer></script>
+<script src="js/film.js?v=4" defer></script>
+<script type="module" src="js/app.js?v=4"></script>
+<script src="js/altaar.js?v=4" defer></script>
 </body>
 </html>
