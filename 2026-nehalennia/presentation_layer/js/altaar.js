@@ -355,6 +355,10 @@ function hit(p) {
   }
   return -1;
 }
+// Op touch-schermen mag de pagina verder scrollen over het altaar; alleen een gebaar dat op een figuur begint, sleept die figuur.
+canvas.addEventListener('touchstart', (ev) => {
+  if (ev.touches.length === 1 && hit(toOrig(ev.touches[0])) >= 0) ev.preventDefault();
+}, { passive: false });
 canvas.addEventListener('pointerdown', (ev) => {
   const p = toOrig(ev), i = hit(p);
   if (i < 0) { select(-1); paint(); return; }
@@ -516,7 +520,7 @@ async function refreshLabel() {
 function printLabel() {
   const land = isLand(), w = land ? '89mm' : '36mm', h = land ? '36mm' : '89mm';
   $('pageStyle').textContent = `@page{size:${w} ${h};margin:0}`;
-  const im = new Image(); im.style.width = w; im.style.height = h;
+  const im = new Image();
   const go = () => setTimeout(() => window.print(), 50);
   im.onload = go; im.src = labelUrl;
   $('printArea').replaceChildren(im);

@@ -19,7 +19,7 @@
 .bouwer .stage, .bouwer .controls { background:var(--panel); border:1px solid var(--line); border-radius:10px; }
 .bouwer .stage { padding:10px; }
 .bouwer .controls { padding:18px; }
-.bouwer canvas { width:100%; height:auto; display:block; border-radius:6px; touch-action:none; cursor:default; }
+.bouwer canvas { width:100%; height:auto; display:block; border-radius:6px; touch-action:pan-y; cursor:default; }  /* verticaal scrollen blijft mogelijk; slepen van een figuur blokkeert het (zie altaar.js) */
 .bouwer .row { margin-bottom:18px; }
 .bouwer .rowhead { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
 .bouwer__grid h2 { font-family:var(--serif); letter-spacing:.08em; font-size:.85rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); margin:22px 0 6px; font-weight:400; }
@@ -81,9 +81,13 @@
 #printArea { display:none; }
 @media print {
   body > * { display:none !important; }
-  body > #printArea { display:block !important; }
+  body > #printArea {
+    display:grid !important; place-items:center;
+    position:fixed; inset:0; width:100vw; height:100vh; margin:0; padding:0; overflow:hidden; background:#fff;
+  }
   html, body { background:#fff !important; margin:0 !important; padding:0 !important; }
-  #printArea img { display:block; }
+  /* fills the printable area of whatever paper size is chosen, centred, never cropped */
+  #printArea img { display:block; width:100%; height:100%; object-fit:contain; object-position:center; }
 }
 .bouwer .stage { position:sticky; top:1.2rem; }
 @media (max-width:760px) { .bouwer .stage { position:static; } }
