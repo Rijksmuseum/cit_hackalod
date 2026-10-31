@@ -145,8 +145,6 @@ async function start() {
     { sleutel: 'RMA', label: 'Rijksmuseum Amsterdam (RMA)' },
   ]
   const STUKKEN_PER_KEER = 12
-  // placeholder so the dialog markup can be evaluated before any object is opened
-  const LEEG_STUK = { rma: false, periodes: [], opschrift: [], edcs: [], relaties: [] }
 
   createApp({
     // --- verhaal ---
@@ -188,10 +186,7 @@ async function start() {
     zoek: '',
     zichtbaar: STUKKEN_PER_KEER,
     gekozen: null,
-    bekijk: null,
-    get toon() {
-      return this.bekijk || this.gekozen || LEEG_STUK
-    },
+    uitgeklapt: null,   // pid of the linked object that is open in the list
     instellingen: INSTELLINGEN,
     zonderPeriode,
     /** Does an object pass all filters, except the one named in `behalve`? Used for the live counts. */
@@ -272,21 +267,17 @@ async function start() {
     /** Open an object as the main object: its big image stays on the left. */
     open(o) {
       this.gekozen = o
-      this.bekijk = null
+      this.uitgeklapt = null
       const dialoog = document.getElementById('lichtbak')
       if (!dialoog.open) dialoog.showModal()
       dialoog.scrollTop = 0
     },
-    /** A linked object is shown in the text column; the main object's image stays put. */
-    kies(o) {
-      this.bekijk = o
-      document.querySelector('#lichtbak .lichtbak__tekst')?.scrollIntoView({ block: 'start' })
-    },
-    terug() {
-      this.bekijk = null
+    /** Open or close the extra information of a linked object in the list. */
+    wissel(id) {
+      this.uitgeklapt = this.uitgeklapt === id ? null : id
     },
     sluit() {
-      this.bekijk = null
+      this.uitgeklapt = null
       document.getElementById('lichtbak').close()
     },
     sluitOpAchtergrond(event) {
