@@ -31,11 +31,18 @@ async function start() {
     })
   }
 
-  const [objecten, verhaal, perioden] = await Promise.all([
+  const [alleObjecten, verhaal, perioden] = await Promise.all([
     laad('data/objecten.json'),
     laad('data/verhaal.json'),
     laad('data/perioden.json'),
   ])
+
+  // glass negatives are left out entirely: not loaded, not listed, not shown as linked objects
+  const isGlasnegatief = (o) => (o.objectnaam || '').split(/\n|;/).some((x) => x.trim().toLowerCase() === 'glasnegatief')
+  const uitgesloten = new Set(alleObjecten.filter(isGlasnegatief).map((o) => o.pid))
+  const objecten = alleObjecten
+    .filter((o) => !uitgesloten.has(o.pid))
+    .map((o) => ({ ...o, linked_objecten: (o.linked_objecten || []).filter((l) => !uitgesloten.has(l.pid)) }))
 
   // --- objects: every field of data/objecten.json is used somewhere ---
   const RMA = 'Rijksmuseum Amsterdam'
@@ -75,7 +82,7 @@ async function start() {
     const eerst = namen[0].toLowerCase()
     const groep = rma || ['prent', 'gravure'].includes(eerst) ? 'prent'
       : eerst.startsWith('altaar') ? 'altaar'
-      : ['bouwfragment', 'glasnegatief'].includes(eerst) ? eerst : 'overig'
+      : eerst === 'bouwfragment' ? eerst : 'overig'
     const afbeelding = o.image_url && rma ? o.image_url.replace(IIIF_MAX, '/full/!640,640/0/default.jpg') : o.image_url
     const stuk = {
       id: o.pid,
@@ -129,13 +136,12 @@ async function start() {
     { sleutel: 'altaar', label: 'Altaren', hoort: (o) => o.groep === 'altaar' },
     { sleutel: 'prent', label: 'Prenten', hoort: (o) => o.groep === 'prent' },
     { sleutel: 'bouwfragment', label: 'Bouwfragmenten', hoort: (o) => o.groep === 'bouwfragment' },
-    { sleutel: 'glasnegatief', label: 'Glasnegatieven', hoort: (o) => o.groep === 'glasnegatief' },
     { sleutel: 'overig', label: 'Overig', hoort: (o) => o.groep === 'overig' },
   ]
   const INSTELLINGEN = [
     { sleutel: 'alle', label: 'Alle instellingen' },
-    { sleutel: 'RMO', label: 'RMO' },
-    { sleutel: 'RMA', label: 'RMA' },
+    { sleutel: 'RMO', label: 'Rijksmuseum van Oudheden (RMO)' },
+    { sleutel: 'RMA', label: 'Rijksmuseum Amsterdam (RMA)' },
   ]
   const STUKKEN_PER_KEER = 12
 
@@ -176,7 +182,6 @@ async function start() {
     soort: 'alle',
     instelling: 'alle',
     periodeFilter: 'alle',
-    alleenGekoppeld: false,
     zoek: '',
     zichtbaar: STUKKEN_PER_KEER,
     gekozen: null,
@@ -194,7 +199,6 @@ async function start() {
         (o) => hoort(o)
           && (this.instelling === 'alle' || (this.instelling === 'RMA') === o.rma)
           && (pf === 'alle' || (pf === 'geen' ? !o.periodes.length : o.periodes.some((p) => p.period_id === pf)))
-          && (!this.alleenGekoppeld || o.relaties.length)
           && (!q || o.zoektekst.includes(q)),
       )
     },
@@ -219,7 +223,6 @@ async function start() {
     bekijkPeriode(id) {
       this.soort = 'alle'
       this.instelling = 'alle'
-      this.alleenGekoppeld = false
       this.zoek = ''
       this.kiesPeriode(id)
     },

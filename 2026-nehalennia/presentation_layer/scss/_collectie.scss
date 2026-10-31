@@ -238,7 +238,15 @@
   display: flex;
   gap: 0.35rem;
   align-items: center;
+  flex-wrap: wrap;
   margin-top: 0.55rem;
+
+  &__kop {
+    flex: 0 0 100%;
+    font-size: 0.85rem;
+    font-weight: var(--halfvet);
+    color: var(--text);
+  }
 
   &__item {
     width: 2.6rem;
@@ -416,6 +424,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex: 1 1 26rem;
+  max-width: 28rem;
 
   &__label {
     position: absolute;
@@ -426,7 +436,8 @@
   }
 
   &__veld {
-    width: min(21rem, 100%);
+    width: 100%;
+    min-width: 0;
     padding: 0.45rem 0.8rem;
     border: 1px solid var(--line-strong);
     border-radius: 999px;

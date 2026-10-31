@@ -12,7 +12,7 @@
 <link rel="preload" href="assets/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SourceSerif4-Light.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/main.css?v=35">
+<link rel="stylesheet" href="css/main.css?v=39">
 </head>
 <body>
 
@@ -145,10 +145,6 @@
           <option value="geen">Zonder periode ({{ zonderPeriode }})</option>
         </select>
       </label>
-      <label class="vinkveld">
-        <input type="checkbox" v-model="alleenGekoppeld" @change="zichtbaar = STUKKEN_PER_KEER">
-        <span>Alleen gekoppelde objecten</span>
-      </label>
       <label class="zoek">
         <span class="zoek__label">Zoeken</span>
         <input type="search" class="zoek__veld" v-model="zoek" @input="zichtbaar = STUKKEN_PER_KEER"
@@ -181,11 +177,8 @@
             <span class="opschrift opschrift--klein" v-if="o.opschrift.length" aria-label="Opschrift">
               <span class="opschrift__lijst"><span class="opschrift__regel" v-for="regel in o.opschrift">{{ regel }}</span></span>
             </span>
-            <span class="kaart__inst">
-              <span v-if="o.periodes.length"><b>Periode:</b> {{ o.periodeTekst }}</span>
-              <span v-if="!o.periodes.length">Geen periode toegekend</span>
-            </span>
-            <span class="minis" v-if="o.relaties.length" aria-hidden="true">
+            <span class="minis" v-if="o.relaties.length">
+              <span class="minis__kop">Gekoppelde objecten</span>
               <span class="minis__lijst"><span class="minis__item" v-for="r in o.relaties.slice(0, 4)" :class="{ 'minis__item--twijfel': r.score < 1 }" :title="obj(r.id).objectnummer">
                 <img v-if="obj(r.id).miniatuur" :src="obj(r.id).miniatuur" alt="" loading="lazy" @error="miniFout($event)">
                 <span class="minis__nr" v-if="!obj(r.id).miniatuur">{{ obj(r.id).objectnummer }}</span>
@@ -450,8 +443,8 @@
   <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten en de altaarbouwer te tonen.</p>
 </noscript>
 
-<script src="js/reveal.js?v=35" defer></script>
-<script type="module" src="js/app.js?v=35"></script>
-<script src="js/altaar.js?v=35" defer></script>
+<script src="js/reveal.js?v=39" defer></script>
+<script type="module" src="js/app.js?v=39"></script>
+<script src="js/altaar.js?v=39" defer></script>
 </body>
 </html>
