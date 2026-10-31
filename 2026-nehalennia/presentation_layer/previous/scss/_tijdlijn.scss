@@ -1,0 +1,208 @@
+// The timeline: five periods on a horizontal axis. Click one to see the
+// coast at that time and read what happened.
+.tijdas {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  margin: 2.2rem 0 0;
+  padding: 0;
+  list-style: none;
+
+  // the axis, and the gold part that fills up to the active period
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 1.15rem;
+    left: 10%; // centre of the first of five equal columns
+    height: 2px;
+    border-radius: 2px;
+  }
+
+  &::before {
+    right: 10%;
+    background: var(--line-strong);
+  }
+
+  &::after {
+    width: calc(80% * var(--voortgang, 0));
+    background: var(--accent);
+    transition: width 0.6s var(--ease);
+  }
+
+  li {
+    flex: 1 1 0;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.periode-knop {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  color: var(--mute);
+  cursor: pointer;
+  transition: color 0.25s var(--ease);
+
+  &__punt {
+    display: grid;
+    place-items: center;
+    width: 2.3rem;
+    height: 2.3rem;
+    border: 2px solid var(--line-strong);
+    border-radius: 50%;
+    background: var(--surface-0);
+    transition: background 0.25s var(--ease), border-color 0.25s var(--ease),
+      transform 0.35s var(--ease);
+
+    &::after {
+      content: '';
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background: var(--line-strong);
+      transition: background 0.25s var(--ease);
+    }
+  }
+
+  &__naam {
+    font-family: var(--display);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  &:hover {
+    color: var(--foam);
+
+    .periode-knop__punt {
+      border-color: var(--accent);
+      transform: scale(1.12) rotate(8deg);
+    }
+  }
+
+  // periods up to and including the active one are lit
+  &--bereikt .periode-knop__punt {
+    border-color: var(--accent);
+
+    &::after {
+      background: var(--accent);
+    }
+  }
+
+  &--actief {
+    color: var(--accent-bright);
+
+    .periode-knop__punt {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 6px rgba(201, 164, 106, 0.18);
+
+      &::after {
+        background: var(--op-accent);
+      }
+    }
+  }
+}
+
+.periode {
+  margin-top: 2.5rem;
+  animation: inschuiven 0.5s var(--ease);
+
+  &__beeld {
+    margin: 0;
+  }
+
+  &__kader {
+    aspect-ratio: 806 / 180;
+    border-radius: var(--radius) var(--radius) 4px 4px;
+    background: var(--surface-1);
+    box-shadow: inset 0 0 0 1px var(--line-strong), 0 0 0 5px var(--surface-0),
+      0 0 0 6px var(--accent-deep);
+    overflow: hidden;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__beeldtekst {
+    margin: 1.4rem 0 0;
+    font-style: italic;
+    font-size: 0.95rem;
+    text-align: center;
+    color: var(--mute);
+  }
+
+  &__tekst {
+    display: grid;
+    grid-template-columns: minmax(14rem, 1fr) 2fr;
+    gap: 1rem clamp(1.5rem, 4vw, 3rem);
+    margin-top: 2rem;
+    padding: clamp(1.5rem, 3vw, 2.2rem);
+    border-radius: var(--radius);
+    background: var(--surface-2);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  &__nummer {
+    margin: 0;
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  &__titel {
+    margin: 0.3rem 0 0;
+    font-size: clamp(1.4rem, 2.8vw, 1.9rem);
+  }
+
+  &__alinea {
+    margin: 0 0 1rem;
+    max-width: 38rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+}
+
+@media (max-width: 52rem) {
+  .periode__tekst {
+    grid-template-columns: 1fr;
+  }
+}
+
+// five periods do not fit side by side on a phone: show the number only
+@media (max-width: 34rem) {
+  .periode-knop__naam {
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
+    white-space: normal;
+    text-align: center;
+    max-width: 4.2rem;
+  }
+
+}
+
+.periode__jaren {
+  margin-left: 0.6rem;
+  font-size: 0.8em;
+  letter-spacing: 0.08em;
+  color: var(--mute);
+}
+
+.periode__objecten {
+  margin-top: 1.2rem;
+}

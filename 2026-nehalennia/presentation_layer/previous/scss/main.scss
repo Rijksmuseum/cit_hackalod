@@ -1,0 +1,217 @@
+@use 'fonts';
+@use 'tokens';
+@use 'kop';
+@use 'verhaal';
+@use 'tijdlijn';
+@use 'collectie';
+@use 'bouwer';
+@use 'lezen';
+@use 'voet';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--surface-0);
+  color: var(--text);
+  font-family: var(--serif);
+  font-weight: var(--licht);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+.laadfout {
+  max-width: var(--wrap);
+  margin: 2rem auto;
+  padding: 1rem var(--gutter);
+  border-left: 3px solid var(--accent);
+  background: var(--surface-1);
+  color: var(--mute);
+
+  code {
+    color: var(--accent-bright);
+  }
+}
+
+// petite-vue strips this once it has mounted
+[v-cloak] {
+  display: none;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: var(--halfvet);
+  letter-spacing: 0.04em;
+  color: var(--foam);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--accent-bright);
+    text-decoration: underline;
+  }
+}
+
+img {
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--surface-0);
+}
+
+// A small uppercase accent label above a heading.
+.bovenschrift {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 0.74rem;
+  font-weight: var(--halfvet);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+// ---- sections ----
+.sectie {
+  position: relative;
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 4.5rem) var(--gutter) 0;
+
+  // roman numeral + carved heading
+  &__kop {
+    margin: 0 0 1.6rem;
+    font-size: clamp(1.7rem, 3.6vw, 2.5rem);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  &__nr {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-family: var(--display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+
+    &::after {
+      content: '';
+      display: inline-block;
+      vertical-align: middle;
+      width: 2.5rem;
+      height: 1px;
+      margin-left: 0.8rem;
+      background: var(--accent-deep);
+      transform-origin: left;
+      transition: transform 0.9s var(--ease) 0.2s;
+    }
+  }
+
+  &__intro {
+    margin: -0.6rem 0 2rem;
+    max-width: 38rem;
+    color: var(--mute);
+    font-size: 1.05rem;
+  }
+}
+
+// ---- wave divider: the Scheldemonding between the sections ----
+.golven {
+  position: relative;
+  height: 2.6rem;
+  margin-top: clamp(2.5rem, 6vw, 4.5rem);
+  overflow: hidden;
+  color: var(--accent-deep);
+  opacity: 0.8;
+
+  &__baan {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 200%;
+    height: 100%;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='40' viewBox='0 0 120 40'%3E%3Cpath d='M0 20 Q15 6 30 20 T60 20 T90 20 T120 20' fill='none' stroke='%238a6d3f' stroke-width='1.6'/%3E%3Cpath d='M0 30 Q15 18 30 30 T60 30 T90 30 T120 30' fill='none' stroke='%238a6d3f' stroke-width='1' opacity='.5'/%3E%3C/svg%3E") repeat-x left center / 120px 40px;
+    animation: golf 14s linear infinite;
+  }
+
+  // the little ship that sails across the first divider
+  &__schip {
+    position: absolute;
+    bottom: 0.5rem;
+    left: -4rem;
+    width: 3rem;
+    animation: zeil 28s linear infinite, deining 3.2s ease-in-out infinite;
+  }
+}
+
+@keyframes golf {
+  to { transform: translateX(-120px); }
+}
+
+@keyframes zeil {
+  to { left: 105%; }
+}
+
+@keyframes deining {
+  0%, 100% { translate: 0 0; rotate: -3deg; }
+  50% { translate: 0 -4px; rotate: 3deg; }
+}
+
+// ---- scroll reveal (js/app.js adds .js-reveal, then .is-zichtbaar) ----
+.js .js-reveal {
+  opacity: 0;
+  transform: translateY(1.4rem);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+
+  &.is-zichtbaar {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.sectie.is-zichtbaar .sectie__nr::after {
+  transform: scaleX(1);
+}
+
+.sectie:not(.is-zichtbaar) .sectie__nr::after {
+  transform: scaleX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .js .js-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

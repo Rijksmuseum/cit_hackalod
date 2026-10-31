@@ -1,0 +1,70 @@
+// Hero: NEHALENNIA, large, as if carved.
+.kop {
+  position: relative;
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: clamp(3rem, 8vw, 6rem) var(--gutter) 0;
+  text-align: center;
+
+  // soft glow behind the title, like torchlight on stone
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 10% auto;
+    height: 22rem;
+    background: radial-gradient(closest-side, rgba(201, 164, 106, 0.16), transparent);
+    pointer-events: none;
+  }
+
+  &__titel {
+    position: relative;
+    margin: 0.9rem 0 0;
+    font-size: clamp(2.4rem, 11.5vw, 8.2rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    // inscription effect: light edge below, dark edge above
+    color: #d9c7a1;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.7), 0 2px 0 rgba(255, 244, 220, 0.18),
+      0 10px 28px rgba(0, 0, 0, 0.55);
+  }
+
+  // every letter is its own span, so it can be chiselled in and nudged
+  &__letter {
+    display: inline-block;
+    animation: houw 0.9s var(--ease) backwards;
+    animation-delay: calc(var(--i) * 70ms);
+    transition: transform 0.3s var(--ease), color 0.3s;
+    cursor: default;
+
+    &:hover {
+      transform: translateY(-0.08em) rotate(var(--tilt, -4deg));
+      color: var(--accent-bright);
+    }
+  }
+
+  &__ondertitel {
+    margin: 0.9rem 0 0;
+    font-family: var(--display);
+    font-size: clamp(0.8rem, 2vw, 1.1rem);
+    font-weight: 500;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  &__onderschrift {
+    margin: 1.2rem auto 0;
+    max-width: 36rem;
+    font-size: 1.1rem;
+    color: var(--mute);
+  }
+}
+
+@keyframes houw {
+  from {
+    opacity: 0;
+    transform: translateY(0.25em) scale(1.08);
+    filter: blur(8px);
+  }
+}

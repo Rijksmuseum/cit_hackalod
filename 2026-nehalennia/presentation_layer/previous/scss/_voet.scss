@@ -1,0 +1,69 @@
+// Colofon
+.colofon {
+  margin-top: clamp(4rem, 9vw, 7rem);
+  background: var(--surface-1);
+  border-top: 1px solid var(--line);
+  position: relative;
+
+  &__motto {
+    max-width: var(--wrap);
+    margin: 0 auto;
+    padding: clamp(2.5rem, 6vw, 4rem) var(--gutter) 0;
+    text-align: center;
+
+    .titel {
+      margin: 0;
+      font-family: var(--display);
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      letter-spacing: 0.4em;
+      color: var(--accent);
+    }
+
+    p {
+      margin: 0.5rem 0 0;
+      font-style: italic;
+      color: var(--mute);
+    }
+  }
+
+  &__raster {
+    max-width: var(--wrap);
+    margin: 0 auto;
+    padding: 2.5rem var(--gutter);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 2rem;
+    font-size: 0.9rem;
+    color: var(--mute);
+
+    h3 {
+      margin: 0 0 0.6rem;
+      font-family: var(--sans);
+      font-size: 0.74rem;
+      font-weight: var(--halfvet);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    p,
+    ul {
+      margin: 0 0 0.5rem;
+      padding: 0;
+      list-style: none;
+    }
+  }
+
+  &__onder {
+    position: relative;
+    max-width: var(--wrap);
+    margin: 0 auto;
+    padding: 1.6rem var(--gutter) 2.4rem;
+    min-height: 5rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.8rem;
+    color: var(--mute);
+    overflow: hidden;
+  }
+
+}
