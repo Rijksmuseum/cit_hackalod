@@ -12,7 +12,7 @@
 <link rel="preload" href="assets/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SourceSerif4-Light.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/main.css?v=30">
+<link rel="stylesheet" href="css/main.css?v=33">
 </head>
 <body>
 
@@ -218,7 +218,7 @@
           <h3 class="lichtbak__titel">{{ gekozen.titel }}</h3>
           <dl class="object__velden">
             <div class="object__veld"><dt>Instelling</dt><dd>{{ gekozen.bron }}</dd></div>
-            <div class="object__veld"><dt>Objectnummer</dt><dd>{{ gekozen.objectnummer }} <button class="mini mini--inline" @click="kopieer(gekozen.objectnummer, $event)">Kopieer</button></dd></div>
+            <div class="object__veld"><dt>Objectnummer</dt><dd>{{ gekozen.objectnummer }}</dd></div>
             <div class="object__veld" v-if="gekozen.plaatsVolledig"><dt>Vindplaats</dt><dd>{{ gekozen.plaatsVolledig }}</dd></div>
             <div class="object__veld" v-if="gekozen.datering"><dt>Datering</dt><dd>{{ gekozen.datering }}</dd></div>
             <div class="object__veld" v-if="gekozen.gevonden"><dt>Gevonden</dt><dd>{{ gekozen.gevonden }}</dd></div>
@@ -402,7 +402,7 @@
       <p class="lezen__ref">Rijksmuseum van Oudheden <span class="lezen__wat">·</span> <a href="https://rmo.cithosting.nl/nde/dataset.jsonld" target="_blank" rel="noopener">dataset (schema.org, JSON-LD) ↗</a></p>
     </li>
     <li class="lezen__item">
-      <p class="lezen__ref">Rijksmuseum Amsterdam <span class="lezen__wat">·</span> <a href="https://id.rijksmuseum.nl/260251" target="_blank" rel="noopener">dataset (Linked Art) ↗</a></p>
+      <p class="lezen__ref">Rijksmuseum Amsterdam <span class="lezen__wat">·</span> <a href="https://data.rijksmuseum.nl/260251" target="_blank" rel="noopener">dataset (Linked Art) ↗</a></p>
     </li>
     <li class="lezen__item">
       <p class="lezen__ref">Epigraphic Database Heidelberg (EDH) <span class="lezen__wat">·</span> <a href="https://edh.ub.uni-heidelberg.de/data/download" target="_blank" rel="noopener">datadumps ↗</a> <span class="lezen__wat">·</span> <a href="https://edh.ub.uni-heidelberg.de/data/api" target="_blank" rel="noopener">API ↗</a></p>
@@ -451,8 +451,8 @@
   <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten en de altaarbouwer te tonen.</p>
 </noscript>
 
-<script src="js/reveal.js?v=30" defer></script>
-<script type="module" src="js/app.js?v=30"></script>
-<script src="js/altaar.js?v=30" defer></script>
+<script src="js/reveal.js?v=33" defer></script>
+<script type="module" src="js/app.js?v=33"></script>
+<script src="js/altaar.js?v=33" defer></script>
 </body>
 </html>

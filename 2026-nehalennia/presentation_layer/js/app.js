@@ -250,17 +250,6 @@ async function start() {
     miniFout(event) {
       event.target.hidden = true
     },
-    async kopieer(tekst, event) {
-      const knop = event.currentTarget
-      const oud = knop.textContent
-      try {
-        await navigator.clipboard.writeText(tekst)
-        knop.textContent = 'Gekopieerd'
-      } catch {
-        knop.textContent = tekst   // clipboard blocked: show the number so it can be selected
-      }
-      setTimeout(() => { knop.textContent = oud }, 1600)
-    },
     open(o, vanuitDetail = false) {
       if (vanuitDetail && this.gekozen) this.vorige.push(this.gekozen)
       else if (!vanuitDetail) this.vorige = []
