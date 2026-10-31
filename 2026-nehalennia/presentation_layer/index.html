@@ -12,7 +12,7 @@
 <link rel="preload" href="assets/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SourceSerif4-Light.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/main.css?v=45">
+<link rel="stylesheet" href="css/main.css?v=55">
 </head>
 <body>
 
@@ -146,11 +146,37 @@
           <option value="geen">Zonder periode</option>
         </select>
       </label>
+      <div class="filters__groep" role="group" aria-label="Filter op persoon of beroep">
+        <button class="filter filter--klein" :class="{ 'filter--actief': paneel === 'namen' || gekozenNamen.length }"
+                :aria-expanded="paneel === 'namen'" aria-controls="paneel-namen" @click="wisselPaneel('namen')">
+          Persoonsnamen<span class="filter__aantal" v-if="gekozenNamen.length">{{ gekozenNamen.length }}</span>
+        </button>
+        <button class="filter filter--klein" :class="{ 'filter--actief': paneel === 'beroepen' || gekozenBeroepen.length }"
+                :aria-expanded="paneel === 'beroepen'" aria-controls="paneel-beroepen" @click="wisselPaneel('beroepen')">
+          Beroepen<span class="filter__aantal" v-if="gekozenBeroepen.length">{{ gekozenBeroepen.length }}</span>
+        </button>
+      </div>
       <label class="zoek">
         <span class="zoek__label">Zoeken</span>
         <input type="search" class="zoek__veld" v-model="zoek" @input="zichtbaar = STUKKEN_PER_KEER"
-               placeholder="Naam, opschrift of objectnummer" autocomplete="off">
+               placeholder="Zoek..." autocomplete="off">
       </label>
+    </div>
+    <div class="waarden" id="paneel-namen" v-if="paneel === 'namen'">
+      <p class="waarden__hint">Namen van de opdragers, zoals ze in de inscripties staan. Je kunt er meer dan één kiezen.</p>
+      <div class="waarden__lijst">
+        <button v-for="n in alleNamen" :key="n" class="chip chip--knop" :class="{ 'chip--aan': gekozenNamen.includes(n) }"
+                :aria-pressed="gekozenNamen.includes(n)" @click="wisselNaam(n)">{{ n }}</button>
+      </div>
+      <button class="knop knop--spook waarden__wis" v-if="gekozenNamen.length" @click="wisNamen()">Wis selectie</button>
+    </div>
+    <div class="waarden" id="paneel-beroepen" v-if="paneel === 'beroepen'">
+      <p class="waarden__hint">Beroepen en functies uit de inscripties. Je kunt er meer dan één kiezen.</p>
+      <div class="waarden__lijst">
+        <button v-for="b in alleBeroepen" :key="b" class="chip chip--knop" :class="{ 'chip--aan': gekozenBeroepen.includes(b) }"
+                :aria-pressed="gekozenBeroepen.includes(b)" @click="wisselBeroep(b)">{{ b }}</button>
+      </div>
+      <button class="knop knop--spook waarden__wis" v-if="gekozenBeroepen.length" @click="wisBeroepen()">Wis selectie</button>
     </div>
     <p class="collectie__teller" aria-live="polite">{{ getoondeStukken.length }} van {{ gefilterdeStukken.length }} objecten</p>
 
@@ -204,47 +230,45 @@
           <p class="lichtbak__onderschrift"><strong>{{ gekozen.objectnummer }}</strong> · {{ gekozen.bron }}</p>
         </div>
         <div class="lichtbak__tekst">
-          <div class="vergelijk" v-if="bekijk">
-            <img class="vergelijk__beeld" v-if="bekijk?.afbeelding && !bekijk?.mislukt" :src="bekijk?.afbeelding || 'data:,'" :alt="bekijk?.titel" @error="beeldFout(bekijk, $event)">
-            <div class="vergelijk__tekst">
-              <p class="vergelijk__kop">Gekoppeld aan {{ gekozen?.objectnummer }}</p>
-              <button class="knop knop--spook" @click="terug()">← Terug naar {{ gekozen?.objectnummer }}</button>
-              <button class="knop knop--spook" @click="open(bekijk)">Maak hier het hoofdobject van</button>
-            </div>
-          </div>
           <p class="bovenschrift">
-            <span class="badge" :class="toon.rma ? 'badge--rma' : 'badge--rmo'">{{ toon.rma ? 'RMA' : 'RMO' }}</span>
-            {{ toon.soortTekst }}
+            <span class="badge" :class="gekozen.rma ? 'badge--rma' : 'badge--rmo'">{{ gekozen.rma ? 'RMA' : 'RMO' }}</span>
+            {{ gekozen.soortTekst }}
           </p>
-          <h3 class="lichtbak__titel">{{ toon.titel }}</h3>
+          <h3 class="lichtbak__titel">{{ gekozen.titel }}</h3>
           <dl class="object__velden">
-            <div class="object__veld"><dt>Instelling</dt><dd>{{ toon.bron }}</dd></div>
-            <div class="object__veld"><dt>Objectnummer</dt><dd>{{ toon.objectnummer }}</dd></div>
-            <div class="object__veld" v-if="toon.plaatsVolledig"><dt>Vindplaats</dt><dd>{{ toon.plaatsVolledig }}</dd></div>
-            <div class="object__veld" v-if="toon.datering"><dt>Datering</dt><dd>{{ toon.datering }}</dd></div>
-            <div class="object__veld" v-if="toon.gevonden"><dt>Gevonden</dt><dd>{{ toon.gevonden }}</dd></div>
+            <div class="object__veld"><dt>Instelling</dt><dd>{{ gekozen.bron }}</dd></div>
+            <div class="object__veld"><dt>Objectnummer</dt><dd>{{ gekozen.objectnummer }}</dd></div>
+            <div class="object__veld" v-if="gekozen.plaatsVolledig"><dt>Vindplaats</dt><dd>{{ gekozen.plaatsVolledig }}</dd></div>
+            <div class="object__veld" v-if="gekozen.datering"><dt>Datering</dt><dd>{{ gekozen.datering }}</dd></div>
+            <div class="object__veld" v-if="gekozen.gevonden"><dt>Gevonden</dt><dd>{{ gekozen.gevonden }}</dd></div>
             <div class="object__veld"><dt>Periode</dt>
               <dd>
-                <span v-if="!toon.periodes.length">Geen periode toegekend</span>
-                <button class="chip chip--knop" v-for="p in toon.periodes" @click="kiesPeriode(p.period_id)" :title="'Toon alle objecten uit deze periode'">{{ p.kort }}</button>
+                <span v-if="!gekozen.periodes.length">Geen periode toegekend</span>
+                <button class="chip chip--knop" v-for="p in gekozen.periodes" @click="kiesPeriode(p.period_id)" :title="'Toon alle objecten uit deze periode'">{{ p.kort }}</button>
               </dd>
             </div>
+                      <div class="object__veld" v-if="gekozen.personen.length"><dt>Personen</dt>
+              <dd><button class="chip chip--knop" v-for="n in gekozen.personen" @click="kiesWaarde('namen', n)" :title="'Toon alle objecten met deze naam'">{{ n }}</button></dd>
+            </div>
+            <div class="object__veld" v-if="gekozen.beroepen.length"><dt>Beroepen</dt>
+              <dd><button class="chip chip--knop" v-for="b in gekozen.beroepen" @click="kiesWaarde('beroepen', b)" :title="'Toon alle objecten met dit beroep'">{{ b }}</button></dd>
+            </div>
           </dl>
-          <p class="lichtbak__beschrijving" v-if="toon.beschrijving">{{ toon.beschrijving }}</p>
+          <p class="lichtbak__beschrijving" v-if="gekozen.beschrijving">{{ gekozen.beschrijving }}</p>
 
-          <div class="lichtbak__opschrift" v-if="toon.opschrift.length">
-            <p class="opschrift opschrift--groot" aria-label="Opschrift"><span class="opschrift__lijst"><span class="opschrift__regel" v-for="regel in toon.opschrift">{{ regel }}</span></span></p>
-            <p class="lichtbak__vertaling" v-if="toon.vertaling">{{ toon.vertaling }} <span class="concept">Conceptvertaling.</span></p>
+          <div class="lichtbak__opschrift" v-if="gekozen.opschrift.length">
+            <p class="opschrift opschrift--groot" aria-label="Opschrift"><span class="opschrift__lijst"><span class="opschrift__regel" v-for="regel in gekozen.opschrift">{{ regel }}</span></span></p>
+            <p class="lichtbak__vertaling" v-if="gekozen.vertaling">{{ gekozen.vertaling }}</p>
           </div>
-          <p class="lichtbak__edcs" v-if="toon.edcs.length">
+          <p class="lichtbak__edcs" v-if="gekozen.edcs.length">
             Opschrift in EDCS:
-            <a v-for="e in toon.edcs" :href="e.url" target="_blank" rel="noopener">{{ e.id }} ↗</a>
+            <a v-for="e in gekozen.edcs" :href="e.url" target="_blank" rel="noopener">{{ e.id }} ↗</a>
           </p>
 
           <h4 class="lichtbak__subkop" v-if="gekozen.relaties.length">{{ gekozen.relaties.length }} gekoppelde {{ gekozen.relaties.length === 1 ? 'object' : 'objecten' }}</h4>
           <ol class="prentlijst" v-if="gekozen.relaties.length">
-            <li class="prentrij" v-for="r in gekozen.relaties">
-              <button class="prentrij__kies" :class="{ 'prentrij__kies--actief': bekijk?.pid === r.id }" @click="kies(obj(r.id))">
+            <li class="prentrij" v-for="r in gekozen.relaties" :class="{ 'prentrij--open': uitgeklapt === r.id }">
+              <button class="prentrij__kies" :aria-expanded="uitgeklapt === r.id" @click="wissel(r.id)">
                 <span class="prent__beeld prent__beeld--klein">
                   <img v-if="obj(r.id).miniatuur" :src="obj(r.id).miniatuur" alt="" loading="lazy" @error="miniFout($event)">
                 </span>
@@ -256,12 +280,32 @@
                     <span class="chip" :class="{ 'chip--twijfel': r.score < 1 }">overeenkomst {{ Math.round(r.score * 100) }}%</span>
                   </span>
                 </span>
+                <span class="prentrij__pijl" aria-hidden="true">{{ uitgeklapt === r.id ? '−' : '+' }}</span>
               </button>
+              <div class="prentrij__meer" v-if="uitgeklapt === r.id">
+                <img class="prentrij__groot" v-if="obj(r.id).afbeelding && !obj(r.id).mislukt" :src="obj(r.id).afbeelding" :alt="obj(r.id).titel" @error="beeldFout(obj(r.id), $event)">
+                <h5 class="prentrij__titel">{{ obj(r.id).titel }}</h5>
+                <dl class="object__velden">
+                  <div class="object__veld"><dt>Soort</dt><dd>{{ obj(r.id).soortTekst }}</dd></div>
+                  <div class="object__veld"><dt>Instelling</dt><dd>{{ obj(r.id).bron }}</dd></div>
+                  <div class="object__veld" v-if="obj(r.id).plaatsVolledig"><dt>Vindplaats</dt><dd>{{ obj(r.id).plaatsVolledig }}</dd></div>
+                  <div class="object__veld" v-if="obj(r.id).datering"><dt>Datering</dt><dd>{{ obj(r.id).datering }}</dd></div>
+                  <div class="object__veld" v-if="obj(r.id).gevonden"><dt>Gevonden</dt><dd>{{ obj(r.id).gevonden }}</dd></div>
+                  <div class="object__veld"><dt>Periode</dt><dd>{{ obj(r.id).periodeTekst || 'Geen periode toegekend' }}</dd></div>
+                </dl>
+                <p class="lichtbak__beschrijving" v-if="obj(r.id).beschrijving">{{ obj(r.id).beschrijving }}</p>
+                <p class="opschrift opschrift--klein" v-if="obj(r.id).opschrift.length" aria-label="Opschrift"><span class="opschrift__lijst"><span class="opschrift__regel" v-for="regel in obj(r.id).opschrift">{{ regel }}</span></span></p>
+                <p class="lichtbak__vertaling" v-if="obj(r.id).vertaling">{{ obj(r.id).vertaling }}</p>
+                <div class="prentrij__acties">
+                  <button class="knop" @click="open(obj(r.id))">Open dit object</button>
+                  <a class="knop knop--spook" :href="obj(r.id).bronLink" target="_blank" rel="noopener">Bekijk bij de bron ↗</a>
+                </div>
+              </div>
             </li>
           </ol>
 
           <div class="lichtbak__acties">
-            <a class="knop" :href="toon.bronLink" target="_blank" rel="noopener">Bekijk bij de bron ↗</a>
+            <a class="knop" :href="gekozen.bronLink" target="_blank" rel="noopener">Bekijk bij de bron ↗</a>
             <button class="knop knop--spook" @click="sluit()">Sluiten</button>
           </div>
         </div>
@@ -450,8 +494,8 @@
   <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten en de altaarbouwer te tonen.</p>
 </noscript>
 
-<script src="js/reveal.js?v=45" defer></script>
-<script type="module" src="js/app.js?v=45"></script>
-<script src="js/altaar.js?v=45" defer></script>
+<script src="js/reveal.js?v=55" defer></script>
+<script type="module" src="js/app.js?v=55"></script>
+<script src="js/altaar.js?v=55" defer></script>
 </body>
 </html>

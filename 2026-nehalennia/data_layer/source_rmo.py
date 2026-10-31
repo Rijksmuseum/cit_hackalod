@@ -1,6 +1,6 @@
 """Harvest object records from the Rijksmuseum van Oudheden (RMO).
 * the CollectionConnection search API, which returns XML
-* the public object page, scraped for Verwerving (acquisition), which the API omits
+* the public object page, scraped for Verwerving (acquisition) and the main image
 * `enrich`, which matches the transcriptions to the Clauss/Slaby inscription database
 """
 
@@ -44,6 +44,8 @@ FIELDS = {
 }
 
 _LIST_ITEM = re.compile(r'<div class="data-list-item">\s*<label>(.*?)</label>(.*?)</div>', re.S)
+_MAIN_IMAGE = re.compile(r'<div class="topstuk-main-image">(.*?)</div>', re.S)
+_SRC = re.compile(r'(?:data-)?src="/imageproxy/[^"]*?/([^"/]+)"')
 _YEAR_RANGE = re.compile(r"(\d{4})\s*-\s*(\d{4})")
 _YEAR = re.compile(r"\d{4}")
 _TAGS = re.compile(r"<[^>]+>")
@@ -105,10 +107,24 @@ def _flatten(record):
     return row, images
 
 
-def _verwerving(pid, cache_dir):
+def _page(pid, cache_dir):
     object_id = pid.rsplit("/", 1)[-1]  # same number as the API's recordnumber
-    page = _download(DETAIL_URL.format(object_id),
+    return _download(DETAIL_URL.format(object_id),
                      cache_dir / "pages" / f"{object_id}.html", decode=True)
+
+
+def _main_image(page):
+    """The image rmo.nl itself leads with.
+
+    The API lists the images in no useful order, so its first one is the right
+    one only about half the time. The page knows which one is the object shot.
+    """
+    block = _MAIN_IMAGE.search(page)
+    found = _SRC.findall(block.group(1)) if block else []
+    return _image_url(found[0]) if found else None
+
+
+def _verwerving(page):
     for label, value in _LIST_ITEM.findall(page):
         if " ".join(html.unescape(label).split()) == "Verwerving":
             return " ".join(html.unescape(_TAGS.sub(" ", value)).split())
@@ -150,10 +166,13 @@ def fetch(queries=QUERIES, cache_dir=CACHE_DIR, progress=True):
         rows.append(row)
         images.extend(image_rows)
 
-    log(f"reading {len(rows)} object pages for verwerving, cached ones are reused")
+    log(f"reading {len(rows)} object pages for verwerving and the main image,"
+        f" cached ones are reused")
     started = time.time()
     for n, row in enumerate(rows, start=1):
-        row["verwerving"] = _verwerving(row["pid"], cache_dir)
+        page = _page(row["pid"], cache_dir)
+        row["image_url"] = _main_image(page) or row["image_url"]  # fall back to the API's first
+        row["verwerving"] = _verwerving(page)
         row["gevonden_datum_van"], row["gevonden_datum_tot"] = found_years(row["verwerving"])
         if n % 25 == 0 or n == len(rows):
             elapsed = time.time() - started

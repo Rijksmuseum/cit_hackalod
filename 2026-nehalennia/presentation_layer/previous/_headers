@@ -1,0 +1,5 @@
+# Keep the whole site out of search results. Honoured by both Cloudflare Pages
+# and Netlify. Deliberately no robots.txt Disallow: a blocked crawler never
+# fetches the page, so it never sees this header.
+/*
+  X-Robots-Tag: noindex, nofollow
