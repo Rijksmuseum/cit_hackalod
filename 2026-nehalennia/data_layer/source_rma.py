@@ -1,7 +1,5 @@
-"""Read the hand-picked Rijksmuseum (RMA) Nehalennia selection and fill in two gaps.
-* image_url, followed from the pid into the Linked Art record at data.rijksmuseum.nl
-* edcs_vertaling_concept, joined on the EDCS monument links already in the inscripties column
-"""
+"""Read the hand-picked Rijksmuseum Amsterdam selection, and fill the gaps the csv
+leaves from the Linked Art record behind each pid."""
 
 import json
 import time

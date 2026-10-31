@@ -1,8 +1,5 @@
-"""Harvest object records from the Rijksmuseum van Oudheden (RMO).
-* the CollectionConnection search API, which returns XML
-* the public object page, scraped for Verwerving (acquisition) and the main image
-* `enrich`, which matches the transcriptions to the Clauss/Slaby inscription database
-"""
+"""Harvest the Rijksmuseum van Oudheden: its XML search API, plus the object pages
+for the acquisition and the main image, which the API does not give."""
 
 import html
 import re

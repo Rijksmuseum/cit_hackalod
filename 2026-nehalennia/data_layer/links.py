@@ -1,11 +1,4 @@
-"""Group the objects that stand for the same altar, across RMO and RMA.
-
-Two reasons put objects in a group:
-* a Rijksmuseum record cites an RMO object in link_RMO_objecten (via-onderzoek)
-* two objects carry the same EDCS inscription (via-inscriptie)
-
-Flattens into a linked_objecten column so front-end is simpler.
-"""
+"""Group the objects that stand for the same altar into a linked_objecten column."""
 
 import collections
 import re

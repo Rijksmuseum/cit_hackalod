@@ -1,5 +1,4 @@
-"""Harvest objects from the Zeeuws erfgoedplatform (Collectie Zeeland) linked-data dump.
-"""
+"""Harvest objects from the Collectie Zeeland linked-data dump. Not used in the export."""
 
 import gzip
 import urllib.request

@@ -1,3 +1,5 @@
+"""Settings and paths shared by the harvesters."""
+
 from pathlib import Path
 
 USER_AGENT = "hackalod-harvester/1.0"

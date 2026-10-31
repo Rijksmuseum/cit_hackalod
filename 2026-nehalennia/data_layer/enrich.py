@@ -1,8 +1,4 @@
-"""Add columns to a harvested frame from the two hand-made sources.
-
-* `edcs` matches inscription transcriptions to the Epigraphik-Datenbank Clauss/Slaby
-* `periods` places objects on the timeline in presentation_layer/data/perioden.json
-"""
+"""Add the EDCS inscription matches and the timeline periods to a harvested frame."""
 
 import difflib
 import json
