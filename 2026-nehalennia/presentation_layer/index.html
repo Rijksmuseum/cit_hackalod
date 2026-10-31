@@ -12,7 +12,7 @@
 <link rel="preload" href="assets/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SourceSerif4-Light.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/main.css?v=13">
+<link rel="stylesheet" href="css/main.css?v=26">
 </head>
 <body>
 
@@ -117,7 +117,7 @@
   <!-- III. Collectiestukken -->
   <section class="sectie collectie js-reveal" id="collectie" aria-labelledby="collectie-kop">
     <h2 class="sectie__kop" id="collectie-kop"><span class="sectie__nr">III</span>De collectiestukken</h2>
-    <p class="sectie__intro">Alle objecten uit de tijdlijn bij elkaar. Klik op een stuk voor de details, of laat je verrassen.</p>
+    <p class="sectie__intro">Altaren, prenten en andere objecten bij elkaar. Heeft het Rijksmuseum prenten van een altaar, dan krijgt dat altaar een brede tegel met die prenten er direct naast. <span class="concept">Concept: koppelingen nog te controleren.</span></p>
 
     <div class="filters" role="group" aria-label="Filter op soort object">
       <button v-for="f in filters" :key="f.sleutel" class="filter"
@@ -128,41 +128,133 @@
       </button>
       <button class="filter filter--verras" @click="verras()">Verras me</button>
     </div>
+    <div class="filters filters--tweede">
+      <div class="filters__groep" role="group" aria-label="Filter op instelling">
+        <button v-for="i in instellingen" :key="i.sleutel" class="filter filter--klein"
+                :class="{ 'filter--actief': i.sleutel === instelling }"
+                :aria-pressed="i.sleutel === instelling"
+                @click="kiesInstelling(i.sleutel)">{{ i.label }}</button>
+      </div>
+      <label class="zoek">
+        <span class="zoek__label">Zoeken</span>
+        <input type="search" class="zoek__veld" v-model="zoek" @input="zichtbaar = STUKKEN_PER_KEER"
+               placeholder="Naam, opschrift of objectnummer" autocomplete="off">
+      </label>
+    </div>
     <p class="collectie__teller" aria-live="polite">{{ getoondeStukken.length }} van {{ gefilterdeStukken.length }} stukken</p>
 
     <ul class="stukken">
       <li class="stuk" v-for="o in getoondeStukken" :key="o.id">
-        <button class="stuk__knop" @click="open(o)">
-          <span class="stuk__beeld">
-            <img v-if="!o.mislukt" :src="o.afbeelding" :alt="naam(o)" loading="lazy" decoding="async" @error="beeldMislukt(o, $event)">
-            <span class="stuk__geen" v-else>Afbeelding niet beschikbaar</span>
+        <article class="kaart" :class="'kaart--' + o.soort">
+          <button class="kaart__open" @click="open(o)" :aria-label="'Details van ' + naam(o)"></button>
+
+          <span class="kaart__beeld">
+            <img v-if="o.soort === 'dossier' && hoofdprent(o)" :src="middel(hoofdprent(o).beeld)" :alt="hoofdprent(o).toont" loading="lazy" decoding="async" @error="prentFout($event, hoofdprent(o))">
+            <img v-if="o.soort === 'rmo' && !o.mislukt" :src="o.afbeelding" :alt="naam(o)" loading="lazy" decoding="async" @error="beeldMislukt(o, $event)">
+            <span class="stuk__geen" v-if="o.soort === 'dossier' && !hoofdprent(o)">Geen beeld beschikbaar</span>
+            <span class="stuk__geen" v-if="o.soort === 'rmo' && o.mislukt">Afbeelding niet beschikbaar</span>
+            <span class="badge badge--rma kaart__badge" v-if="o.soort === 'dossier'">RMA</span>
+            <span class="badge badge--rmo kaart__badge" v-if="o.soort === 'rmo'">RMO</span>
+            <span class="kaart__aantal" v-if="o.soort === 'dossier'"><b>{{ o.prenten.length }}</b>{{ o.prenten.length === 1 ? 'prent' : 'prenten' }}</span>
           </span>
-          <span class="stuk__tekst">
-            <span class="stuk__soort">{{ o.objectnaam || 'object' }}</span>
-            <span class="stuk__titel">{{ naam(o) }}</span>
-            <span class="stuk__plaats" v-if="o.vindplaats">{{ o.vindplaats }}</span>
+
+          <span class="kaart__tekst">
+            <span class="kaart__kop">
+              <span class="kaart__soort">{{ o.objectnaam || 'object' }}</span>
+              <a class="kaart__id" v-if="o.soort === 'dossier'" :href="o.opschriftLink" target="_blank" rel="noopener" title="Opschrift in EDCS">{{ o.edcsId }} ↗</a>
+              <span class="kaart__id" v-if="o.soort !== 'dossier'">record {{ o.recordnummer }}</span>
+            </span>
+            <span class="kaart__titel">{{ naam(o) }}</span>
+            <span class="kaart__plaats" v-if="o.vindplaats">{{ o.vindplaats }}<template v-if="o.datering"> · {{ o.datering }} n.Chr.</template></span>
+            <span class="opschrift opschrift--klein" v-if="o.opschrift" aria-label="Opschrift">
+              <span class="opschrift__lijst"><span class="opschrift__regel" v-for="regel in o.opschrift">{{ regel }}</span></span>
+            </span>
+            <span class="kaart__inst" v-if="o.soort === 'dossier'">
+              <b>RMA</b> · {{ nummers(o) }}
+              <span class="kaart__twijfel" v-if="twijfel(o)"> · {{ twijfel(o) }} van {{ o.prenten.length }} koppelingen niet zeker</span>
+            </span>
+            <span class="kaart__inst" v-if="o.soort !== 'dossier'"><b>RMO</b> · objectnummer volgt</span>
+            <span class="minis" v-if="o.soort === 'dossier' && o.prenten.length > 1" aria-hidden="true">
+              <span class="minis__lijst"><span class="minis__item" v-for="p in o.prenten.slice(0, 4)" :class="{ 'minis__item--twijfel': p.zekerheid !== 'zeker' }">
+                <img v-if="p.beeld" :src="miniatuur(p.beeld)" alt="" loading="lazy" @error="prentFout($event, p)">
+              </span></span>
+              <span class="minis__meer" v-if="o.prenten.length > 4">+{{ o.prenten.length - 4 }}</span>
+            </span>
           </span>
-        </button>
+        </article>
       </li>
     </ul>
 
     <div class="meer" v-if="getoondeStukken.length < gefilterdeStukken.length">
       <button class="knop knop--spook" @click="toonMeer()">Toon meer</button>
     </div>
+    <p class="collectie__leeg" v-if="!gefilterdeStukken.length">Niets gevonden. Probeer een ander filter of zoekwoord.</p>
 
     <dialog class="lichtbak" id="lichtbak" aria-label="Details van het object" @click="sluitOpAchtergrond($event)">
-      <template v-if="gekozen">
+      <!-- altaar met prenten -->
+      <template v-if="gekozen && gekozen.soort === 'dossier'">
+        <div class="lichtbak__beeld">
+          <img v-if="actievePrent.beeld" :src="grootBeeld(actievePrent.beeld)" :alt="actievePrent.toont" @error="prentFout($event, actievePrent)">
+          <p class="stuk__geen" v-else>Geen beeld beschikbaar</p>
+          <p class="lichtbak__onderschrift"><strong>{{ actievePrent.objectnummer }}</strong> · {{ actievePrent.toont }}</p>
+        </div>
+        <div class="lichtbak__tekst">
+          <p class="bovenschrift">Altaar · {{ gekozen.edcsId }}</p>
+          <h3 class="lichtbak__titel">{{ gekozen.titel }}</h3>
+          <dl class="object__velden">
+            <div class="object__veld"><dt>Vindplaats</dt><dd>{{ gekozen.vindplaats }}</dd></div>
+            <div class="object__veld" v-if="gekozen.datering"><dt>Datering</dt><dd>{{ gekozen.datering }} n.Chr.</dd></div>
+            <div class="object__veld"><dt>Instelling</dt><dd>Prenten: Rijksmuseum Amsterdam (RMA). Het altaar zelf: nog niet gekoppeld.</dd></div>
+          </dl>
+          <p class="opschrift opschrift--groot" aria-label="Opschrift"><span class="opschrift__regel" v-for="regel in gekozen.opschrift">{{ regel }}</span></p>
+          <p class="lichtbak__vertaling" v-if="gekozen.vertaling">{{ gekozen.vertaling }} <span class="concept">Conceptvertaling.</span></p>
+          <a class="kaart__link" :href="gekozen.opschriftLink" target="_blank" rel="noopener">Opschrift in EDCS ↗</a>
+
+          <h4 class="lichtbak__subkop">{{ gekozen.prenten.length }} {{ gekozen.prenten.length === 1 ? 'prent' : 'prenten' }} van dit altaar</h4>
+          <ol class="prentlijst">
+            <li class="prentrij" :class="{ 'prentrij--actief': i === prentIndex }" v-for="(p, i) in gekozen.prenten">
+              <button class="prentrij__kies" @click="prentIndex = i" :aria-pressed="i === prentIndex">
+                <span class="prent__beeld prent__beeld--klein">
+                  <img v-if="p.beeld" :src="miniatuur(p.beeld)" alt="" loading="lazy" @error="prentFout($event, p)">
+                </span>
+                <span class="prentrij__tekst">
+                  <span class="prent__nr">{{ p.objectnummer }}</span>
+                  <span class="prentrij__toont">{{ p.toont }}</span>
+                  <span class="prent__chips">
+                    <span class="chip chip--verzamel" v-if="p.verzamelprent">verzamelprent<template v-if="p.nr"> · nr. {{ p.nr }} op de prent</template></span>
+                    <span class="chip" v-if="p.kopieVan">kopie van {{ p.kopieVan }}</span>
+                    <span class="chip" :class="{ 'chip--twijfel': p.zekerheid !== 'zeker' }">koppeling: {{ p.zekerheid }}</span>
+                  </span>
+                  <span class="prentrij__opm" v-if="p.opmerking">{{ p.opmerking }}</span>
+                </span>
+              </button>
+              <span class="prentrij__acties">
+                <button class="mini" @click="kopieer(p.objectnummer, $event)">Kopieer nr.</button>
+                <a class="mini" :href="p.link" target="_blank" rel="noopener">RMA ↗</a>
+              </span>
+            </li>
+          </ol>
+          <div class="lichtbak__acties">
+            <button class="knop knop--spook" @click="sluit()">Sluiten</button>
+          </div>
+        </div>
+      </template>
+
+      <!-- RMO-object -->
+      <template v-else-if="gekozen">
         <div class="lichtbak__beeld">
           <img v-if="!gekozen.mislukt" :src="gekozen.afbeelding" :alt="naam(gekozen)" @error="beeldMislukt(gekozen, $event)">
           <p class="stuk__geen" v-else>Afbeelding niet beschikbaar</p>
         </div>
         <div class="lichtbak__tekst">
-          <p class="bovenschrift">{{ gekozen.objectnaam || 'object' }}</p>
+          <p class="bovenschrift"><span class="badge badge--rmo">RMO</span> {{ gekozen.objectnaam || 'object' }}</p>
           <h3 class="lichtbak__titel">{{ naam(gekozen) }}</h3>
           <dl class="object__velden">
+            <div class="object__veld"><dt>Instelling</dt><dd>Rijksmuseum van Oudheden (RMO)</dd></div>
+            <div class="object__veld"><dt>Record</dt><dd>{{ gekozen.recordnummer }} <span class="concept">(inventarisnummer volgt)</span></dd></div>
             <div class="object__veld" v-if="gekozen.materiaal"><dt>Materiaal</dt><dd>{{ gekozen.materiaal }}</dd></div>
             <div class="object__veld" v-if="gekozen.vindplaats"><dt>Vindplaats</dt><dd>{{ gekozen.vindplaats }}</dd></div>
-            <div class="object__veld"><dt>Bron</dt><dd>{{ gekozen.bronNaam }}</dd></div>
+            <div class="object__veld"><dt>Opschrift en prenten</dt><dd>Nog niet gekoppeld aan dit object.</dd></div>
           </dl>
           <div class="lichtbak__acties">
             <a class="knop" :href="gekozen.bronLink" target="_blank" rel="noopener">Bekijk bij de bron ↗</a>
@@ -269,15 +361,27 @@
 
 <!-- V. Meer lezen -->
 <section class="sectie lezen js-reveal" id="lezen" aria-labelledby="lezen-kop">
-  <h2 class="sectie__kop" id="lezen-kop"><span class="sectie__nr">V</span>Meer lezen</h2>
+  <h2 class="sectie__kop" id="lezen-kop"><span class="sectie__nr">V</span>Literatuur</h2>
   <ul class="lezen__lijst">
+    <li class="lezen__item">
+      <p class="lezen__ref">Bongers, T. (2020), Connectivity in the Scheldt Basin: The Role of the River Scheldt in the Roman-Era Transport Network. <i>Digital Classics Online</i> 6 (1), 33-58. <a href="https://doi.org/10.11588/dco.0.0.73392" target="_blank" rel="noopener">doi:10.11588/dco.0.0.73392 ↗</a></p>
+    </li>
+    <li class="lezen__item">
+      <p class="lezen__ref">De Wree, O. (1650), <i>Historiae Comitum Flandriae Libri Prodromi Duo</i>. Brugis: apud Lucam Kerchovium.</p>
+    </li>
+    <li class="lezen__item">
+      <p class="lezen__ref">Hondius-Crone, A. (1955), <i>The Temple of Nehalennia at Domburg</i>. Amsterdam: Meulenhoff. Geraadpleegd op Delpher op 30-10-2026: <a href="https://resolver.kb.nl/resolve?urn=MMKB53:310209000:00008" target="_blank" rel="noopener">The temple of Nehalennia at Domburg, p. 8 (Delpher) ↗</a></p>
+      <p class="lezen__noot">Over het heiligdom bij Domburg.</p>
+    </li>
+    <li class="lezen__item">
+      <p class="lezen__ref">Janssen, L.J.F. &amp; Zeeuwsch Genootschap der Wetenschappen (1845), <i>De Romeinsche beelden en gedenksteenen van Zeeland…</i></p>
+    </li>
     <li class="lezen__item">
       <p class="lezen__ref">Stuart, P. &amp; Bogaers, J.E.S. (2001), <i>Nehalennia: Roman Votive Stones from the Oosterschelde</i>. Leiden: Rijksmuseum van Oudheden.</p>
       <p class="lezen__noot">Standaardwerk over de stenen van Colijnsplaat.</p>
     </li>
     <li class="lezen__item">
-      <p class="lezen__ref">Hondius-Crone, A. (1955), <i>The Temple of Nehalennia at Domburg</i>. Amsterdam: Allard Pierson Stichting.</p>
-      <p class="lezen__noot">Over het heiligdom bij Domburg.</p>
+      <p class="lezen__ref"><a href="https://www.livius.org/articles/religion/nehalennia" target="_blank" rel="noopener">Nehalennia, Livius.org ↗</a> (aangemaakt in 2002; laatst gewijzigd op 16 april 2020)</p>
     </li>
     <li class="lezen__item">
       <p class="lezen__ref"><a href="https://db.edcs.eu/epigr/epi.php?s_language=en" target="_blank" rel="noopener">Epigraphik-Datenbank Clauss/Slaby (EDCS) ↗</a></p>
@@ -292,7 +396,22 @@
       <p class="lezen__noot">Bewaarplaats van het grootste deel van de vondst.</p>
     </li>
   </ul>
-  <p class="lezen__let-op">Concept: titels, jaartallen en uitgevers zijn nog niet gecontroleerd. Controleer ze voordat de lijst gepubliceerd wordt.</p>
+</section>
+
+<!-- VI. Databronnen -->
+<section class="sectie lezen js-reveal" id="databronnen" aria-labelledby="databronnen-kop">
+  <h2 class="sectie__kop" id="databronnen-kop"><span class="sectie__nr">VI</span>Databronnen</h2>
+  <ul class="lezen__lijst">
+    <li class="lezen__item">
+      <p class="lezen__ref"><a href="https://rmo.cithosting.nl/nde/dataset.jsonld" target="_blank" rel="noopener">Rijksmuseum van Oudheden ↗</a> (dataset, JSON-LD)</p>
+    </li>
+    <li class="lezen__item">
+      <p class="lezen__ref"><a href="https://id.rijksmuseum.nl/260251" target="_blank" rel="noopener">Rijksmuseum Amsterdam ↗</a> (dataset)</p>
+    </li>
+      <li class="lezen__item">
+      <p class="lezen__ref">Epigraphic Database Heidelberg (EDH): <a href="https://edh.ub.uni-heidelberg.de/data/download" target="_blank" rel="noopener">datadumps ↗</a> · <a href="https://edh.ub.uni-heidelberg.de/data/api" target="_blank" rel="noopener">API ↗</a></p>
+    </li>
+  </ul>
 </section>
 
 <!-- Colofon -->
@@ -312,7 +431,7 @@
       <ul>
         <li>Objecten en afbeeldingen: <a href="https://www.rmo.nl/" target="_blank" rel="noopener">Rijksmuseum van Oudheden</a> (CC0), <a href="https://www.rijksmuseum.nl/" target="_blank" rel="noopener">Rijksmuseum Amsterdam</a> (public domain)</li>
         <li>Inscripties: EDCS en EDH</li>
-        <li>[Rechten van de altaarfoto's in de bouwer nog bevestigen.]</li>
+        <li>Altaarfoto's in de bouwer: CC0</li>
       </ul>
     </div>
     <div>
@@ -321,7 +440,7 @@
     </div>
     <div>
       <h3>Licentie</h3>
-      <p>CC0, team Rijksmuseum Collectie IT. Demo voor HackaLOD 2026; de teksten bij de tijdlijn zijn concept.</p>
+      <p>CC0, team Rijksmuseum Collectie IT. Demo voor HackaLOD 2026.</p>
     </div>
   </div>
   <div class="colofon__onder">
@@ -336,8 +455,8 @@
   <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten en de altaarbouwer te tonen.</p>
 </noscript>
 
-<script src="js/reveal.js?v=13" defer></script>
-<script type="module" src="js/app.js?v=13"></script>
-<script src="js/altaar.js?v=13" defer></script>
+<script src="js/reveal.js?v=26" defer></script>
+<script type="module" src="js/app.js?v=26"></script>
+<script src="js/altaar.js?v=26" defer></script>
 </body>
 </html>

@@ -15,6 +15,7 @@ Regenerate (`css/main.css` and `data/timeline.json` are generated; edit `scss/` 
 ```bash
 npx sass scss/main.scss css/main.css --no-source-map
 python3 -I maak_demo_data.py
+python3 -I maak_collectie.py pad/naar/edcs_nehalennia_analyse_6.xlsx   # data/collectie.json (concept)
 ```
 
 `js/altaar.js` is generated from the altar-builder sources (images embedded as WebP).

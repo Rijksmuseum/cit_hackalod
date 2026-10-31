@@ -59,52 +59,7 @@
 }
 
 .stuk {
-  &__knop {
-    display: block;
-    width: 100%;
-    padding: 0;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface-2);
-    text-align: left;
-    color: inherit;
-    font: inherit;
-    cursor: pointer;
-    overflow: hidden;
-    transition: transform 0.35s var(--ease), border-color 0.25s, box-shadow 0.35s var(--ease);
-
-    &:hover {
-      transform: translateY(-5px) rotate(-0.6deg);
-      border-color: var(--accent);
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
-    }
-  }
-
-  &:nth-child(even) &__knop:hover {
-    transform: translateY(-5px) rotate(0.6deg);
-  }
-
-  &__beeld {
-    display: grid;
-    place-items: center;
-    aspect-ratio: 1;
-    background: var(--surface-1);
-    overflow: hidden;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      filter: sepia(0.25) brightness(0.92);
-      transition: transform 0.7s var(--ease), filter 0.4s;
-    }
-  }
-
-  &__knop:hover &__beeld img {
-    transform: scale(1.06);
-    filter: none;
-  }
+  min-width: 0;
 
   &__geen {
     padding: 1rem;
@@ -112,34 +67,385 @@
     font-size: 0.76rem;
     color: var(--mute);
   }
+}
+
+// one tile format for every piece: picture on top, the same fields below.
+// The invisible button on top opens the details, links inside the tile sit above it.
+.kaart {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  overflow: hidden;
+  transition: transform 0.35s var(--ease), border-color 0.25s, box-shadow 0.35s var(--ease);
+
+  &--dossier {
+    border-color: var(--accent-deep);
+  }
+
+  &:hover,
+  &:focus-within {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  &__open {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  &__beeld {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 5;   // tall enough for most prints; the whole picture is always shown
+    background: var(--surface-1);
+    overflow: hidden;
+
+    img {
+      position: absolute;   // the box keeps its 4:5 shape; a taller picture is shrunk to fit, never cropped
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      filter: sepia(0.25) brightness(0.92);
+      transition: transform 0.7s var(--ease), filter 0.4s;
+    }
+  }
+
+  &:hover &__beeld img {
+    transform: scale(1.03);
+    filter: none;
+  }
+
+  &__badge {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+  }
+
+  // gold pill on the picture: how many prints belong to this altar
+  &__aantal {
+    position: absolute;
+    right: 0.6rem;
+    bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.7rem 0.25rem 0.3rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--op-accent);
+    font-size: 0.78rem;
+    font-weight: var(--halfvet);
+
+    b {
+      display: grid;
+      place-items: center;
+      width: 1.5rem;
+      height: 1.5rem;
+      border-radius: 50%;
+      background: var(--surface-1);
+      color: var(--accent-bright);
+    }
+  }
 
   &__tekst {
-    display: block;
-    padding: 0.7rem 0.85rem 0.85rem;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 0.75rem 0.85rem 0.9rem;
+  }
+
+  &__kop {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
   }
 
   &__soort {
-    display: block;
-    font-size: 0.68rem;
-    letter-spacing: 0.16em;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--accent);
   }
 
+  &__id {
+    position: relative;
+    z-index: 2;
+    font-size: 0.7rem;
+    color: var(--mute);
+  }
+
+  a#{&}__id {
+    text-underline-offset: 0.2em;
+
+    &:hover {
+      color: var(--accent-bright);
+    }
+  }
+
   &__titel {
-    display: block;
-    margin-top: 0.15rem;
-    font-size: 0.95rem;
-    line-height: 1.3;
+    margin-top: 0.3rem;
+    font-size: 1.02rem;
+    line-height: 1.25;
     color: var(--foam);
   }
 
   &__plaats {
-    display: block;
     margin-top: 0.1rem;
     font-size: 0.78rem;
     color: var(--mute);
   }
+
+  &__inst {
+    margin-top: auto;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.74rem;
+    line-height: 1.4;
+    color: var(--mute);
+
+    b {
+      color: var(--text);
+      font-weight: var(--halfvet);
+    }
+  }
+
+  &__twijfel {
+    color: #e6a97c;
+  }
+
+  &__tekst > .opschrift + &__inst,
+  &__tekst > &__plaats + &__inst {
+    margin-top: 0.7rem;
+  }
+}
+
+// a few small prints under the tile text
+.minis {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  margin-top: 0.55rem;
+
+  &__item {
+    width: 2.6rem;
+    height: 3.2rem;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--surface-1);
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    &--twijfel {
+      border: 1px dashed #d98f5c;
+    }
+  }
+
+  &__meer {
+    font-size: 0.74rem;
+    color: var(--accent-bright);
+  }
+}
+
+.opschrift {
+  display: grid;
+  gap: 0.1rem;
+  margin: 0;
+  padding: 0.65rem 0.8rem;
+  border-left: 3px solid var(--accent);
+  background: var(--surface-1);
+  font-family: var(--display, serif);
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  line-height: 1.35;
+  color: var(--foam);
+
+  &__regel {
+    display: block;
+  }
+
+  &--klein {
+    margin-top: 0.6rem;
+    padding: 0.1rem 0 0.1rem 0.55rem;
+    border-left-width: 2px;
+    background: transparent;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+  }
+
+  &--groot {
+    margin: 0.4rem 0 0.9rem;
+    font-size: 1rem;
+  }
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.08rem 0.45rem;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  font-size: 0.66rem;
+  font-weight: var(--halfvet);
+  letter-spacing: 0.1em;
+  color: var(--accent-bright);
+
+  &--rmo {
+    background: var(--accent);
+    color: var(--op-accent);
+  }
+
+  &--rma {
+    background: var(--foam);
+    border-color: var(--foam);
+    color: var(--surface-1);
+  }
+}
+
+.chip {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  font-size: 0.64rem;
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--mute);
+
+  &--verzamel {
+    border-color: var(--accent);
+    color: var(--accent-bright);
+  }
+
+  &--twijfel {
+    border-style: dashed;
+    border-color: #d98f5c;
+    color: #e6a97c;
+  }
+}
+
+.concept {
+  font-size: 0.78em;
+  font-style: italic;
+  color: var(--mute);
+}
+
+.prent {
+  &__beeld {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 5;
+    background: var(--surface-1);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: sepia(0.2) brightness(0.95);
+    }
+
+    &--klein {
+      flex: none;
+      width: 3.6rem;
+      aspect-ratio: 1;
+    }
+  }
+
+  &__geen {
+    font-size: 0.68rem;
+    color: var(--mute);
+  }
+
+  &__nr {
+    display: block;
+    margin-top: 0.3rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    overflow-wrap: break-word;
+  }
+
+  &__chips {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    margin-top: 0.3rem;
+  }
+}
+
+// filters, second row
+.filters--tweede {
+  margin-bottom: 1rem;
+  justify-content: space-between;
+}
+
+.filters__groep {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.filter--klein {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.8rem;
+}
+
+.zoek {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  &__veld {
+    width: min(21rem, 100%);
+    padding: 0.45rem 0.8rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--surface-1);
+    font: inherit;
+    font-size: 0.88rem;
+    color: var(--text);
+
+    &:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+  }
+}
+
+.collectie__leeg {
+  padding: 2rem 0;
+  text-align: center;
+  color: var(--mute);
 }
 
 .meer {
@@ -174,7 +480,7 @@
 
 // lightbox
 .lichtbak {
-  width: min(52rem, 94vw);
+  width: min(62rem, 94vw);
   max-height: 92vh;
   padding: 0;
   border: 1px solid var(--accent-deep);
@@ -254,4 +560,148 @@
       margin: 0;
     }
   }
+}
+
+// lightbox: altar with prints
+.lichtbak__onderschrift {
+  margin: 0;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.78rem;
+  color: var(--mute);
+
+  strong {
+    color: var(--text);
+  }
+}
+
+// on a wide screen the picture stays in view while the list of prints scrolls
+.lichtbak__beeld {
+  align-content: start;
+}
+
+@media (min-width: 40.01rem) {
+  .lichtbak__beeld {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    max-height: 92vh;
+
+    img {
+      width: 100%;
+      height: auto;
+      min-height: 0;
+      max-height: calc(92vh - 3.5rem);
+      object-fit: contain;
+    }
+  }
+}
+
+.lichtbak__vertaling {
+  margin: 0 0 0.3rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.lichtbak__subkop {
+  margin: 1.4rem 0 0.6rem;
+  font-size: 0.95rem;
+  color: var(--accent-bright);
+}
+
+.prentlijst {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.prentrij {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface-1);
+
+  &--actief {
+    border-color: var(--accent);
+  }
+
+  &__kies {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    gap: 0.7rem;
+    padding: 0.5rem;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  &__tekst {
+    display: block;
+    min-width: 0;
+  }
+
+  &__toont {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--mute);
+  }
+
+  &__opm {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.72rem;
+    font-style: italic;
+    color: var(--mute);
+  }
+
+  &__acties {
+    display: grid;
+    gap: 0.3rem;
+    padding: 0.5rem 0.5rem 0.5rem 0;
+  }
+}
+
+.mini {
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.7rem;
+  color: var(--text);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--accent);
+  }
+}
+
+.prentrij .prent__chips {
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .chip {
+    white-space: normal;
+  }
+}
+
+.opschrift__lijst {
+  display: contents;
+}
+
+.minis__lijst {
+  display: flex;
+  gap: 0.35rem;
 }
