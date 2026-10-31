@@ -1,5 +1,5 @@
 {
-  "_let_op": "Tekst aangeleverd door het team en licht gecorrigeerd (concept). Feiten nog te controleren: Domburg 1647 (storm, vondst), verblijf van de altaren in de kerk van Domburg, 18e-eeuwse ontdekkingen, Kees Bout (1970) en Ganuenta als 'verdronken stad'.",
+  "_let_op": "Tekst aangeleverd door het team en licht gecorrigeerd (concept). Feiten nog te controleren: Domburg 1647 (storm, vondst), verblijf van de altaren in de kerk van Domburg, 18e-eeuwse ontdekkingen, Kees Bout (1970) en Ganuenta als 'verdronken stad'. Voor de 19e eeuw: de datum van de Domburgse kerkbrand (10 oktober 1848), welke altaren verloren gingen en welke beschadigd raakten, en de rol van L.J.F. Janssen bij de prentenreeks van 1843-1845.",
   "perioden": [
     {
       "period_id": "200",
@@ -32,12 +32,26 @@
       "period_id": "18de",
       "kort": "18de eeuw",
       "datum_van": 1700,
-      "datum_tot": 1899,
+      "datum_tot": 1799,
       "titel": "Verzameld en beschreven",
       "beeld": "assets/tijdlijn/18de.jpg",
       "beeldtekst": "Erosie door wind en zee zorgt ervoor dat de tempel langzaam in de zee verdwijnt.",
       "tekst": [
         "Blootstelling aan de elementen leidt in de 18e eeuw tot nieuwe ontdekkingen, maar zorgt er ook voor dat de tempel bij Domburg langzaam in de zee begint te zinken. Uiteindelijk verdwijnt de tempel in zijn geheel."
+      ]
+    },
+    {
+      "period_id": "19de",
+      "kort": "19de eeuw",
+      "datum_van": 1800,
+      "datum_tot": 1899,
+      "titel": "In Domburg volstrekt zich een nieuwe ramp",
+      "beeld": "assets/tijdlijn/19de.jpg",
+      "beeldtekst": "Door een blikseminslag gaat de collectie bijna verloren.",
+      "tekst": [
+        "Nadat de tempel bij Domburg in zee is verdwenen, volstrekt in de stad een nieuwe ramp. Op 10 oktober 1848 brand de kerk in Dormburg door een blikseminslag bijna volledig af.",
+        "De altaren die daar al tweehonderd jaar veilig stonden, gaan verloren of raken zwaar beschadigd.",
+        "Gelukkig waren ze voor de brand al zorgvuldig gedocumenteerd door wetenschappers en kunstenaars."
       ]
     },
     {
@@ -62,7 +76,7 @@
       "beeld": "assets/tijdlijn/vandaag.jpg",
       "beeldtekst": "1800 jaar geschiedenis wordt opnieuw zichtbaar.",
       "tekst": [
-        "Nehalennia’s altaren werden begraven, verdronken en verbrand. Toch ligt een groot deel nu weer veilig in het Rijksmuseum van Oudheden in Leiden en in de Zeeuwse collecties.",
+        "Nehalennia’s altaren werden begraven, verdronken en verbrand. Toch ligt een groot deel nu weer veilig in het Rijksmuseum van Oudheden in Leiden en in de Zeeuwse collecties. Prenten van de verloren collectie zijn onder andere te vinden in de collectie van het Rijksmuseum. Inscripties zijn gedigitaliseerd in een database.",
         "Kennis die verloren dreigde te gaan is gered door het werk van wetenschappers en kunstenaars vanaf de 17e eeuw tot nu. Dankzij Linked Open Data zijn de schatten weer samengebracht."
       ]
     }
