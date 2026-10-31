@@ -12,7 +12,7 @@
 <link rel="preload" href="assets/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SourceSerif4-Light.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/main.css?v=33">
+<link rel="stylesheet" href="css/main.css?v=35">
 </head>
 <body>
 
@@ -63,7 +63,6 @@
                :id="`stap-paneel-${stap}`"
                :aria-labelledby="`stap-tab-${stap}`"
                tabindex="0">
-        <p class="verhaal__nummer">{{ nummer(stap) }}</p>
         <h3 class="verhaal__titel">{{ huidigeStap.titel }}</h3>
         <p class="verhaal__alinea" v-for="(p, i) in huidigeStap.tekst" :key="i">{{ p }}</p>
       </article>
@@ -451,8 +450,8 @@
   <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten en de altaarbouwer te tonen.</p>
 </noscript>
 
-<script src="js/reveal.js?v=33" defer></script>
-<script type="module" src="js/app.js?v=33"></script>
-<script src="js/altaar.js?v=33" defer></script>
+<script src="js/reveal.js?v=35" defer></script>
+<script type="module" src="js/app.js?v=35"></script>
+<script src="js/altaar.js?v=35" defer></script>
 </body>
 </html>

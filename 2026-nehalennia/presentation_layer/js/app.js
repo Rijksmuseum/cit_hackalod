@@ -275,7 +275,7 @@ async function start() {
 
     // --- gedeeld ---
     nummer(i) {
-      return String(i + 1).padStart(2, '0')
+      return ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'][i] ?? String(i + 1)
     },
   }).mount('#app')
 }
