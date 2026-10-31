@@ -258,7 +258,7 @@
 
           <div class="lichtbak__opschrift" v-if="gekozen.opschrift.length">
             <p class="opschrift opschrift--groot" aria-label="Opschrift"><span class="opschrift__lijst"><span class="opschrift__regel" v-for="regel in gekozen.opschrift">{{ regel }}</span></span></p>
-            <p class="lichtbak__vertaling" v-if="gekozen.vertaling">{{ gekozen.vertaling }}</p>
+            <p class="lichtbak__vertaling" v-if="gekozen.vertaling">{{ gekozen.vertaling }} <span class="concept">Conceptvertaling.</span></p>
           </div>
           <p class="lichtbak__edcs" v-if="gekozen.edcs.length">
             Opschrift in EDCS:
@@ -465,18 +465,21 @@
       <h3>Colofon</h3>
       <p>Gemaakt voor HackaLOD 2026 in Middelburg door team Rijksmuseum Collectie IT:
         <a href="https://www.linkedin.com/in/dignavannielen/" target="_blank" rel="noopener">Digna van Nielen</a>, <a href="https://www.linkedin.com/in/jeroen-de-meester-3ba6b2b/" target="_blank" rel="noopener">Jeroen De Meester</a>, <a href="https://www.linkedin.com/in/fricke-oosten-62a34b4a/" target="_blank" rel="noopener">Fricke Oosten</a> en <a href="https://www.linkedin.com/in/minh-phuong-tran-b71524131/" target="_blank" rel="noopener">Minh Phuong Tran</a>.</p>
+      <p>Gepubliceerd onder CC0 op <a href="https://github.com/Rijksmuseum/cit_hackalod" target="_blank" rel="noopener">https://github.com/Rijksmuseum/cit_hackalod</a>
+      </p>
     </div>
     <div>
       <h3>Bronnen</h3>
-      <ul>
-        <li>Objecten en afbeeldingen: <a href="https://www.rmo.nl/" target="_blank" rel="noopener">Rijksmuseum van Oudheden</a> (CC0), <a href="https://www.rijksmuseum.nl/" target="_blank" rel="noopener">Rijksmuseum Amsterdam</a> (public domain)</li>
-        <li>Inscripties: EDCS en EDH</li>
-        <li>Altaarfoto's in de bouwer: CC0</li>
-      </ul>
+      <p>
+        Objecten en afbeeldingen: <a href="https://www.rmo.nl/" target="_blank" rel="noopener">Rijksmuseum van Oudheden</a> (CC0), <a href="https://www.rijksmuseum.nl/" target="_blank" rel="noopener">Rijksmuseum Amsterdam</a> (public domain)<br/>
+        Inscripties: EDCS en EDH<br/>
+        Afbeeldingen tijdlijn: gebaseerd op A. Hondius-Crone, The temple of Nehalennia of Domburg p12 <a href ="https://resolver.kb.nl/resolve?urn=MMKB53:310209000" target="_blank" rel="noopener">figure 1</a> en bewerkt met AI<br/>       
+        Altaarfoto's in de bouwer: Rijksmuseum van Oudheden, CC0
+      </p>
     </div>
     <div>
       <h3>Techniek</h3>
-      <p>Lettertypen Source Serif 4 en Cinzel (SIL OFL). Interactie met petite-vue en canvas. Geen cookies, geen tracking.</p>
+      <p>Lettertypen Source Serif 4 en Cinzel (SIL OFL). Interactie met petite-vue en canvas. Met hulp van Claude.ai. Geen cookies, geen tracking.</p>
     </div>
     <div>
       <h3>Licentie</h3>
