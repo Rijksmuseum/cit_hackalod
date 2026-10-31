@@ -82,7 +82,7 @@
   overflow: hidden;
   transition: transform 0.35s var(--ease), border-color 0.25s, box-shadow 0.35s var(--ease);
 
-  &--dossier {
+  &--gekoppeld {
     border-color: var(--accent-deep);
   }
 
@@ -496,7 +496,7 @@
 
   &[open] {
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     animation: inschuiven 0.35s var(--ease);
   }
 
@@ -533,7 +533,18 @@
 
 @media (max-width: 40rem) {
   .lichtbak[open] {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lichtbak__beeld {
+    min-height: 0;
+
+    img {
+      width: 100%;
+      height: auto;
+      max-height: 55vh;
+      object-fit: contain;
+    }
   }
 }
 
@@ -704,4 +715,111 @@
 .minis__lijst {
   display: flex;
   gap: 0.35rem;
+}
+
+// objects.json fields
+.kaart__data {
+  margin-top: 0.15rem;
+  font-size: 0.74rem;
+  color: var(--mute);
+}
+
+.kaart__inst b {
+  color: var(--text);
+}
+
+.minis__nr {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  padding: 0.15rem;
+  font-size: 0.5rem;
+  line-height: 1.1;
+  text-align: center;
+  color: var(--mute);
+  word-break: break-all;
+}
+
+.filters--tweede {
+  align-items: center;
+  gap: 0.8rem 1.1rem;
+}
+
+.selectveld,
+.vinkveld {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--mute);
+}
+
+.selectveld select {
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--surface-1);
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.vinkveld input {
+  accent-color: var(--accent);
+}
+
+.chip--knop {
+  margin-right: 0.3rem;
+  background: transparent;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--accent-bright);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--accent);
+  }
+}
+
+.mini--inline {
+  margin-left: 0.4rem;
+  padding: 0.05rem 0.45rem;
+}
+
+.lichtbak__beschrijving {
+  margin: 0.2rem 0 1rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.lichtbak__edcs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 0.9rem;
+  margin: 0.3rem 0 0;
+  font-size: 0.82rem;
+  color: var(--mute);
+
+  a {
+    color: var(--accent-bright);
+    white-space: nowrap;
+  }
+}
+
+// long titles (some print titles run to a full sentence) stay readable but do not blow up the tile;
+// the full title is in the detail window
+.kaart__titel {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+.prentrij__toont {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }

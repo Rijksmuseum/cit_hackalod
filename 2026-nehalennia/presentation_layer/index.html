@@ -12,7 +12,7 @@
 <link rel="preload" href="assets/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SourceSerif4-Light.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/main.css?v=26">
+<link rel="stylesheet" href="css/main.css?v=30">
 </head>
 <body>
 
@@ -102,11 +102,14 @@
       </figure>
       <div class="periode__tekst">
         <div>
-          <p class="periode__nummer">{{ huidigePeriode.kort }}</p>
+          <p class="periode__nummer">{{ huidigePeriode.kort }} <span class="periode__jaren">{{ jarenTekst(huidigePeriode) }}</span></p>
           <h3 class="periode__titel">{{ huidigePeriode.titel }}</h3>
         </div>
         <div>
           <p class="periode__alinea" v-for="(t, i) in huidigePeriode.tekst" :key="i">{{ t }}</p>
+          <button class="knop knop--spook periode__objecten" @click="bekijkPeriode(huidigePeriode.period_id)">
+            Bekijk de {{ huidigePeriode.aantal }} objecten uit deze periode
+          </button>
         </div>
       </div>
     </div>
@@ -117,7 +120,7 @@
   <!-- III. Collectiestukken -->
   <section class="sectie collectie js-reveal" id="collectie" aria-labelledby="collectie-kop">
     <h2 class="sectie__kop" id="collectie-kop"><span class="sectie__nr">III</span>De collectiestukken</h2>
-    <p class="sectie__intro">Altaren, prenten en andere objecten bij elkaar. Heeft het Rijksmuseum prenten van een altaar, dan krijgt dat altaar een brede tegel met die prenten er direct naast. <span class="concept">Concept: koppelingen nog te controleren.</span></p>
+    <p class="sectie__intro">Alle {{ alle.length }} objecten uit het Rijksmuseum van Oudheden en het Rijksmuseum Amsterdam rond Nehalennia. Objecten die via een inscriptie of onderzoek bij elkaar horen, zijn aan elkaar gekoppeld: een altaar en de prenten ervan, bijvoorbeeld. <span class="concept">Concept: koppelingen en vertalingen nog te controleren.</span></p>
 
     <div class="filters" role="group" aria-label="Filter op soort object">
       <button v-for="f in filters" :key="f.sleutel" class="filter"
@@ -135,50 +138,60 @@
                 :aria-pressed="i.sleutel === instelling"
                 @click="kiesInstelling(i.sleutel)">{{ i.label }}</button>
       </div>
+      <label class="selectveld">
+        <span>Periode</span>
+        <select v-model="periodeFilter" @change="zichtbaar = STUKKEN_PER_KEER">
+          <option value="alle">Alle perioden</option>
+          <option v-for="p in perioden" :value="p.period_id">{{ p.kort }} ({{ p.aantal }})</option>
+          <option value="geen">Zonder periode ({{ zonderPeriode }})</option>
+        </select>
+      </label>
+      <label class="vinkveld">
+        <input type="checkbox" v-model="alleenGekoppeld" @change="zichtbaar = STUKKEN_PER_KEER">
+        <span>Alleen gekoppelde objecten</span>
+      </label>
       <label class="zoek">
         <span class="zoek__label">Zoeken</span>
         <input type="search" class="zoek__veld" v-model="zoek" @input="zichtbaar = STUKKEN_PER_KEER"
                placeholder="Naam, opschrift of objectnummer" autocomplete="off">
       </label>
     </div>
-    <p class="collectie__teller" aria-live="polite">{{ getoondeStukken.length }} van {{ gefilterdeStukken.length }} stukken</p>
+    <p class="collectie__teller" aria-live="polite">{{ getoondeStukken.length }} van {{ gefilterdeStukken.length }} objecten</p>
 
     <ul class="stukken">
       <li class="stuk" v-for="o in getoondeStukken" :key="o.id">
-        <article class="kaart" :class="'kaart--' + o.soort">
-          <button class="kaart__open" @click="open(o)" :aria-label="'Details van ' + naam(o)"></button>
+        <article class="kaart" :class="{ 'kaart--gekoppeld': o.relaties.length }">
+          <button class="kaart__open" @click="open(o)" :aria-label="'Details van ' + o.titel"></button>
 
           <span class="kaart__beeld">
-            <img v-if="o.soort === 'dossier' && hoofdprent(o)" :src="middel(hoofdprent(o).beeld)" :alt="hoofdprent(o).toont" loading="lazy" decoding="async" @error="prentFout($event, hoofdprent(o))">
-            <img v-if="o.soort === 'rmo' && !o.mislukt" :src="o.afbeelding" :alt="naam(o)" loading="lazy" decoding="async" @error="beeldMislukt(o, $event)">
-            <span class="stuk__geen" v-if="o.soort === 'dossier' && !hoofdprent(o)">Geen beeld beschikbaar</span>
-            <span class="stuk__geen" v-if="o.soort === 'rmo' && o.mislukt">Afbeelding niet beschikbaar</span>
-            <span class="badge badge--rma kaart__badge" v-if="o.soort === 'dossier'">RMA</span>
-            <span class="badge badge--rmo kaart__badge" v-if="o.soort === 'rmo'">RMO</span>
-            <span class="kaart__aantal" v-if="o.soort === 'dossier'"><b>{{ o.prenten.length }}</b>{{ o.prenten.length === 1 ? 'prent' : 'prenten' }}</span>
+            <img v-if="o.afbeelding && !o.mislukt" :src="o.afbeelding" :alt="o.titel" loading="lazy" decoding="async" @error="beeldFout(o, $event)">
+            <span class="stuk__geen" v-if="!o.afbeelding || o.mislukt">Geen afbeelding beschikbaar</span>
+            <span class="badge kaart__badge" :class="o.rma ? 'badge--rma' : 'badge--rmo'">{{ o.rma ? 'RMA' : 'RMO' }}</span>
+            <span class="kaart__aantal" v-if="o.relaties.length"><b>{{ o.relaties.length }}</b>gekoppeld</span>
           </span>
 
           <span class="kaart__tekst">
             <span class="kaart__kop">
-              <span class="kaart__soort">{{ o.objectnaam || 'object' }}</span>
-              <a class="kaart__id" v-if="o.soort === 'dossier'" :href="o.opschriftLink" target="_blank" rel="noopener" title="Opschrift in EDCS">{{ o.edcsId }} ↗</a>
-              <span class="kaart__id" v-if="o.soort !== 'dossier'">record {{ o.recordnummer }}</span>
+              <span class="kaart__soort">{{ o.soort }}</span>
+              <span class="kaart__id">{{ o.objectnummer }}</span>
             </span>
-            <span class="kaart__titel">{{ naam(o) }}</span>
-            <span class="kaart__plaats" v-if="o.vindplaats">{{ o.vindplaats }}<template v-if="o.datering"> · {{ o.datering }} n.Chr.</template></span>
-            <span class="opschrift opschrift--klein" v-if="o.opschrift" aria-label="Opschrift">
+            <span class="kaart__titel">{{ o.titel }}</span>
+            <span class="kaart__plaats" v-if="o.plaats">{{ o.plaats }}</span>
+            <span class="kaart__data" v-if="o.datering">Datering: {{ o.datering }}</span>
+            <span class="kaart__data" v-if="o.gevonden">Gevonden: {{ o.gevonden }}</span>
+            <span class="opschrift opschrift--klein" v-if="o.opschrift.length" aria-label="Opschrift">
               <span class="opschrift__lijst"><span class="opschrift__regel" v-for="regel in o.opschrift">{{ regel }}</span></span>
             </span>
-            <span class="kaart__inst" v-if="o.soort === 'dossier'">
-              <b>RMA</b> · {{ nummers(o) }}
-              <span class="kaart__twijfel" v-if="twijfel(o)"> · {{ twijfel(o) }} van {{ o.prenten.length }} koppelingen niet zeker</span>
+            <span class="kaart__inst">
+              <span v-if="o.periodes.length"><b>Periode:</b> {{ o.periodeTekst }}</span>
+              <span v-if="!o.periodes.length">Geen periode toegekend</span>
             </span>
-            <span class="kaart__inst" v-if="o.soort !== 'dossier'"><b>RMO</b> · objectnummer volgt</span>
-            <span class="minis" v-if="o.soort === 'dossier' && o.prenten.length > 1" aria-hidden="true">
-              <span class="minis__lijst"><span class="minis__item" v-for="p in o.prenten.slice(0, 4)" :class="{ 'minis__item--twijfel': p.zekerheid !== 'zeker' }">
-                <img v-if="p.beeld" :src="miniatuur(p.beeld)" alt="" loading="lazy" @error="prentFout($event, p)">
+            <span class="minis" v-if="o.relaties.length" aria-hidden="true">
+              <span class="minis__lijst"><span class="minis__item" v-for="r in o.relaties.slice(0, 4)" :class="{ 'minis__item--twijfel': r.score < 1 }" :title="obj(r.id).objectnummer">
+                <img v-if="obj(r.id).miniatuur" :src="obj(r.id).miniatuur" alt="" loading="lazy" @error="miniFout($event)">
+                <span class="minis__nr" v-if="!obj(r.id).miniatuur">{{ obj(r.id).objectnummer }}</span>
               </span></span>
-              <span class="minis__meer" v-if="o.prenten.length > 4">+{{ o.prenten.length - 4 }}</span>
+              <span class="minis__meer" v-if="o.relaties.length > 4">+{{ o.relaties.length - 4 }}</span>
             </span>
           </span>
         </article>
@@ -191,73 +204,64 @@
     <p class="collectie__leeg" v-if="!gefilterdeStukken.length">Niets gevonden. Probeer een ander filter of zoekwoord.</p>
 
     <dialog class="lichtbak" id="lichtbak" aria-label="Details van het object" @click="sluitOpAchtergrond($event)">
-      <!-- altaar met prenten -->
-      <template v-if="gekozen && gekozen.soort === 'dossier'">
+      <template v-if="gekozen">
         <div class="lichtbak__beeld">
-          <img v-if="actievePrent.beeld" :src="grootBeeld(actievePrent.beeld)" :alt="actievePrent.toont" @error="prentFout($event, actievePrent)">
-          <p class="stuk__geen" v-else>Geen beeld beschikbaar</p>
-          <p class="lichtbak__onderschrift"><strong>{{ actievePrent.objectnummer }}</strong> · {{ actievePrent.toont }}</p>
+          <img v-if="gekozen.afbeeldingGroot && !gekozen.mislukt" :src="gekozen.afbeeldingGroot" :alt="gekozen.titel" @error="beeldFout(gekozen, $event)">
+          <p class="stuk__geen" v-if="!gekozen.afbeeldingGroot || gekozen.mislukt">Geen afbeelding beschikbaar</p>
+          <p class="lichtbak__onderschrift"><strong>{{ gekozen.objectnummer }}</strong> · {{ gekozen.bron }}</p>
         </div>
         <div class="lichtbak__tekst">
-          <p class="bovenschrift">Altaar · {{ gekozen.edcsId }}</p>
+          <p class="bovenschrift">
+            <span class="badge" :class="gekozen.rma ? 'badge--rma' : 'badge--rmo'">{{ gekozen.rma ? 'RMA' : 'RMO' }}</span>
+            {{ gekozen.soortTekst }}
+          </p>
           <h3 class="lichtbak__titel">{{ gekozen.titel }}</h3>
           <dl class="object__velden">
-            <div class="object__veld"><dt>Vindplaats</dt><dd>{{ gekozen.vindplaats }}</dd></div>
-            <div class="object__veld" v-if="gekozen.datering"><dt>Datering</dt><dd>{{ gekozen.datering }} n.Chr.</dd></div>
-            <div class="object__veld"><dt>Instelling</dt><dd>Prenten: Rijksmuseum Amsterdam (RMA). Het altaar zelf: nog niet gekoppeld.</dd></div>
+            <div class="object__veld"><dt>Instelling</dt><dd>{{ gekozen.bron }}</dd></div>
+            <div class="object__veld"><dt>Objectnummer</dt><dd>{{ gekozen.objectnummer }} <button class="mini mini--inline" @click="kopieer(gekozen.objectnummer, $event)">Kopieer</button></dd></div>
+            <div class="object__veld" v-if="gekozen.plaatsVolledig"><dt>Vindplaats</dt><dd>{{ gekozen.plaatsVolledig }}</dd></div>
+            <div class="object__veld" v-if="gekozen.datering"><dt>Datering</dt><dd>{{ gekozen.datering }}</dd></div>
+            <div class="object__veld" v-if="gekozen.gevonden"><dt>Gevonden</dt><dd>{{ gekozen.gevonden }}</dd></div>
+            <div class="object__veld"><dt>Periode</dt>
+              <dd>
+                <span v-if="!gekozen.periodes.length">Geen periode toegekend</span>
+                <button class="chip chip--knop" v-for="p in gekozen.periodes" @click="kiesPeriode(p.period_id)" :title="'Toon alle objecten uit deze periode'">{{ p.kort }}</button>
+              </dd>
+            </div>
           </dl>
-          <p class="opschrift opschrift--groot" aria-label="Opschrift"><span class="opschrift__regel" v-for="regel in gekozen.opschrift">{{ regel }}</span></p>
-          <p class="lichtbak__vertaling" v-if="gekozen.vertaling">{{ gekozen.vertaling }} <span class="concept">Conceptvertaling.</span></p>
-          <a class="kaart__link" :href="gekozen.opschriftLink" target="_blank" rel="noopener">Opschrift in EDCS ↗</a>
+          <p class="lichtbak__beschrijving" v-if="gekozen.beschrijving">{{ gekozen.beschrijving }}</p>
 
-          <h4 class="lichtbak__subkop">{{ gekozen.prenten.length }} {{ gekozen.prenten.length === 1 ? 'prent' : 'prenten' }} van dit altaar</h4>
-          <ol class="prentlijst">
-            <li class="prentrij" :class="{ 'prentrij--actief': i === prentIndex }" v-for="(p, i) in gekozen.prenten">
-              <button class="prentrij__kies" @click="prentIndex = i" :aria-pressed="i === prentIndex">
+          <div class="lichtbak__opschrift" v-if="gekozen.opschrift.length">
+            <p class="opschrift opschrift--groot" aria-label="Opschrift"><span class="opschrift__lijst"><span class="opschrift__regel" v-for="regel in gekozen.opschrift">{{ regel }}</span></span></p>
+            <p class="lichtbak__vertaling" v-if="gekozen.vertaling">{{ gekozen.vertaling }} <span class="concept">Conceptvertaling.</span></p>
+          </div>
+          <p class="lichtbak__edcs" v-if="gekozen.edcs.length">
+            Opschrift in EDCS:
+            <a v-for="e in gekozen.edcs" :href="e.url" target="_blank" rel="noopener">{{ e.id }} ↗</a>
+          </p>
+
+          <h4 class="lichtbak__subkop" v-if="gekozen.relaties.length">{{ gekozen.relaties.length }} gekoppelde {{ gekozen.relaties.length === 1 ? 'object' : 'objecten' }}</h4>
+          <ol class="prentlijst" v-if="gekozen.relaties.length">
+            <li class="prentrij" v-for="r in gekozen.relaties">
+              <button class="prentrij__kies" @click="open(obj(r.id), true)">
                 <span class="prent__beeld prent__beeld--klein">
-                  <img v-if="p.beeld" :src="miniatuur(p.beeld)" alt="" loading="lazy" @error="prentFout($event, p)">
+                  <img v-if="obj(r.id).miniatuur" :src="obj(r.id).miniatuur" alt="" loading="lazy" @error="miniFout($event)">
                 </span>
                 <span class="prentrij__tekst">
-                  <span class="prent__nr">{{ p.objectnummer }}</span>
-                  <span class="prentrij__toont">{{ p.toont }}</span>
+                  <span class="prent__nr">{{ obj(r.id).objectnummer }} <span class="badge" :class="obj(r.id).rma ? 'badge--rma' : 'badge--rmo'">{{ obj(r.id).rma ? 'RMA' : 'RMO' }}</span></span>
+                  <span class="prentrij__toont">{{ obj(r.id).soort }}: {{ obj(r.id).titel }}</span>
                   <span class="prent__chips">
-                    <span class="chip chip--verzamel" v-if="p.verzamelprent">verzamelprent<template v-if="p.nr"> · nr. {{ p.nr }} op de prent</template></span>
-                    <span class="chip" v-if="p.kopieVan">kopie van {{ p.kopieVan }}</span>
-                    <span class="chip" :class="{ 'chip--twijfel': p.zekerheid !== 'zeker' }">koppeling: {{ p.zekerheid }}</span>
+                    <span class="chip chip--verzamel" v-for="v in r.vias">via {{ v }}</span>
+                    <span class="chip" :class="{ 'chip--twijfel': r.score < 1 }">overeenkomst {{ Math.round(r.score * 100) }}%</span>
                   </span>
-                  <span class="prentrij__opm" v-if="p.opmerking">{{ p.opmerking }}</span>
                 </span>
               </button>
-              <span class="prentrij__acties">
-                <button class="mini" @click="kopieer(p.objectnummer, $event)">Kopieer nr.</button>
-                <a class="mini" :href="p.link" target="_blank" rel="noopener">RMA ↗</a>
-              </span>
             </li>
           </ol>
-          <div class="lichtbak__acties">
-            <button class="knop knop--spook" @click="sluit()">Sluiten</button>
-          </div>
-        </div>
-      </template>
 
-      <!-- RMO-object -->
-      <template v-else-if="gekozen">
-        <div class="lichtbak__beeld">
-          <img v-if="!gekozen.mislukt" :src="gekozen.afbeelding" :alt="naam(gekozen)" @error="beeldMislukt(gekozen, $event)">
-          <p class="stuk__geen" v-else>Afbeelding niet beschikbaar</p>
-        </div>
-        <div class="lichtbak__tekst">
-          <p class="bovenschrift"><span class="badge badge--rmo">RMO</span> {{ gekozen.objectnaam || 'object' }}</p>
-          <h3 class="lichtbak__titel">{{ naam(gekozen) }}</h3>
-          <dl class="object__velden">
-            <div class="object__veld"><dt>Instelling</dt><dd>Rijksmuseum van Oudheden (RMO)</dd></div>
-            <div class="object__veld"><dt>Record</dt><dd>{{ gekozen.recordnummer }} <span class="concept">(inventarisnummer volgt)</span></dd></div>
-            <div class="object__veld" v-if="gekozen.materiaal"><dt>Materiaal</dt><dd>{{ gekozen.materiaal }}</dd></div>
-            <div class="object__veld" v-if="gekozen.vindplaats"><dt>Vindplaats</dt><dd>{{ gekozen.vindplaats }}</dd></div>
-            <div class="object__veld"><dt>Opschrift en prenten</dt><dd>Nog niet gekoppeld aan dit object.</dd></div>
-          </dl>
           <div class="lichtbak__acties">
             <a class="knop" :href="gekozen.bronLink" target="_blank" rel="noopener">Bekijk bij de bron ↗</a>
+            <button class="knop knop--spook" v-if="vorige.length" @click="terug()">← Terug</button>
             <button class="knop knop--spook" @click="sluit()">Sluiten</button>
           </div>
         </div>
@@ -387,14 +391,6 @@
       <p class="lezen__ref"><a href="https://db.edcs.eu/epigr/epi.php?s_language=en" target="_blank" rel="noopener">Epigraphik-Datenbank Clauss/Slaby (EDCS) ↗</a></p>
       <p class="lezen__noot">Inscripties; de formules en beroepen in de bouwer komen hieruit.</p>
     </li>
-    <li class="lezen__item">
-      <p class="lezen__ref"><a href="https://edh.ub.uni-heidelberg.de/" target="_blank" rel="noopener">Epigraphic Database Heidelberg (EDH) ↗</a></p>
-      <p class="lezen__noot">Inscripties met commentaar en vertaling.</p>
-    </li>
-    <li class="lezen__item">
-      <p class="lezen__ref"><a href="https://www.rmo.nl/" target="_blank" rel="noopener">Rijksmuseum van Oudheden ↗</a></p>
-      <p class="lezen__noot">Bewaarplaats van het grootste deel van de vondst.</p>
-    </li>
   </ul>
 </section>
 
@@ -403,13 +399,13 @@
   <h2 class="sectie__kop" id="databronnen-kop"><span class="sectie__nr">VI</span>Databronnen</h2>
   <ul class="lezen__lijst">
     <li class="lezen__item">
-      <p class="lezen__ref"><a href="https://rmo.cithosting.nl/nde/dataset.jsonld" target="_blank" rel="noopener">Rijksmuseum van Oudheden ↗</a> (dataset, JSON-LD)</p>
+      <p class="lezen__ref">Rijksmuseum van Oudheden <span class="lezen__wat">·</span> <a href="https://rmo.cithosting.nl/nde/dataset.jsonld" target="_blank" rel="noopener">dataset (schema.org, JSON-LD) ↗</a></p>
     </li>
     <li class="lezen__item">
-      <p class="lezen__ref"><a href="https://id.rijksmuseum.nl/260251" target="_blank" rel="noopener">Rijksmuseum Amsterdam ↗</a> (dataset)</p>
+      <p class="lezen__ref">Rijksmuseum Amsterdam <span class="lezen__wat">·</span> <a href="https://id.rijksmuseum.nl/260251" target="_blank" rel="noopener">dataset (Linked Art) ↗</a></p>
     </li>
-      <li class="lezen__item">
-      <p class="lezen__ref">Epigraphic Database Heidelberg (EDH): <a href="https://edh.ub.uni-heidelberg.de/data/download" target="_blank" rel="noopener">datadumps ↗</a> · <a href="https://edh.ub.uni-heidelberg.de/data/api" target="_blank" rel="noopener">API ↗</a></p>
+    <li class="lezen__item">
+      <p class="lezen__ref">Epigraphic Database Heidelberg (EDH) <span class="lezen__wat">·</span> <a href="https://edh.ub.uni-heidelberg.de/data/download" target="_blank" rel="noopener">datadumps ↗</a> <span class="lezen__wat">·</span> <a href="https://edh.ub.uni-heidelberg.de/data/api" target="_blank" rel="noopener">API ↗</a></p>
     </li>
   </ul>
 </section>
@@ -455,8 +451,8 @@
   <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten en de altaarbouwer te tonen.</p>
 </noscript>
 
-<script src="js/reveal.js?v=26" defer></script>
-<script type="module" src="js/app.js?v=26"></script>
-<script src="js/altaar.js?v=26" defer></script>
+<script src="js/reveal.js?v=30" defer></script>
+<script type="module" src="js/app.js?v=30"></script>
+<script src="js/altaar.js?v=30" defer></script>
 </body>
 </html>
