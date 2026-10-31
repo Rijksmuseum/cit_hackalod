@@ -1,30 +1,35 @@
-"""Match inscription transcriptions to the Epigraphik-Datenbank Clauss/Slaby (EDCS).
+"""Add columns to a harvested frame from the two hand-made sources.
+
+* `edcs` matches inscription transcriptions to the Epigraphik-Datenbank Clauss/Slaby
+* `periods` places objects on the timeline in presentation_layer/data/perioden.json
 """
 
 import difflib
+import json
 import re
 import unicodedata
 from pathlib import Path
 
 import pandas as pd
 
-WORKBOOK = Path("source/edcs_nehalennia_analyse.xlsx")
+from const import DATA_DIR, SEP, SOURCE_DIR
+
+WORKBOOK = SOURCE_DIR / "edcs_nehalennia_analyse.xlsx"
 SHEET = "Inscripties"
 ID_COLUMN = "EDCS ID"
 TEXT_COLUMN = "Inscription text"
 TRANSLATION_COLUMN = "Nederlandse vertaling (concept)"
-MONUMENT_URL = "https://edcs.hist.uzh.ch/monument/{}"  
+MONUMENT_URL = "https://edcs.hist.uzh.ch/monument/{}"
 
 MIN_SCORE = 0.75
 EXACT_SCORE = 0.99
 MAX_CANDIDATES = 3
-MIN_LENGTH = 10  
-SEP = " | "
+MIN_LENGTH = 10
 
-_CORRECTION = re.compile(r"<[^<>]*?=([^<>]*)>")  
-_EXPANSION = re.compile(r"\([^()]*\)")  
+_CORRECTION = re.compile(r"<[^<>]*?=([^<>]*)>")
+_EXPANSION = re.compile(r"\([^()]*\)")
 _NONLETTER = re.compile(r"[^a-z]")
-_FOLD = str.maketrans("vj", "ui")  
+_FOLD = str.maketrans("vj", "ui")
 _ID = re.compile(r"EDCS-(\d+)", re.I)
 _URL_ID = re.compile(r"/monument/(\d+)")
 
@@ -58,7 +63,7 @@ def translations(inscriptions):
     }
 
 
-def load(workbook=WORKBOOK):
+def load_inscriptions(workbook=WORKBOOK):
     frame = pd.read_excel(workbook, sheet_name=SHEET)
     frame["normalised"] = frame[TEXT_COLUMN].map(normalise)
     return frame[frame["normalised"].str.len() > 0].reset_index(drop=True)
@@ -78,8 +83,8 @@ def matches(text, inscriptions):
     return [(edcs_id, round(score, 3)) for edcs_id, score in hits]
 
 
-def enrich(frame, column="inscripties", workbook=WORKBOOK, progress=True):
-    inscriptions = load(workbook)
+def edcs(frame, column="inscripties", workbook=WORKBOOK, progress=True):
+    inscriptions = load_inscriptions(workbook)
     found = [matches(text, inscriptions) for text in frame[column]]
     dutch = translations(inscriptions)
 
@@ -88,7 +93,7 @@ def enrich(frame, column="inscripties", workbook=WORKBOOK, progress=True):
 
     frame = frame.copy()
     frame["edcs_id"] = [joined(i for i, _ in hits) for hits in found]
-    frame["inschrijving"] = [joined(monument_url(i) for i, _ in hits) for hits in found]
+    frame["inscripties"] = [joined(monument_url(i) for i, _ in hits) for hits in found]
     frame["edcs_score"] = [joined(f"{s:.3f}" for _, s in hits) for hits in found]
     frame["edcs_vertaling"] = [dutch.get(hits[0][0]) if hits else None for hits in found]
 
@@ -97,4 +102,51 @@ def enrich(frame, column="inscripties", workbook=WORKBOOK, progress=True):
         print(f"{len(sizes)} of {frame[column].notna().sum()} inscriptions matched at"
               f" >={MIN_SCORE:.0%}, {sum(sizes) / len(sizes):.0f} candidates each on average,"
               f" worst {max(sizes)} of {len(inscriptions)}", flush=True)
+    return frame
+
+
+PERIODEN = DATA_DIR / "perioden.json"
+
+DATE_SPANS = [
+    ("datering_datum_start", "datering_datum_eind"),
+    ("gevonden_datum_van", "gevonden_datum_tot"),
+]
+
+
+def load_periods(path=PERIODEN):
+    return json.loads(Path(path).read_text(encoding="utf-8"))["perioden"]
+
+
+def _year(value):
+    try:
+        year = int(value)
+    except (TypeError, ValueError):
+        return None
+    return year or None  # 0 is how both sources write an unknown year
+
+
+def _spans(row):
+    for start, end in DATE_SPANS:
+        van, tot = _year(row.get(start)), _year(row.get(end))
+        if van or tot:
+            yield min(van or tot, tot or van), max(van or tot, tot or van)
+
+
+def period_ids(row, perioden):
+    found = []
+    for period in perioden:
+        if any(van <= period["datum_tot"] and tot >= period["datum_van"]
+               for van, tot in _spans(row)):
+            found.append(period["period_id"])
+    return found
+
+
+def periods(frame, path=PERIODEN, progress=True):
+    perioden = load_periods(path)
+    frame = frame.copy()
+    frame["period_ids"] = [period_ids(row, perioden) for _, row in frame.iterrows()]
+
+    if progress:
+        matched = frame["period_ids"].str.len().gt(0).sum()
+        print(f"{matched} of {len(frame)} objects placed in a period", flush=True)
     return frame

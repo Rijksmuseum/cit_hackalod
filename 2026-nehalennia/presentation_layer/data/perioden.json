@@ -2,7 +2,10 @@
   "_let_op": "Concepttekst. Geschreven op basis van data/verhaal.json; feiten en jaartallen nog door een specialist te controleren.",
   "perioden": [
     {
+      "period_id": "200",
       "kort": "200",
+      "datum_van": 1,
+      "datum_tot": 400,
       "titel": "Een heiligdom aan de kust",
       "beeld": "assets/tijdlijn/200.jpg",
       "beeldtekst": "Rond het jaar 200: het land reikt ver de zee in. Op de kustheuvel staat het heiligdom van Nehalennia.",
@@ -12,7 +15,10 @@
       ]
     },
     {
+      "period_id": "17de",
       "kort": "17de eeuw",
+      "datum_van": 1600,
+      "datum_tot": 1699,
       "titel": "De zee geeft stenen terug",
       "beeld": "assets/tijdlijn/17de.jpg",
       "beeldtekst": "De zee heeft het land al ver teruggenomen; van het heiligdom is bijna niets meer te zien.",
@@ -22,7 +28,10 @@
       ]
     },
     {
+      "period_id": "18de",
       "kort": "18de eeuw",
+      "datum_van": 1700,
+      "datum_tot": 1899,
       "titel": "Verzameld en beschreven",
       "beeld": "assets/tijdlijn/18de.jpg",
       "beeldtekst": "Alleen de rand van het oude land is nog te zien; wat er lag, is verzwolgen.",
@@ -32,7 +41,10 @@
       ]
     },
     {
+      "period_id": "20ste",
       "kort": "20ste eeuw",
+      "datum_van": 1900,
+      "datum_tot": 1999,
       "titel": "1970: de netten komen vol boven",
       "beeld": "assets/tijdlijn/20ste.jpg",
       "beeldtekst": "Op de bodem van de Oosterschelde liggen de brokken van een tweede heiligdom.",
@@ -42,7 +54,10 @@
       ]
     },
     {
+      "period_id": "vandaag",
       "kort": "Vandaag",
+      "datum_van": 2000,
+      "datum_tot": 2100,
       "titel": "Open data en een eigen altaar",
       "beeld": "assets/tijdlijn/vandaag.jpg",
       "beeldtekst": "De zee heeft het land van toen ingenomen, maar de stenen zijn bewaard en worden nu opnieuw gelezen.",

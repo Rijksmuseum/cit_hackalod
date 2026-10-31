@@ -1,9 +1,7 @@
 """Harvest object records from the Rijksmuseum van Oudheden (RMO).
 * the CollectionConnection search API, which returns XML
 * the public object page, scraped for Verwerving (acquisition), which the API omits
-* `edcs`, which matches the transcriptions to the Clauss/Slaby inscription database
-
-Responses are cached , so only the first run hits the servers.
+* `enrich`, which matches the transcriptions to the Clauss/Slaby inscription database
 """
 
 import html
@@ -12,20 +10,20 @@ import time
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from pathlib import Path
 
 import pandas as pd
 
-import edcs
+import enrich
+from const import DELAY, CACHE_DIR, SEP, USER_AGENT, make_cache_dir
 
 API_URL = "http://api.rmo.nl:17521/"
 IMAGE_BASE = "https://www.rmo.nl/imageproxy/"
 DETAIL_URL = "https://www.rmo.nl/collectie/collectiezoeker/collectiestuk/?object={}"
-USER_AGENT = "hackalod-harvester/1.0" 
 
 PAGE_SIZE = 100
-DELAY = 0.5
-SEP = " | " 
+
+YEAR_COLUMNS = ("datering_datum_start", "datering_datum_eind",
+                "gevonden_datum_van", "gevonden_datum_tot")
 
 QUERIES = {
     "nehalennia": None,
@@ -53,7 +51,7 @@ _TAGS = re.compile(r"<[^>]+>")
 
 def _download(url, cache, decode=False):
     if not cache.exists():
-        cache.parent.mkdir(parents=True, exist_ok=True)
+        make_cache_dir(cache.parent)
         request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
         with urllib.request.urlopen(request, timeout=60) as response:
             cache.write_bytes(response.read())
@@ -133,7 +131,7 @@ def found_years(verwerving):
     return (int(year.group()), int(year.group())) if year else (None, None)
 
 
-def fetch(queries=QUERIES, cache_dir=Path("out"), progress=True):
+def fetch(queries=QUERIES, cache_dir=CACHE_DIR, progress=True):
     def log(message):
         if progress:
             print(message, flush=True)
@@ -163,10 +161,11 @@ def fetch(queries=QUERIES, cache_dir=Path("out"), progress=True):
                 f" ~{(len(rows) - n) * elapsed / n:.0f}s to go")
 
     frame = pd.DataFrame(rows)
-    for column in ("gevonden_datum_van", "gevonden_datum_tot"):
-        frame[column] = pd.array(frame[column].tolist(), dtype="Int64")
+    for column in YEAR_COLUMNS:
+        years = pd.to_numeric(frame[column], errors="coerce").astype("Int64")
+        frame[column] = years.mask(years == 0)  # 0 is how the API writes an unknown year
 
-    frame = edcs.enrich(frame, column="inscripties_text", progress=progress)
+    frame = enrich.edcs(frame, column="inscripties_text", progress=progress)
 
     image_frame = pd.DataFrame(images)
     image_frame = image_frame[["pid"] + [c for c in image_frame.columns if c != "pid"]]

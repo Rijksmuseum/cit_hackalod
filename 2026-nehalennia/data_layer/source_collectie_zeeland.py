@@ -8,10 +8,10 @@ import pandas as pd
 from rdflib import BNode, Graph, Literal, Namespace, URIRef
 from rdflib.namespace import RDF, RDFS
 
+from const import SEP, USER_AGENT
+
 DUMP_URL = ("https://zoeken.collectiezeeland.nl/Atlantispubliek/data/set/"
             "Zeeuws+erfgoedplatform+-+Museum+objecten.nq.gz")
-USER_AGENT = "hackalod-harvester/1.0"  # the server 403s urllib's default
-SEP = " | "
 
 CRM = Namespace("http://www.cidoc-crm.org/cidoc-crm/")
 SDO = Namespace("https://schema.org/")
