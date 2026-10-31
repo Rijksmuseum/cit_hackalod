@@ -15,18 +15,20 @@ UIT = sys.argv[2] if len(sys.argv) > 2 else 'data/personen.json'
 # Herkomst van de Nederlandse termen (nog te controleren door een epigraaf):
 #   zouthandelaar, handelaar in vissaus, schipper, handelaar op Brittannië: Varga 2023 (JAHA 14) en de vertalingen in objecten.json
 #   consulaire begunstigde: aangeleverd door het team
-#   sevir Augustalis, veteraan, handelaar op Kent, klei/aardewerk, beheerder (actor): vertalingen in objecten.json (niet onafhankelijk geverifieerd)
-#   decurio: bewust niet vertaald; geen betrouwbare Nederlandse term gevonden
+#   sevir Augustalis, veteraan, handelaar op Kent: vertalingen in objecten.json (niet onafhankelijk geverifieerd)
+#   kapitein (actor navis): Varga 2023 ('ship captain') en Stempel 2004 ('Kapitäne'); de vertaling in objecten.json zegt 'beheerder'
+#   lid van de stadsraad (decurio): isgeschiedenis.nl (Van Wiggen) en Wikipedia 'Decurio'; de lezing D M B = decurio municipii Batavorum is een interpretatie
+#   handelaar in aardewerk (cretarius): Stempel 2004 (Töpferwarenhändler) en Livius (trader in pottery with Britain)
 BEROEPEN = [
     (r'zouthandelaar|negotiator salarius|NEGOTIATOR\s*/?\s*SALARIVS|SALARIVS', 'zouthandelaar (negotiator salarius)'),
     (r'handelaren? in vissaus|allecarius|ALLECARIVS', 'handelaar in vissaus (negotiator allecarius)'),
-    (r'handelaar in klei|cretarius|CRETARIVS', 'handelaar in klei/aardewerk (negotiator cretarius)'),
+    (r'handelaar in klei|cretarius|CRETARIVS', 'handelaar in aardewerk (negotiator cretarius)'),
     (r'handelaar op Brittannië|Britannicianus|BRITANNICIANV|BRITANNICIA\s*/?\s*NI', 'handelaar op Brittannië (negotiator Britannicianus)'),
     (r'Kent|Cantianus|NEGOT CAN', 'handelaar op Kent (negotiator Cantianus)'),
     (r'schipper|nauta', 'schipper (nauta)'),
-    (r'beheerder \(actor\)', 'beheerder (actor)'),
+    (r'beheerder \(actor\)|ACTOR', 'kapitein (actor navis)'),
     (r'beneficiarius consularis|EX BF|BF COS|\bBF\b', 'consulaire begunstigde (beneficiarius consularis)'),
-    (r'decurio', 'decurio'),
+    (r'decurio', 'lid van de stadsraad (decurio)'),
     (r'sevir Augustalis', 'lid van het collegium van de keizercultus (sevir Augustalis)'),
     (r'veteraan|VETERANVS', 'veteraan (veteranus)'),
 ]
@@ -40,7 +42,7 @@ HANDMATIG = {
     'Q() B()': (['Marcus Assonius Aelius'], []),
     'MERCATOR / AMABILIS': (['Mercatorius Amabilis'], []),
     'EXOMNIVS / ISAVRICI': (['Exomnius'], []),
-    'Q . PHOEB . HILARVS / D M B': (['Quintus Phoebius Hilarus'], ['decurio']),
+    'Q . PHOEB . HILARVS / D M B': (['Quintus Phoebius Hilarus'], ['lid van de stadsraad (decurio)']),
     'C CRE / SCENTIVS FLO': (['Gaius Crescentius Florus'], []),
     'C . VITALINIVS': (['Gaius Vitalinius Genialis'], []),
     'MEMNON': (['Memnon'], []),

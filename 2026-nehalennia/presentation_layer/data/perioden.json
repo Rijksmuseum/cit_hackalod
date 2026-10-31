@@ -3,9 +3,9 @@
   "perioden": [
     {
       "period_id": "200",
-      "kort": "200",
-      "datum_van": 1,
-      "datum_tot": 400,
+      "kort": "2de - 3de eeuw",
+      "datum_van": 100,
+      "datum_tot": 299,
       "titel": "Een heiligdom aan de kust",
       "beeld": "assets/tijdlijn/200.jpg",
       "beeldtekst": "Rond 200 n.Chr. staan er aan de Zeeuwse kust twee belangrijke tempels voor de godin Nehalennia.",

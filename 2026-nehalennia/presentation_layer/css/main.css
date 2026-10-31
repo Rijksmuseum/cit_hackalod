@@ -1339,6 +1339,47 @@
   color: var(--surface-0);
 }
 
+.inscr {
+  margin: 0.6rem 0 0;
+  border-top: 1px solid var(--line);
+}
+.inscr__kop {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  padding: 0.6rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.82rem;
+  color: var(--mute);
+}
+.inscr__kop::-webkit-details-marker {
+  display: none;
+}
+.inscr__kop::after {
+  content: "+";
+  margin-left: auto;
+  color: var(--accent-bright);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.inscr[open] > .inscr__kop::after {
+  content: "−";
+}
+.inscr__id {
+  color: var(--accent-bright);
+  white-space: nowrap;
+}
+.inscr__voorbeeld {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+.inscr[open] > .inscr__kop .inscr__voorbeeld {
+  display: none;
+}
+
 .bouwer {
   --bg: var(--surface-0);
   --panel: var(--surface-2);
@@ -2033,6 +2074,25 @@ img {
   animation: zeil 28s linear infinite, deining 3.2s ease-in-out infinite;
 }
 
+.golven--rand {
+  position: absolute;
+  top: -1.3rem;
+  left: 0;
+  right: 0;
+  margin: 0;
+}
+.golven--rand .golven__schip {
+  left: auto;
+  right: -4rem;
+  scale: -1 1;
+  animation: zeil-terug 28s linear infinite, deining 3.2s ease-in-out infinite;
+}
+
+@keyframes zeil-terug {
+  to {
+    right: 105%;
+  }
+}
 @keyframes golf {
   to {
     transform: translateX(-120px);
