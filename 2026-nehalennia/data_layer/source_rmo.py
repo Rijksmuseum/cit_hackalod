@@ -31,7 +31,7 @@ QUERIES = {
 }
 
 FIELDS = {
-    "objectnummer": "recordnumber",
+    "objectnummer": "Inventarisnummer",
     "titel": "Titel",
     "objectnaam": "Objectnaam",
     "periode": "Periode",

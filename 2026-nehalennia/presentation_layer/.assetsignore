@@ -1,0 +1,5 @@
+# Build sources, not part of the published site. Everything listed here stays
+# in the repo but is never uploaded to Cloudflare.
+*.py
+scss/*
+README.md
