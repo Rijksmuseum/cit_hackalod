@@ -15,12 +15,16 @@ from const import DELAY, CACHE_DIR, SOURCE_DIR, USER_AGENT, make_cache_dir
 CSV = SOURCE_DIR / "rma_nehalennia.csv"
 BRON = "Rijksmuseum Amsterdam"
 INSCRIPTION_COLUMN = "inscripties"
+TITLE_COLUMN = "titel"
 YEAR_COLUMNS = ("datering_datum_start", "datering_datum_eind")
 ENCODING = "cp1252"
 DELIMITER = ";"
 
 JSON_LD = "application/ld+json"
 HTML = "text/html"
+
+DESCRIPTION = "http://vocab.getty.edu/aat/300435452" 
+PRIMARY = "http://vocab.getty.edu/aat/300404670"
 
 
 def _download(url, cache):
@@ -45,8 +49,21 @@ def _image_url(record):
     return None
 
 
+def _types(note):
+    return {c.get("id") for c in note.get("classified_as", [])}
+
+
+def _beschrijving(record):
+    notes = [note for note in record.get("referred_to_by", []) if DESCRIPTION in _types(note)]
+    best = next((note for note in notes if PRIMARY in _types(note)), notes[0] if notes else None)
+    return (best.get("content") or None) if best else None
+
+
+def _first_line(value):
+    return value.split("\n")[0].strip() if isinstance(value, str) else value
+
+
 def _monuments(value):
-    """The EDCS links in a cell, which lists one per depicted altar."""
     if not isinstance(value, str):
         return []
     parts = (part.strip() for part in value.replace(DELIMITER, "\n").splitlines())
@@ -70,15 +87,18 @@ def fetch(path=CSV, cache_dir=CACHE_DIR, progress=True):
         frame[column] = pd.to_numeric(frame[column], errors="coerce").astype("Int64")
     log(f"{len(frame)} rows in {path}")
 
-    images = []
+    images, beschrijvingen = [], []
     started = time.time()
     for n, pid in enumerate(frame["pid"], start=1):
         record = _download(pid, cache_dir / "rma" / f"{pid.rsplit('/', 1)[-1]}.json")
         images.append(_image_url(record))
+        beschrijvingen.append(_beschrijving(record))
         if n % 25 == 0 or n == len(frame):
             log(f"  {n:>3}/{len(frame)}  {time.time() - started:.0f}s elapsed")
     frame["image_url"] = images
+    frame["beschrijving"] = beschrijvingen
 
+    frame[TITLE_COLUMN] = [_first_line(value) for value in frame[TITLE_COLUMN]]
     frame[INSCRIPTION_COLUMN] = [_monuments(value) for value in frame[INSCRIPTION_COLUMN]]
 
     # the csv has no transcription of its own, so borrow the one EDCS read off the stone
@@ -91,5 +111,6 @@ def fetch(path=CSV, cache_dir=CACHE_DIR, progress=True):
     frame["inscripties_text"] = [latin.get(edcs_id) for edcs_id in first]
 
     log(f"{frame['image_url'].notna().sum()} image urls,"
+        f" {frame['beschrijving'].notna().sum()} beschrijvingen,"
         f" {frame['edcs_vertaling_concept'].notna().sum()} translations")
     return frame
