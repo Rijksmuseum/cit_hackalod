@@ -258,7 +258,7 @@
 
           <div class="lichtbak__opschrift" v-if="gekozen.opschrift.length">
             <p class="opschrift opschrift--groot" aria-label="Opschrift"><span class="opschrift__lijst"><span class="opschrift__regel" v-for="regel in gekozen.opschrift">{{ regel }}</span></span></p>
-            <p class="lichtbak__vertaling" v-if="gekozen.vertaling">{{ gekozen.vertaling }}</p>
+            <p class="lichtbak__vertaling" v-if="gekozen.vertaling">{{ gekozen.vertaling }} <span class="concept">Conceptvertaling.</span></p>
           </div>
           <p class="lichtbak__edcs" v-if="gekozen.edcs.length">
             Opschrift in EDCS:
@@ -465,6 +465,8 @@
       <h3>Colofon</h3>
       <p>Gemaakt voor HackaLOD 2026 in Middelburg door team Rijksmuseum Collectie IT:
         <a href="https://www.linkedin.com/in/dignavannielen/" target="_blank" rel="noopener">Digna van Nielen</a>, <a href="https://www.linkedin.com/in/jeroen-de-meester-3ba6b2b/" target="_blank" rel="noopener">Jeroen De Meester</a>, <a href="https://www.linkedin.com/in/fricke-oosten-62a34b4a/" target="_blank" rel="noopener">Fricke Oosten</a> en <a href="https://www.linkedin.com/in/minh-phuong-tran-b71524131/" target="_blank" rel="noopener">Minh Phuong Tran</a>.</p>
+      <p>Gepubliceerd onder CC0 op <a href="https://github.com/Rijksmuseum/cit_hackalod" target="_blank" rel="noopener">https://github.com/Rijksmuseum/cit_hackalod</a>
+      </p>
     </div>
     <div>
       <h3>Bronnen</h3>
