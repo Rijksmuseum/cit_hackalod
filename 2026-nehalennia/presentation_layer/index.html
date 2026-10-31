@@ -12,7 +12,7 @@
 <link rel="preload" href="assets/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SourceSerif4-Light.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/main.css?v=39">
+<link rel="stylesheet" href="css/main.css?v=41">
 </head>
 <body>
 
@@ -141,8 +141,8 @@
         <span>Periode</span>
         <select v-model="periodeFilter" @change="zichtbaar = STUKKEN_PER_KEER">
           <option value="alle">Alle perioden</option>
-          <option v-for="p in perioden" :value="p.period_id">{{ p.kort }} ({{ p.aantal }})</option>
-          <option value="geen">Zonder periode ({{ zonderPeriode }})</option>
+          <option v-for="p in periodeOpties" :value="p.period_id">{{ p.kort }} ({{ p.aantal }})</option>
+          <option value="geen">Zonder periode ({{ zonderPeriodeAantal }})</option>
         </select>
       </label>
       <label class="zoek">
@@ -443,8 +443,8 @@
   <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten en de altaarbouwer te tonen.</p>
 </noscript>
 
-<script src="js/reveal.js?v=39" defer></script>
-<script type="module" src="js/app.js?v=39"></script>
-<script src="js/altaar.js?v=39" defer></script>
+<script src="js/reveal.js?v=41" defer></script>
+<script type="module" src="js/app.js?v=41"></script>
+<script src="js/altaar.js?v=41" defer></script>
 </body>
 </html>

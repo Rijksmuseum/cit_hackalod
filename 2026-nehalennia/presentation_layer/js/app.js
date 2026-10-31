@@ -97,7 +97,8 @@ async function start() {
       beschrijving: o.beschrijving?.trim() || null,
       plaats: korteVindplaats(o.vindplaats),
       plaatsVolledig: o.vindplaats ? o.vindplaats.split('|').map((x) => x.trim()).join('  |  ') : null,
-      datering: periodeTekst(o.datering_datum_start, o.datering_datum_eind),
+      // all building fragments are dated to the year 200, whatever the source says
+      datering: groep === 'bouwfragment' ? periodeTekst(200, 200) : periodeTekst(o.datering_datum_start, o.datering_datum_eind),
       gevonden: periodeTekst(o.gevonden_datum_van, o.gevonden_datum_tot),
       afbeelding,
       afbeeldingGroot: o.image_url && rma ? o.image_url.replace(IIIF_MAX, '/full/!1600,1600/0/default.jpg') : o.image_url,
@@ -188,19 +189,29 @@ async function start() {
     vorige: [],
     instellingen: INSTELLINGEN,
     zonderPeriode,
-    get filters() {
-      return SOORTEN.map((f) => ({ sleutel: f.sleutel, label: f.label, aantal: alleStukken.filter(f.hoort).length }))
-    },
-    get gefilterdeStukken() {
-      const hoort = SOORTEN.find((f) => f.sleutel === this.soort).hoort
+    /** Does an object pass all filters, except the one named in `behalve`? Used for the live counts. */
+    past(o, behalve) {
       const q = this.zoek.trim().toLowerCase()
       const pf = this.periodeFilter
-      return alleStukken.filter(
-        (o) => hoort(o)
-          && (this.instelling === 'alle' || (this.instelling === 'RMA') === o.rma)
-          && (pf === 'alle' || (pf === 'geen' ? !o.periodes.length : o.periodes.some((p) => p.period_id === pf)))
-          && (!q || o.zoektekst.includes(q)),
-      )
+      return (behalve === 'soort' || SOORTEN.find((f) => f.sleutel === this.soort).hoort(o))
+        && (behalve === 'instelling' || this.instelling === 'alle' || (this.instelling === 'RMA') === o.rma)
+        && (behalve === 'periode' || pf === 'alle' || (pf === 'geen' ? !o.periodes.length : o.periodes.some((p) => p.period_id === pf)))
+        && (!q || o.zoektekst.includes(q))
+    },
+    // counts follow the other active filters, so "Alles" matches what is listed
+    get filters() {
+      const rest = alleStukken.filter((o) => this.past(o, 'soort'))
+      return SOORTEN.map((f) => ({ sleutel: f.sleutel, label: f.label, aantal: rest.filter(f.hoort).length }))
+    },
+    get periodeOpties() {
+      const rest = alleStukken.filter((o) => this.past(o, 'periode'))
+      return perioden.perioden.map((p) => ({ period_id: p.period_id, kort: p.kort, aantal: rest.filter((o) => o.periodes.includes(p)).length }))
+    },
+    get zonderPeriodeAantal() {
+      return alleStukken.filter((o) => this.past(o, 'periode') && !o.periodes.length).length
+    },
+    get gefilterdeStukken() {
+      return alleStukken.filter((o) => this.past(o))
     },
     get getoondeStukken() {
       return this.gefilterdeStukken.slice(0, this.zichtbaar)
