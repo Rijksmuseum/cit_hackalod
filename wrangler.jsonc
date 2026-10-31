@@ -2,7 +2,7 @@
   // Static-only Worker: no `main`, so Cloudflare serves the asset directory
   // directly. `_headers` inside that directory supplies the noindex rules.
   "name": "nehalennia",
-  "compatibility_date": "2026-10-31",
+  "compatibility_date": "2026-10-30",
   "assets": {
     "directory": "./2026-nehalennia/presentation_layer"
   }
