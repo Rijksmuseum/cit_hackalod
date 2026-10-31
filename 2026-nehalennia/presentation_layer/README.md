@@ -16,7 +16,7 @@ Regenerate (`css/main.css` is generated; edit `scss/`):
 npx sass scss/main.scss css/main.css --no-source-map
 ```
 
-Data: `data/objecten.json` (alle objecten, koppelingen, opschriften, periodes), `data/perioden.json`,
+Data: `data/objecten.json` (alle objecten, koppelingen, opschriften, periodes), `data/perioden.json`, `data/personen.json` (personen en beroepen per inscriptie, afgeleid met `maak_personen.py`; nog te controleren),
 `data/verhaal.json`. De collectie leest `objecten.json` rechtstreeks; er is geen bouwscript meer voor.
 Vervallen: `data/timeline.json`, `data/collectie.json`, `data/rma_beelden.json`, `maak_demo_data.py`, `maak_collectie.py`.
 

@@ -1,5 +1,5 @@
 {
-  "_let_op": "Tekst aangeleverd door het team en licht gecorrigeerd (concept). Feiten nog te controleren: Domburg 1647 (storm, vondst), verblijf van de altaren in de kerk van Domburg, 18e-eeuwse ontdekkingen, Kees Bout (1970) en Ganuenta als 'verdronken stad'. Voor de 19e eeuw: de datum van de Domburgse kerkbrand (10 oktober 1848), welke altaren verloren gingen en welke beschadigd raakten, en de rol van L.J.F. Janssen bij de prentenreeks van 1843-1845.",
+  "_let_op": "Tekst aangeleverd door het team en licht gecorrigeerd (concept). Feiten nog te controleren: Domburg 1647 (storm, vondst), verblijf van de altaren in de kerk van Domburg, 18e-eeuwse ontdekkingen, Kees Bout (1970) en Ganuenta als 'verdronken stad'.",
   "perioden": [
     {
       "period_id": "200",
@@ -32,26 +32,12 @@
       "period_id": "18de",
       "kort": "18de eeuw",
       "datum_van": 1700,
-      "datum_tot": 1799,
+      "datum_tot": 1899,
       "titel": "Verzameld en beschreven",
       "beeld": "assets/tijdlijn/18de.jpg",
       "beeldtekst": "Erosie door wind en zee zorgt ervoor dat de tempel langzaam in de zee verdwijnt.",
       "tekst": [
         "Blootstelling aan de elementen leidt in de 18e eeuw tot nieuwe ontdekkingen, maar zorgt er ook voor dat de tempel bij Domburg langzaam in de zee begint te zinken. Uiteindelijk verdwijnt de tempel in zijn geheel."
-      ]
-    },
-    {
-      "period_id": "19de",
-      "kort": "19de eeuw",
-      "datum_van": 1800,
-      "datum_tot": 1899,
-      "titel": "Gelukkig zijn er de prenten",
-      "beeld": "assets/tijdlijn/18de.jpg",
-      "beeldtekst": "Vlak voor de kerkbrand van 1848 worden de altaren van Domburg nauwkeurig in prent gebracht.",
-      "tekst": [
-        "Tussen 1843 en 1845 worden de Domburgse stenen plaat voor plaat vastgelegd in Romeinse beelden en bouwfragmenten uit Zeeland. Nooit eerder zijn ze zo precies beschreven en getekend.",
-        "Op 10 oktober 1848 brandt de kerk van Domburg af. De altaren die daar al tweehonderd jaar stonden, gaan verloren of raken zwaar beschadigd.",
-        "Wat we nu van die stenen weten, danken we voor een groot deel aan de prenten die net op tijd gemaakt zijn."
       ]
     },
     {
@@ -76,8 +62,8 @@
       "beeld": "assets/tijdlijn/vandaag.jpg",
       "beeldtekst": "1800 jaar geschiedenis wordt opnieuw zichtbaar.",
       "tekst": [
-        "Het grootste deel van de vondst ligt in het Rijksmuseum van Oudheden in Leiden, met stukken in Zeeuwse collecties. Prenten zijn onder andere te vinden in de collectie van het Rijksmuseum. Inscripties zijn gedigitaliseerd in een database. Alle informatie hierover is beschreven als open data.",
-        "Daardoor kun je de handel van bijna tweeduizend jaar geleden nu doorzoeken op beroep, en er zelf een altaar bij bouwen."
+        "Nehalennia’s altaren werden begraven, verdronken en verbrand. Toch ligt een groot deel nu weer veilig in het Rijksmuseum van Oudheden in Leiden en in de Zeeuwse collecties.",
+        "Kennis die verloren dreigde te gaan is gered door het werk van wetenschappers en kunstenaars vanaf de 17e eeuw tot nu. Dankzij Linked Open Data zijn de schatten weer samengebracht."
       ]
     }
   ]

@@ -31,11 +31,15 @@ async function start() {
     })
   }
 
-  const [alleObjecten, verhaal, perioden] = await Promise.all([
+  const [alleObjecten, verhaal, perioden, personenData] = await Promise.all([
     laad('data/objecten.json'),
     laad('data/verhaal.json'),
     laad('data/perioden.json'),
+    laad('data/personen.json'),
   ])
+  // persons and professions per inscription text (derived from the Latin, see maak_personen.py)
+  const perInscriptie = {}
+  for (const p of personenData.inscripties) perInscriptie[p.tekst] = p
 
   // glass negatives are left out entirely: not loaded, not listed, not shown as linked objects
   const isGlasnegatief = (o) => (o.objectnaam || '').split(/\n|;/).some((x) => x.trim().toLowerCase() === 'glasnegatief')
@@ -73,6 +77,7 @@ async function start() {
     return tot < 1000 ? `${van}–${tot} n.Chr.` : `${van}–${tot}`
   }
 
+  const nrPerPid = Object.fromEntries(objecten.map((x) => [x.pid, x.objectnummer]))
   const perPeriode = {}
   for (const p of perioden.perioden) perPeriode[p.period_id] = p
   const perId = {}
@@ -112,6 +117,8 @@ async function start() {
       mislukt: false,
       pogingen: 0,
     }
+    stuk.personen = perInscriptie[o.inscripties_text]?.personen ?? []
+    stuk.beroepen = perInscriptie[o.inscripties_text]?.beroepen ?? []
     stuk.periodeTekst = stuk.periodes.map((p) => p.kort).join(', ')
     // the same linked pid can appear twice (via inscription and via research): merge, keep the best score
     const rel = {}
@@ -121,8 +128,12 @@ async function start() {
       r.score = Math.max(r.score, l.score)
     }
     stuk.relaties = Object.values(rel).sort((a, b) => b.score - a.score || a.id.localeCompare(b.id))
-    stuk.zoektekst = [stuk.titel, stuk.soortTekst, stuk.objectnummer, stuk.plaatsVolledig, stuk.beschrijving,
-      stuk.opschrift.join(' '), stuk.vertaling, stuk.edcs.map((e) => e.id).join(' ')].join(' ').toLowerCase()
+    // the search box looks at everything that is shown about an object
+    stuk.zoektekst = [stuk.titel, stuk.soortTekst, o.objectnaam, stuk.objectnummer, stuk.bron, rma ? 'RMA' : 'RMO',
+      stuk.plaatsVolledig, stuk.datering, stuk.gevonden, stuk.periodes.map((p) => `${p.kort} ${p.titel}`).join(' '),
+      stuk.beschrijving, stuk.opschrift.join(' '), stuk.vertaling, stuk.edcs.map((e) => e.id).join(' '),
+      stuk.personen.join(' '), stuk.beroepen.join(' '), stuk.relaties.map((r) => nrPerPid[r.id]).join(' '),
+    ].filter(Boolean).join(' ').toLowerCase()
     perId[o.pid] = stuk
   }
   // linked objects first, then objects with a picture
@@ -130,6 +141,9 @@ async function start() {
     (a, b) => b.relaties.length - a.relaties.length || Number(!!b.afbeelding) - Number(!!a.afbeelding),
   )
   for (const p of perioden.perioden) p.aantal = alleStukken.filter((o) => o.periodes.includes(p)).length
+  const uniek = (sleutel) => [...new Set(alleStukken.flatMap((o) => o[sleutel]))].sort((a, b) => a.localeCompare(b, 'nl'))
+  const alleNamen = uniek('personen')
+  const alleBeroepen = uniek('beroepen')
   const zonderPeriode = alleStukken.filter((o) => !o.periodes.length).length
 
   const SOORTEN = [
@@ -186,6 +200,11 @@ async function start() {
     zoek: '',
     zichtbaar: STUKKEN_PER_KEER,
     gekozen: null,
+    paneel: null,            // which list of values is open under the filters: 'namen' | 'beroepen'
+    gekozenNamen: [],
+    gekozenBeroepen: [],
+    alleNamen,
+    alleBeroepen,
     uitgeklapt: null,   // pid of the linked object that is open in the list
     instellingen: INSTELLINGEN,
     zonderPeriode,
@@ -196,6 +215,8 @@ async function start() {
       return (behalve === 'soort' || SOORTEN.find((f) => f.sleutel === this.soort).hoort(o))
         && (behalve === 'instelling' || this.instelling === 'alle' || (this.instelling === 'RMA') === o.rma)
         && (behalve === 'periode' || pf === 'alle' || (pf === 'geen' ? !o.periodes.length : o.periodes.some((p) => p.period_id === pf)))
+        && (!this.gekozenNamen.length || o.personen.some((n) => this.gekozenNamen.includes(n)))
+        && (!this.gekozenBeroepen.length || o.beroepen.some((b) => this.gekozenBeroepen.includes(b)))
         && (!q || o.zoektekst.includes(q))
     },
     // counts follow the other active filters, so "Alles" matches what is listed
@@ -224,6 +245,38 @@ async function start() {
       this.instelling = sleutel
       this.zichtbaar = STUKKEN_PER_KEER
     },
+    wisselPaneel(naam) {
+      this.paneel = this.paneel === naam ? null : naam
+    },
+    wisselNaam(n) {
+      const i = this.gekozenNamen.indexOf(n)
+      if (i < 0) this.gekozenNamen.push(n); else this.gekozenNamen.splice(i, 1)
+      this.gekozenBeroepen = []   // either persons or professions, never both
+      this.zichtbaar = STUKKEN_PER_KEER
+    },
+    wisselBeroep(b) {
+      const i = this.gekozenBeroepen.indexOf(b)
+      if (i < 0) this.gekozenBeroepen.push(b); else this.gekozenBeroepen.splice(i, 1)
+      this.gekozenNamen = []   // either persons or professions, never both
+      this.zichtbaar = STUKKEN_PER_KEER
+    },
+    wisNamen() {
+      this.gekozenNamen = []
+      this.zichtbaar = STUKKEN_PER_KEER
+    },
+    wisBeroepen() {
+      this.gekozenBeroepen = []
+      this.zichtbaar = STUKKEN_PER_KEER
+    },
+    /** From the dialog: show everything that mentions this person or profession. */
+    kiesWaarde(soort, waarde) {
+      this.gekozenNamen = soort === 'namen' ? [waarde] : []
+      this.gekozenBeroepen = soort === 'beroepen' ? [waarde] : []
+      this.paneel = soort
+      this.zichtbaar = STUKKEN_PER_KEER
+      this.sluit()
+      document.getElementById('collectie').scrollIntoView({ behavior: 'smooth' })
+    },
     kiesPeriode(id) {
       this.periodeFilter = id
       this.zichtbaar = STUKKEN_PER_KEER
@@ -234,6 +287,8 @@ async function start() {
     bekijkPeriode(id) {
       this.soort = 'alle'
       this.instelling = 'alle'
+      this.gekozenNamen = []
+      this.gekozenBeroepen = []
       this.zoek = ''
       this.kiesPeriode(id)
     },

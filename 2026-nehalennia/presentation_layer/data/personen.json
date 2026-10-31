@@ -1,0 +1,628 @@
+{
+ "_let_op": "Afgeleid uit de inscripties (en waar beschikbaar de vertaling); nog te controleren. Alleen de opdragers worden genoemd, geen vaders, patroons of consuls.",
+ "inscripties": [
+  {
+   "tekst": "Deae / Nehalenniae / Dacinus Liffionis / filius v(otum) s(olvit) l(ibens) m(erito)",
+   "personen": [
+    "Dacinus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALENNIAE / DACINVS LIFFIONIS / FILIVS V.S.L.M",
+   "personen": [
+    "Dacinus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALENNIE / NEVTO LVCANI / FIL / V S L M",
+   "personen": [
+    "Neuto"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "Deae / Nehalenniae / Flettius Gennalonis / pro se et suis / v(otum) s(olvit) l(ibens) m(erito)",
+   "personen": [
+    "Flettius"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "Deae Neha/lenniae / Mintarinius / Primus ex voto / suscepto l(ibens) m(erito)",
+   "personen": [
+    "Mintarinius Primus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "[DEAE] NEHALL[.]N / NIAE . COMMODVS / VFENTIS . FILIVS / V . S . L . M",
+   "personen": [
+    "Commodus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE [NE]HALEN / NIAE [..]XTIVS / MI[---] / NEG [---]",
+   "personen": [],
+   "beroepen": [
+    "handelaar (negotiator)"
+   ]
+  },
+  {
+   "tekst": "Nehalen(n)iae / L(ucius) Iustius Satto et / L(ucius) Secundinius Moderatus / fratres v(otum) s(olverunt) l(ibentes) m(erito)",
+   "personen": [
+    "Lucius Iustius Satto",
+    "Lucius Secundinius Moderatus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALEN[...] / [---] / ACCEPTIV[S] / [.]ASSVS / V . S . L . M",
+   "personen": [
+    "Acceptius Bassus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DE[AE] / NEHAL[....]AE / SEPTIM[...]VS / CASAL[....]I / NEGOTI[AT]OR / V . S . L . M",
+   "personen": [],
+   "beroepen": [
+    "handelaar (negotiator)"
+   ]
+  },
+  {
+   "tekst": "Deae Nehalen/niae C(aius) Exom/nianius Verus / d(onum) d(edit)",
+   "personen": [
+    "Gaius Exomnianius Verus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "[I]N . H . D . D . D[E]AE / [NE]HALENNIAE . C . IVL / [A]PRILIS VETERAN[V]S . EX BF / COS PRO SE ET SV[IS] V . S . L . M / MAXIMO ET AELIA[N]O COS",
+   "personen": [
+    "Gaius Iulius Aprilis"
+   ],
+   "beroepen": [
+    "veteraan (veteranus)",
+    "consulaire begunstigde (beneficiarius consularis)"
+   ]
+  },
+  {
+   "tekst": "Deae / Nehalenniae / Sext(us) Nertoma/rius Nertonus / v(otum) s(olvit) l(ibens) l(aetus) m(erito)",
+   "personen": [
+    "Sextus Nertomarius Nertonus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "Deae / Nehalenniae / Sumaronius / Primanus / v(otum) s(olvit) l(ibens) m(erito)",
+   "personen": [
+    "Sumaronius Primanus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "Deae / Nehal{a}enniae / L(ucius) Festius / Primus v(otum) s(olvit) l(ibens) m(erito)",
+   "personen": [
+    "Lucius Festius Primus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALEN[NIAE] / Q . PHOEBI[VS] / HI[L]ARVS . D . M . B / P[RO .] MERCIBV[S] / BE[NE . C]O[NSER] / VA[NDIS] V . S [. L . M]",
+   "personen": [
+    "Quintus Phoebius Hilarus"
+   ],
+   "beroepen": [
+    "decurio"
+   ]
+  },
+  {
+   "tekst": "DEAE / NEHALE[N] / [N]IAE [...]I / CTORINIVS / PRIMVS / V [---]",
+   "personen": [
+    "Victorinius Primus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "Deae Nehalenni(a)e / Servatus / Theronis filius / v(otum) s(olvit) l(ibens) m(erito)",
+   "personen": [
+    "Servatus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "Deae Nehalenniae / ob merces recte conser/vatas M(arcus) Secund(inius) Silvanus / negoti(a)tor cretarius / Britannicianus / v(otum) s(olvit) l(ibens) m(erito)",
+   "personen": [
+    "Marcus Secundinius Silvanus"
+   ],
+   "beroepen": [
+    "handelaar in klei/aardewerk (negotiator cretarius)",
+    "handelaar op Brittannië (negotiator Britannicianus)"
+   ]
+  },
+  {
+   "tekst": "D(eae) N(ehalenniae) / M(arcus) Assonius Aelius Q() B()",
+   "personen": [
+    "Marcus Assonius Aelius"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE N[E]HALENNIAE / OB MERCES RECTE CONSER / VATAS M SECVND SILVANVS / NEGOTIATOR CRETARIVS / BRITANNICIANV[S] / V S L M",
+   "personen": [
+    "Marcus Secundinius Silvanus"
+   ],
+   "beroepen": [
+    "handelaar in klei/aardewerk (negotiator cretarius)",
+    "handelaar op Brittannië (negotiator Britannicianus)"
+   ]
+  },
+  {
+   "tekst": "DEAE . NEHALEN / NIAE . P . ARISENIV / S MARIVS LIBERT / VS P ARISENI . V[...] / HI . NEGOTIATO / RIS BRITANNICIA / NI OB MERCES / BENE CONS[E]RVA / TA[S ..] L . M",
+   "personen": [
+    "Publius Arisenius Marius"
+   ],
+   "beroepen": [
+    "handelaar op Brittannië (negotiator Britannicianus)"
+   ]
+  },
+  {
+   "tekst": "D[E]A[E] / NEHALEN[....] / AGILIVS . SECV[...] / BF COS PRO SE E[T] / SVIS . V S L M",
+   "personen": [
+    "Agilius Secundus"
+   ],
+   "beroepen": [
+    "consulaire begunstigde (beneficiarius consularis)"
+   ]
+  },
+  {
+   "tekst": "DEA[E] / NEHALENNIAE / [S]ECVRVS / [S]ERGANTI / F[I]LIV[S] / [---] M",
+   "personen": [
+    "Securus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "Deae / Nehalenniae / Ammacius / Hucdionis l(ibens) m(erito)",
+   "personen": [
+    "Ammacius"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "Deae / Nehalen(n)i/ae T(iti) Fla[v]i / Fortunati / lib(ertus) / Primitius / v(otum) s(olvit) l(ibens) m(erito)",
+   "personen": [
+    "Primitius"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE . NEHALENNIAE / SEXTVS . SEERINI / VS . SEVERVS . V . S . L . M",
+   "personen": [
+    "Sextus Severinius Severus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE . NEHA / LAENNIAE . C / SABINIANVS . SA / TVRNINVS . L",
+   "personen": [
+    "Gaius Sabinianus Saturninus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALENNIAE / C . AVRELIVS / VERVS / NEGOTIATOR / BRITANNICIANVS / EX . VOTO . L . M",
+   "personen": [
+    "Gaius Aurelius Verus"
+   ],
+   "beroepen": [
+    "handelaar op Brittannië (negotiator Britannicianus)"
+   ]
+  },
+  {
+   "tekst": "DEAE / NEHALENNIAE / AMMACIVS / HVCDIONIS L M",
+   "personen": [
+    "Ammacius"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALENI / AE . T . FL [AV]I / FORTVNATI / LIB / PRIMITIVS / V S L [M]",
+   "personen": [
+    "Primitius"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE NEHALENNI / AE C SENIVS / SECVNDVS / PR[O SE] ET SVIS / V S L M",
+   "personen": [
+    "Gaius Senius Secundus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "Deae Nehalen(n)i/ae Ianuarinius / Ambacthius pro / se et suis v(otum) r(eddidit) l(ibens) m(erito)",
+   "personen": [
+    "Ianuarinius Ambacthius"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALENNIAE / Q . CASTRICIVS / SENECIANVS / EX . IMP . IPS / L . M",
+   "personen": [
+    "Quintus Castricius Senecianus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALENNIAE / VETTIVS / SECVNDVS / V . S . L . M",
+   "personen": [
+    "Vettius Secundus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALEN / NIAE . M / SIMILINIVS / SERANVS / V . S . L . M",
+   "personen": [
+    "Marcus Similinius Seranus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALEN / NIAE L / AMMINIVS / SATVRNINVS / [V .] S . L . M",
+   "personen": [
+    "Lucius Amminius Saturninus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "[DE]AE NEHALENNIAE / M OTTINIVS FREQVENS / [.....] AVG C C A A V S L M / FVSCIANO II ET SILANO II C[OS]",
+   "personen": [
+    "Marcus Ottinius Frequens"
+   ],
+   "beroepen": [
+    "lid van het collegium van de keizercultus (sevir Augustalis)"
+   ]
+  },
+  {
+   "tekst": "DEAE / NEHALEN / NIAE PRO / NAVIBVS / MERCA / [TORI]VS / AMABILIS / V . S . L . M",
+   "personen": [
+    "Mercatorius Amabilis"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "D[EAE] / NEHALENNIAE / C SABINIANV[S] / SE[X]TVS / V [S] L M",
+   "personen": [
+    "Gaius Sabinianus Sextus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DE[AE] NEHALENNI[AE] / [.] VAL MAR[......] / NEGOT CAN[......] / [.(?)] GESERECAN[......] / [O]B MERCES BENE C[.....]",
+   "personen": [],
+   "beroepen": [
+    "handelaar op Kent (negotiator Cantianus)"
+   ]
+  },
+  {
+   "tekst": "DEAE . NEHALEN / NIAE . C . IVLIVS / PRIMITIVS / PRO . SE . ET . SVIS . V . S . L . M",
+   "personen": [
+    "Gaius Iulius Primitivus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "D . NEHALE / [N]IAE . PRIMAN / VS VRSVL[I] / PRO SE . V . S . L . [M]",
+   "personen": [
+    "Iramanus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALENIAE/ M . EXGINGIVS / AGRICOLA / CIVES . TREVER / NEGOTIATOR / SALARIVS / C . C . A . A . V . S . L . M",
+   "personen": [
+    "Marcus Exgingius Agricola"
+   ],
+   "beroepen": [
+    "zouthandelaar (negotiator salarius)"
+   ]
+  },
+  {
+   "tekst": "IN H D D / DEAE NEH[.....] / ARAM AES[....] / IVNI SILVISERVS / MANCHISSA / EX VOTO P L M",
+   "personen": [
+    "Aestivus Iunius",
+    "Silviserus",
+    "Manchissa"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE . NEHALENNIAE / VEGISONIVS . MAR / TINVS . CIVES / SECVANVS . NAVTA / V . S . L . M",
+   "personen": [
+    "Vegisonius Martinus"
+   ],
+   "beroepen": [
+    "schipper (nauta)"
+   ]
+  },
+  {
+   "tekst": "DEAE / NEHALENNI / Q CORNELIVS / SVPERSTIS / NEGOTIATOR / SALARIVS / V . S . L . M",
+   "personen": [
+    "Quintus Cornelius Superstis"
+   ],
+   "beroepen": [
+    "zouthandelaar (negotiator salarius)"
+   ]
+  },
+  {
+   "tekst": "DEAE NEHA[LE] / NIAE / GIMIO GA / NVENT CONS / V S L M",
+   "personen": [
+    "Gimio"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALENNIAE / QVARTIVS . REDITVS / V . S . L . M",
+   "personen": [
+    "Quartius Reditus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE . NEHALENNIAE / PLACIDVS . VIDVCI FIL / CIVES . VELIOCASSINIVS / NEGOTIAT . BRITANN / V . S . L . M",
+   "personen": [
+    "Placidus"
+   ],
+   "beroepen": [
+    "handelaar op Brittannië (negotiator Britannicianus)"
+   ]
+  },
+  {
+   "tekst": "DE(AE) / NEHALENNIAE . L SECVNDIVS / SIMILIS . ET . T . CARINIVS / GRATVS . NEGOTIATORES / ALLECARI . V . S . L . M / [---]",
+   "personen": [
+    "Lucius Secundius Similis",
+    "Titus Carinius Gratus"
+   ],
+   "beroepen": [
+    "handelaar in vissaus (negotiator allecarius)"
+   ]
+  },
+  {
+   "tekst": "DEAE . NEHALENNIAE / C . IVL . IANVARIVS / AGRIP . NEG . SALARVS L",
+   "personen": [
+    "Gaius Iulius Ianuarius"
+   ],
+   "beroepen": [
+    "zouthandelaar (negotiator salarius)"
+   ]
+  },
+  {
+   "tekst": "NEHALENNIAE / BOSICONIVS / QVARTVS / ACTOR . NAVIS / FLORI . SEVERI / V . S . L . M",
+   "personen": [
+    "Bosiconius Quartus"
+   ],
+   "beroepen": [
+    "beheerder (actor)"
+   ]
+  },
+  {
+   "tekst": "DEAE / NEHALENNIAE / VARAVSIVS / AHVCCONIS / V . S . L . M",
+   "personen": [
+    "Varausius"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / N[E]HALE[N]NIAE / I[---] MARCELLVS / I[---]AT / RAVRACORVM . L . M",
+   "personen": [
+    "Marcellus"
+   ],
+   "beroepen": [
+    "lid van het collegium van de keizercultus (sevir Augustalis)"
+   ]
+  },
+  {
+   "tekst": "DEAE / NEHALENNIAE / VOLVSIVS . DIVS / ET SEROTINVS / L . M",
+   "personen": [
+    "Volusius Dius",
+    "Serotinus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALENNIAE / C . SENTVS CERTVS / ET . C . SENTIVS / PRIMITIVS . EX / IMPERIO . IPSEVS",
+   "personen": [
+    "Gaius Sentius Certus",
+    "Gaius Sentius Primitivus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALAEN / NIAE FREIO / PALVSONIS / POSVIT ARAM / DE SVO V S L M",
+   "personen": [
+    "Freio"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "IMMVNI / PRIMVS . ET / IBLIOMARVS / TREV . V . S . L . M",
+   "personen": [
+    "Primus",
+    "Ibliomarus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "IN . H . D . D / DEAE / NEHALENNIAE / C . CATVLLINIVS / SECCO / NEGOTIATOR / ALLECARIVS / CIVES . TREVER / PRO . SE / ET . SVIS / V . L . P",
+   "personen": [
+    "Gaius Catullinius Secco"
+   ],
+   "beroepen": [
+    "handelaar in vissaus (negotiator allecarius)"
+   ]
+  },
+  {
+   "tekst": "DEAE . NEHALE / NIAE . SACRVM / C . IVL . FLOREN / TINVS . AGRIPP / NEGOTIATOR / SALARIVS . PRO S / E ET . SVI[S . V .] S . L . M",
+   "personen": [
+    "Gaius Iulius Florentinus"
+   ],
+   "beroepen": [
+    "zouthandelaar (negotiator salarius)"
+   ]
+  },
+  {
+   "tekst": "DEAE / NEHALENNIA[E] / TAGAMAS / TAGADIANI / V . S . L . M",
+   "personen": [
+    "Tagamas"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE . NE / HALENNIAE / L . SATTONIVS / VICTORINV[S] / V . S . L . M",
+   "personen": [
+    "Lucius Sattonius Victorinus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALAENNIAE / EXOMNIVS / ISAVRICI FIL / ARAM POSV / IT EX IVSSV",
+   "personen": [
+    "Exomnius"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALENNIAE / T . TERTINIVS / VIRILIS / PRO . SE . ET . SVIS / V . S . L . M",
+   "personen": [
+    "Titus Tertinius Virilis"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALENNIA[E] / T . TAGADVNI / VS ADIVTOR / V . S . L . M",
+   "personen": [
+    "Titus Tagadunius Adiutor"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALAENIAE / ARAM QVAM / Q . PHOEB . HILARVS / D M B OB MERCE[S] / SVAS . BENE . CONS / [ER]VATAS . VOVERA[T] / [P]OSVIT . L . M / ALBINO . ET . MAXI / MO . COS",
+   "personen": [
+    "Quintus Phoebius Hilarus"
+   ],
+   "beroepen": [
+    "decurio"
+   ]
+  },
+  {
+   "tekst": "DEAE NEHALA / ENNIAE . PRO ME / RCIBVS CONSE / RVANDIS C CRE / SCENTIVS FLO / RVS EX IMP EIVS / L M",
+   "personen": [
+    "Gaius Crescentius Florus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "[---] / [..]NIA[E ....] / [..]M[......] / GALLICANV[S] / V S L M",
+   "personen": [
+    "Gallicanus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "IN H D D DEAE / NEHALNNIAE / C . MAXIMINIVS / RVSTICVS ET / T . IVLIVS . TACI / TVS . V . SOLVER / VNT . L . M",
+   "personen": [
+    "Gaius Maximinius Rusticus",
+    "Titus Iulius Tacitus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "[---] / [---] / C . VITALINIVS / GENIALIS / V . S . L . M / V . S . L . M",
+   "personen": [
+    "Gaius Vitalinius Genialis"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHAL[E]NNIAE / MERCATOR / AMABILIS / EX VO[T]O / P . L . L . M",
+   "personen": [
+    "Mercatorius Amabilis"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE NEHALENNIA[E] / Q IVL FRONTINVS / V S L M",
+   "personen": [
+    "Quintus Iulius Frontinus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "[---] / NEHAL[..]NIAE / ANDANHIANIV / SEVERVS / V . S . L . L . M",
+   "personen": [
+    "Andanhianius Severus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "IN H D D / [---] / [---] / MEMNON / [V] S [L] M",
+   "personen": [
+    "Memnon"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "[I]N H D D / [.......]ALENNIAE / [AR]AM L SILVIVS VIC / [TOR E]X VOTO LIBENS L M",
+   "personen": [
+    "Lucius Silvius Victor"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALENNIAE / L CANDIDI / ANIVS / VICTOR / V . S . L . M",
+   "personen": [
+    "Lucius Candidianius Victor"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE N[E]HALE[.....] / [.] A[..]VS G[.]ATVS / NEGO[TIAT ALL]ECAR / PRO SE [ET SVIS] V S L M",
+   "personen": [],
+   "beroepen": [
+    "handelaar in vissaus (negotiator allecarius)"
+   ]
+  },
+  {
+   "tekst": "DEAE / NEHALENNIAE / M . ANTONIVS / FELICIO / V . S . L . M",
+   "personen": [
+    "Marcus Antonius Felicio"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALENIAE / M . IVSTINIVS / ALBVS . L . M",
+   "personen": [
+    "Marcus Iustinius Albus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NECHALENIAE / L PATRVITI[V]S / SATVRNIN[VS] / V . S . L . M",
+   "personen": [
+    "Lucius Patruitius Saturninus"
+   ],
+   "beroepen": []
+  },
+  {
+   "tekst": "DEAE / NEHALENNIAE / L . TERTINIVS / VICTOR / V . S . L. M",
+   "personen": [
+    "Lucius Tertinius Victor"
+   ],
+   "beroepen": []
+  }
+ ]
+}
