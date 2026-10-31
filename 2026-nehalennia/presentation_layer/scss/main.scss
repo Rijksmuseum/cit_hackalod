@@ -166,6 +166,27 @@ img {
   }
 }
 
+// wave sitting exactly on the colour change (top edge of the colofon)
+.golven--rand {
+  position: absolute;
+  top: -1.3rem;
+  left: 0;
+  right: 0;
+  margin: 0;
+
+  // this ship sails the other way: right to left
+  .golven__schip {
+    left: auto;
+    right: -4rem;
+    scale: -1 1;
+    animation: zeil-terug 28s linear infinite, deining 3.2s ease-in-out infinite;
+  }
+}
+
+@keyframes zeil-terug {
+  to { right: 105%; }
+}
+
 @keyframes golf {
   to { transform: translateX(-120px); }
 }

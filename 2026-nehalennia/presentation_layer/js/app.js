@@ -31,15 +31,29 @@ async function start() {
     })
   }
 
-  const [alleObjecten, verhaal, perioden, personenData] = await Promise.all([
+  const [alleObjecten, verhaal, perioden, personenData, inscriptieData] = await Promise.all([
     laad('data/objecten.json'),
     laad('data/verhaal.json'),
     laad('data/perioden.json'),
     laad('data/personen.json'),
+    laad('data/inscripties.json'),
   ])
   // persons and professions per inscription text (derived from the Latin, see maak_personen.py)
   const perInscriptie = {}
   for (const p of personenData.inscripties) perInscriptie[p.tekst] = p
+
+  const edcsBlokken = (o) => {
+    const ids = [...new Set(o.inscripties)].map((url) => ({ url, id: edcsId(url) }))
+    const blokken = ids
+      .map((e) => ({ ...e, data: inscriptieData[e.url.split('/').pop()] }))
+      .filter((e) => e.data)
+      .map((e) => ({ id: e.id, url: e.url, regels: e.data.regels, vertaling: e.data.vertaling }))
+    if (blokken.length) return blokken
+    // no EDCS text known: fall back to the text on the object itself
+    return o.inscripties_text
+      ? [{ id: null, url: null, regels: o.inscripties_text.split(' / ').map((x) => x.trim()), vertaling: o.edcs_vertaling_concept }]
+      : []
+  }
 
   // glass negatives are left out entirely: not loaded, not listed, not shown as linked objects
   const isGlasnegatief = (o) => (o.objectnaam || '').split(/\n|;/).some((x) => x.trim().toLowerCase() === 'glasnegatief')
@@ -111,6 +125,8 @@ async function start() {
       opschrift: o.inscripties_text ? o.inscripties_text.split(' / ').map((x) => x.trim()) : [],
       vertaling: o.edcs_vertaling_concept,
       edcs: [...new Set(o.inscripties)].map((url) => ({ url, id: edcsId(url) })),
+      // one block per EDCS reference: Latin text + translation (data/inscripties.json, keyed by EDCS id)
+      inscripties: edcsBlokken(o),
       periodes: o.period_ids.map((id) => perPeriode[id]).filter(Boolean),
       // RMO pids are handles; RMA pids point to the linked-data record, the public page is behind id.rijksmuseum.nl
       bronLink: rma ? o.pid.replace('https://data.rijksmuseum.nl/', 'https://id.rijksmuseum.nl/') : o.pid,
@@ -131,7 +147,7 @@ async function start() {
     // the search box looks at everything that is shown about an object
     stuk.zoektekst = [stuk.titel, stuk.soortTekst, o.objectnaam, stuk.objectnummer, stuk.bron, rma ? 'RMA' : 'RMO',
       stuk.plaatsVolledig, stuk.datering, stuk.gevonden, stuk.periodes.map((p) => `${p.kort} ${p.titel}`).join(' '),
-      stuk.beschrijving, stuk.opschrift.join(' '), stuk.vertaling, stuk.edcs.map((e) => e.id).join(' '),
+      stuk.beschrijving, stuk.opschrift.join(' '), stuk.vertaling, stuk.inscripties.map((b) => b.regels.join(' ') + ' ' + (b.vertaling || '')).join(' '), stuk.edcs.map((e) => e.id).join(' '),
       stuk.personen.join(' '), stuk.beroepen.join(' '), stuk.relaties.map((r) => nrPerPid[r.id]).join(' '),
     ].filter(Boolean).join(' ').toLowerCase()
     perId[o.pid] = stuk

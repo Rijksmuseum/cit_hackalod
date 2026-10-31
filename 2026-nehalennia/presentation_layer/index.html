@@ -12,7 +12,7 @@
 <link rel="preload" href="assets/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SourceSerif4-Light.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/main.css?v=55">
+<link rel="stylesheet" href="css/main.css?v=67">
 </head>
 <body>
 
@@ -238,7 +238,7 @@
           <dl class="object__velden">
             <div class="object__veld"><dt>Instelling</dt><dd>{{ gekozen.bron }}</dd></div>
             <div class="object__veld"><dt>Objectnummer</dt><dd>{{ gekozen.objectnummer }}</dd></div>
-            <div class="object__veld" v-if="gekozen.plaatsVolledig"><dt>Vindplaats</dt><dd>{{ gekozen.plaatsVolledig }}</dd></div>
+            <div class="object__veld" v-if="gekozen.plaatsVolledig"><dt>Plaats</dt><dd>{{ gekozen.plaatsVolledig }}</dd></div>
             <div class="object__veld" v-if="gekozen.datering"><dt>Datering</dt><dd>{{ gekozen.datering }}</dd></div>
             <div class="object__veld" v-if="gekozen.gevonden"><dt>Gevonden</dt><dd>{{ gekozen.gevonden }}</dd></div>
             <div class="object__veld"><dt>Periode</dt>
@@ -256,14 +256,12 @@
           </dl>
           <p class="lichtbak__beschrijving" v-if="gekozen.beschrijving">{{ gekozen.beschrijving }}</p>
 
-          <div class="lichtbak__opschrift" v-if="gekozen.opschrift.length">
-            <p class="opschrift opschrift--groot" aria-label="Opschrift"><span class="opschrift__lijst"><span class="opschrift__regel" v-for="regel in gekozen.opschrift">{{ regel }}</span></span></p>
-            <p class="lichtbak__vertaling" v-if="gekozen.vertaling">{{ gekozen.vertaling }} <span class="concept">Conceptvertaling.</span></p>
-          </div>
-          <p class="lichtbak__edcs" v-if="gekozen.edcs.length">
-            Opschrift in EDCS:
-            <a v-for="e in gekozen.edcs" :href="e.url" target="_blank" rel="noopener">{{ e.id }} ↗</a>
-          </p>
+          <details class="inscr" v-for="(b, i) in gekozen.inscripties" :open="i === 0">
+            <summary class="inscr__kop"><span class="inscr__id">{{ b.id || 'Opschrift' }}</span><span class="inscr__voorbeeld">{{ b.regels[0] }}</span></summary>
+            <p class="lichtbak__edcs" v-if="b.id"><a :href="b.url" target="_blank" rel="noopener">Bekijk in EDCS ↗</a></p>
+            <p class="opschrift opschrift--groot" aria-label="Opschrift"><span class="opschrift__lijst"><span class="opschrift__regel" v-for="regel in b.regels">{{ regel }}</span></span></p>
+            <p class="lichtbak__vertaling" v-if="b.vertaling">{{ b.vertaling }}</p>
+          </details>
 
           <h4 class="lichtbak__subkop" v-if="gekozen.relaties.length">{{ gekozen.relaties.length }} gekoppelde {{ gekozen.relaties.length === 1 ? 'object' : 'objecten' }}</h4>
           <ol class="prentlijst" v-if="gekozen.relaties.length">
@@ -288,14 +286,18 @@
                 <dl class="object__velden">
                   <div class="object__veld"><dt>Soort</dt><dd>{{ obj(r.id).soortTekst }}</dd></div>
                   <div class="object__veld"><dt>Instelling</dt><dd>{{ obj(r.id).bron }}</dd></div>
-                  <div class="object__veld" v-if="obj(r.id).plaatsVolledig"><dt>Vindplaats</dt><dd>{{ obj(r.id).plaatsVolledig }}</dd></div>
+                  <div class="object__veld" v-if="obj(r.id).plaatsVolledig"><dt>Plaats</dt><dd>{{ obj(r.id).plaatsVolledig }}</dd></div>
                   <div class="object__veld" v-if="obj(r.id).datering"><dt>Datering</dt><dd>{{ obj(r.id).datering }}</dd></div>
                   <div class="object__veld" v-if="obj(r.id).gevonden"><dt>Gevonden</dt><dd>{{ obj(r.id).gevonden }}</dd></div>
                   <div class="object__veld"><dt>Periode</dt><dd>{{ obj(r.id).periodeTekst || 'Geen periode toegekend' }}</dd></div>
                 </dl>
                 <p class="lichtbak__beschrijving" v-if="obj(r.id).beschrijving">{{ obj(r.id).beschrijving }}</p>
-                <p class="opschrift opschrift--klein" v-if="obj(r.id).opschrift.length" aria-label="Opschrift"><span class="opschrift__lijst"><span class="opschrift__regel" v-for="regel in obj(r.id).opschrift">{{ regel }}</span></span></p>
-                <p class="lichtbak__vertaling" v-if="obj(r.id).vertaling">{{ obj(r.id).vertaling }}</p>
+                <details class="inscr" v-for="(b, i) in obj(r.id).inscripties" :open="i === 0">
+                  <summary class="inscr__kop"><span class="inscr__id">{{ b.id || 'Opschrift' }}</span><span class="inscr__voorbeeld">{{ b.regels[0] }}</span></summary>
+                  <p class="lichtbak__edcs" v-if="b.id"><a :href="b.url" target="_blank" rel="noopener">Bekijk in EDCS ↗</a></p>
+                  <p class="opschrift opschrift--klein" aria-label="Opschrift"><span class="opschrift__lijst"><span class="opschrift__regel" v-for="regel in b.regels">{{ regel }}</span></span></p>
+                  <p class="lichtbak__vertaling" v-if="b.vertaling">{{ b.vertaling }}</p>
+                </details>
                 <div class="prentrij__acties">
                   <button class="knop" @click="open(obj(r.id))">Open dit object</button>
                   <a class="knop knop--spook" :href="obj(r.id).bronLink" target="_blank" rel="noopener">Bekijk bij de bron ↗</a>
@@ -456,6 +458,7 @@
 
 <!-- Colofon -->
 <footer class="colofon" id="colofon">
+  <div class="golven golven--rand" aria-hidden="true"><div class="golven__baan"></div><svg class="golven__schip" viewBox="0 0 48 36" fill="none" stroke="#c9a46a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M24 3v22M24 5c8 3 13 10 14 18H24M24 8c-6 3-9 8-10 14h10"/><path d="M6 26h36l-5 7H11z" fill="#26221c"/></svg></div>
   <div class="colofon__motto">
     <p class="titel" aria-label="V S L M">V · S · L · M</p>
     <p>Votum solvit libens merito — de gelofte gaarne en naar verdienste ingelost.</p>
@@ -498,8 +501,8 @@
   <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten en de altaarbouwer te tonen.</p>
 </noscript>
 
-<script src="js/reveal.js?v=55" defer></script>
-<script type="module" src="js/app.js?v=55"></script>
-<script src="js/altaar.js?v=55" defer></script>
+<script src="js/reveal.js?v=67" defer></script>
+<script type="module" src="js/app.js?v=67"></script>
+<script src="js/altaar.js?v=67" defer></script>
 </body>
 </html>
