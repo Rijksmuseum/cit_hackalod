@@ -1,6 +1,6 @@
 """Read the hand-picked Rijksmuseum (RMA) Nehalennia selection and fill in two gaps.
 * image_url, followed from the pid into the Linked Art record at data.rijksmuseum.nl
-* edcs_vertaling, joined on the EDCS monument links already in the inscripties column
+* edcs_vertaling_concept, joined on the EDCS monument links already in the inscripties column
 """
 
 import json
@@ -45,14 +45,12 @@ def _image_url(record):
     return None
 
 
-def _first_monument(value):
-    """The first EDCS link in a cell that may list one per depicted altar."""
+def _monuments(value):
+    """The EDCS links in a cell, which lists one per depicted altar."""
     if not isinstance(value, str):
-        return None
-    for part in value.replace(DELIMITER, "\n").splitlines():
-        if part.strip().startswith("http"):
-            return part.strip()
-    return None
+        return []
+    parts = (part.strip() for part in value.replace(DELIMITER, "\n").splitlines())
+    return [part for part in parts if part.startswith("http")]
 
 
 def load_csv(path=CSV):
@@ -81,11 +79,17 @@ def fetch(path=CSV, cache_dir=CACHE_DIR, progress=True):
             log(f"  {n:>3}/{len(frame)}  {time.time() - started:.0f}s elapsed")
     frame["image_url"] = images
 
-    dutch = enrich.translations(enrich.load_inscriptions())
-    frame["edcs_vertaling"] = [
-        dutch.get(enrich.monument_id(_first_monument(value))) for value in frame[INSCRIPTION_COLUMN]
-    ]
+    frame[INSCRIPTION_COLUMN] = [_monuments(value) for value in frame[INSCRIPTION_COLUMN]]
+
+    # the csv has no transcription of its own, so borrow the one EDCS read off the stone
+    inscriptions = enrich.load_inscriptions()
+    dutch = enrich.by_id(inscriptions, enrich.TRANSLATION_COLUMN)
+    latin = enrich.by_id(inscriptions, enrich.TEXT_COLUMN)
+    first = [enrich.monument_id(urls[0]) if urls else None
+             for urls in frame[INSCRIPTION_COLUMN]]
+    frame["edcs_vertaling_concept"] = [dutch.get(edcs_id) for edcs_id in first]
+    frame["inscripties_text"] = [latin.get(edcs_id) for edcs_id in first]
 
     log(f"{frame['image_url'].notna().sum()} image urls,"
-        f" {frame['edcs_vertaling'].notna().sum()} translations")
+        f" {frame['edcs_vertaling_concept'].notna().sum()} translations")
     return frame

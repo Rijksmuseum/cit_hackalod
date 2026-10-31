@@ -55,11 +55,11 @@ def monument_id(url):
     return f"EDCS-{found.group(1)}" if found else None
 
 
-def translations(inscriptions):
+def by_id(inscriptions, column):
     return {
-        edcs_id: text
-        for edcs_id, text in zip(inscriptions[ID_COLUMN], inscriptions[TRANSLATION_COLUMN])
-        if isinstance(text, str)
+        edcs_id: value
+        for edcs_id, value in zip(inscriptions[ID_COLUMN], inscriptions[column])
+        if isinstance(value, str)
     }
 
 
@@ -86,16 +86,16 @@ def matches(text, inscriptions):
 def edcs(frame, column="inscripties", workbook=WORKBOOK, progress=True):
     inscriptions = load_inscriptions(workbook)
     found = [matches(text, inscriptions) for text in frame[column]]
-    dutch = translations(inscriptions)
+    dutch = by_id(inscriptions, TRANSLATION_COLUMN)
 
     def joined(values):
         return SEP.join(values) or None
 
     frame = frame.copy()
     frame["edcs_id"] = [joined(i for i, _ in hits) for hits in found]
-    frame["inscripties"] = [joined(monument_url(i) for i, _ in hits) for hits in found]
+    frame["inscripties"] = [[monument_url(i) for i, _ in hits] for hits in found]
     frame["edcs_score"] = [joined(f"{s:.3f}" for _, s in hits) for hits in found]
-    frame["edcs_vertaling"] = [dutch.get(hits[0][0]) if hits else None for hits in found]
+    frame["edcs_vertaling_concept"] = [dutch.get(hits[0][0]) if hits else None for hits in found]
 
     if progress:
         sizes = [len(hits) for hits in found if hits]
