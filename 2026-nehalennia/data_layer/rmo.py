@@ -38,7 +38,7 @@ FIELDS = {
     "objectnaam": "Objectnaam",
     "periode": "Periode",
     "datering_datum_start": "datebegin",
-    "datering_datum_end": "dateend",
+    "datering_datum_eind": "dateend",
     "vindplaats": "Vindplaats",
     "inscripties_text": "Inscripties",
     "beschrijving": "Beschrijving",
