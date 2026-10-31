@@ -222,3 +222,6 @@ __marimo__/
 
 # Wrangler local state/cache
 .wrangler/
+
+# Personal scratch repo, has its own git remote
+scratchpad-demo/
