@@ -520,7 +520,7 @@ async function refreshLabel() {
 function printLabel() {
   const land = isLand(), w = land ? '89mm' : '36mm', h = land ? '36mm' : '89mm';
   $('pageStyle').textContent = `@page{size:${w} ${h};margin:0}`;
-  const im = new Image(); im.style.width = w; im.style.height = h;
+  const im = new Image();
   const go = () => setTimeout(() => window.print(), 50);
   im.onload = go; im.src = labelUrl;
   $('printArea').replaceChildren(im);

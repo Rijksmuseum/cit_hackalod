@@ -1231,6 +1231,43 @@
   overflow: hidden;
 }
 
+.vergelijk {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin: 0 0 1.2rem;
+  padding: 0.8rem;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: var(--surface-0);
+}
+.vergelijk__beeld {
+  flex: none;
+  width: 7rem;
+  max-height: 9rem;
+  object-fit: contain;
+  border-radius: 3px;
+  background: var(--surface-1);
+}
+.vergelijk__tekst {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  min-width: 0;
+}
+.vergelijk__kop {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: var(--halfvet);
+  color: var(--accent);
+}
+
+.prentrij__kies--actief {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
 .bouwer {
   --bg: var(--surface-0);
   --panel: var(--surface-2);
@@ -1624,15 +1661,29 @@
     display: none !important;
   }
   body > #printArea {
-    display: block !important;
+    display: grid !important;
+    place-items: center;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #fff;
   }
   html, body {
     background: #fff !important;
     margin: 0 !important;
     padding: 0 !important;
   }
+  /* fills the printable area of whatever paper size is chosen, centred, never cropped */
   #printArea img {
     display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
   }
 }
 .bouwer .stage {

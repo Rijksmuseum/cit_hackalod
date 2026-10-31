@@ -834,3 +834,44 @@
   line-clamp: 2;
   overflow: hidden;
 }
+
+// linked object shown next to the (unchanged) main image
+.vergelijk {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin: 0 0 1.2rem;
+  padding: 0.8rem;
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  background: var(--surface-0);
+
+  &__beeld {
+    flex: none;
+    width: 7rem;
+    max-height: 9rem;
+    object-fit: contain;
+    border-radius: 3px;
+    background: var(--surface-1);
+  }
+
+  &__tekst {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  &__kop {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: var(--halfvet);
+    color: var(--accent);
+  }
+}
+
+.prentrij__kies--actief {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
