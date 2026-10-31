@@ -2,7 +2,10 @@
   "_let_op": "Tekst aangeleverd door het team en licht gecorrigeerd (concept). Feiten nog te controleren: Domburg 1647 (storm, vondst), verblijf van de altaren in de kerk van Domburg, 18e-eeuwse ontdekkingen, Kees Bout (1970) en Ganuenta als 'verdronken stad'.",
   "perioden": [
     {
+      "period_id": "200",
       "kort": "200",
+      "datum_van": 1,
+      "datum_tot": 400,
       "titel": "Een heiligdom aan de kust",
       "beeld": "assets/tijdlijn/200.jpg",
       "beeldtekst": "Rond 200 n.Chr. staan er aan de Zeeuwse kust twee belangrijke tempels voor de godin Nehalennia.",
@@ -13,7 +16,10 @@
       ]
     },
     {
+      "period_id": "17de",
       "kort": "17de eeuw",
+      "datum_van": 1600,
+      "datum_tot": 1699,
       "titel": "De zee geeft stenen terug",
       "beeld": "assets/tijdlijn/17de.jpg",
       "beeldtekst": "In 1647 slaat een storm de duinen bij Domburg weg en wordt een verloren heiligdom opnieuw zichtbaar.",
@@ -23,7 +29,10 @@
       ]
     },
     {
+      "period_id": "18de",
       "kort": "18de eeuw",
+      "datum_van": 1700,
+      "datum_tot": 1899,
       "titel": "Verzameld en beschreven",
       "beeld": "assets/tijdlijn/18de.jpg",
       "beeldtekst": "Erosie door wind en zee zorgt ervoor dat de tempel langzaam in de zee verdwijnt.",
@@ -32,8 +41,11 @@
       ]
     },
     {
+      "period_id": "20ste",
       "kort": "20ste eeuw",
-      "titel": "Een tweede tempel ontdekt",
+      "datum_van": 1900,
+      "datum_tot": 1999,
+      "titel": "1970: de netten komen vol boven",
       "beeld": "assets/tijdlijn/20ste.jpg",
       "beeldtekst": "In 1970 doet een visser op de Oosterschelde een belangrijke vondst.",
       "tekst": [
@@ -42,7 +54,10 @@
       ]
     },
     {
+      "period_id": "vandaag",
       "kort": "Vandaag",
+      "datum_van": 2000,
+      "datum_tot": 2100,
       "titel": "Open data en een eigen altaar",
       "beeld": "assets/tijdlijn/vandaag.jpg",
       "beeldtekst": "1800 jaar geschiedenis wordt opnieuw zichtbaar.",
