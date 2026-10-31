@@ -1,5 +1,5 @@
 {
-  "_let_op": "Concepttekst. Geschreven op basis van data/verhaal.json; feiten en jaartallen nog door een specialist te controleren.",
+  "_let_op": "Tekst aangeleverd door het team en licht gecorrigeerd (concept). Feiten nog te controleren: Domburg 1647 (storm, vondst), verblijf van de altaren in de kerk van Domburg, 18e-eeuwse ontdekkingen, Kees Bout (1970) en Ganuenta als 'verdronken stad'.",
   "perioden": [
     {
       "period_id": "200",
@@ -8,10 +8,11 @@
       "datum_tot": 400,
       "titel": "Een heiligdom aan de kust",
       "beeld": "assets/tijdlijn/200.jpg",
-      "beeldtekst": "Rond het jaar 200: het land reikt ver de zee in. Op de kustheuvel staat het heiligdom van Nehalennia.",
+      "beeldtekst": "Rond 200 n.Chr. staan er aan de Zeeuwse kust twee belangrijke tempels voor de godin Nehalennia.",
       "tekst": [
-        "In de Romeinse tijd is de kust van Zeeland een andere dan nu. Bij Domburg en bij het latere Colijnsplaat staat een heiligdom voor Nehalennia, een inheemse godin die over de overtocht waakt.",
-        "Handelaren en schippers die veilig van of naar Britannia varen, laten er een altaar achter als dank. Op de steen staat wie ze zijn en vaak wat ze verhandelen."
+        "In de Romeinse tijd is de kust van Zeeland een andere dan nu. Zeeland speelt een belangrijke rol in het handelsnetwerk van het noordelijke deel van het Romeinse Rijk.",
+        "Bij Domburg en bij het latere Colijnsplaat staan heiligdommen voor Nehalennia, een inheemse godin die over handelaren en schippers waakt.",
+        "Na een veilige overtocht van of naar Britannia richten ze een altaar op als dank."
       ]
     },
     {
@@ -21,10 +22,10 @@
       "datum_tot": 1699,
       "titel": "De zee geeft stenen terug",
       "beeld": "assets/tijdlijn/17de.jpg",
-      "beeldtekst": "De zee heeft het land al ver teruggenomen; van het heiligdom is bijna niets meer te zien.",
+      "beeldtekst": "In 1647 slaat een storm de duinen bij Domburg weg en wordt een verloren heiligdom opnieuw zichtbaar.",
       "tekst": [
-        "Eeuwen later is het heiligdom bij Domburg verdwenen onder de golven. In 1647 spoelt na een storm een deel van de altaren vrij op het strand.",
-        "Het is de eerste keer dat geleerden de stenen echt te zien krijgen. De namen en de Latijnse opschriften worden overgeschreven en beginnen aan hun tocht door de boeken."
+        "Eeuwen later is het heiligdom bij Domburg onder het zand verdwenen. In 1647 slaat een storm de duinen weg en komen de tempel en de altaren weer tevoorschijn.",
+        "De vondsten worden uitgebreid gedocumenteerd, opgetekend en besproken. De altaren zelf krijgen een nieuw thuis in de kerk van Domburg."
       ]
     },
     {
@@ -34,10 +35,9 @@
       "datum_tot": 1899,
       "titel": "Verzameld en beschreven",
       "beeld": "assets/tijdlijn/18de.jpg",
-      "beeldtekst": "Alleen de rand van het oude land is nog te zien; wat er lag, is verzwolgen.",
+      "beeldtekst": "Erosie door wind en zee zorgt ervoor dat de tempel langzaam in de zee verdwijnt.",
       "tekst": [
-        "De kustlijn schuift verder op. Wat bij laag water boven komt, wordt opgeraapt en beschreven door verzamelaars en oudheidkundigen.",
-        "De stenen worden bewaard in huizen, kerken en kabinetten, ver van de plek waar ze ooit stonden. Het verhaal van de vondsten raakt verspreid."
+        "Blootstelling aan de elementen leidt in de 18e eeuw tot nieuwe ontdekkingen, maar zorgt er ook voor dat de tempel bij Domburg langzaam in de zee begint te zinken. Uiteindelijk verdwijnt de tempel in zijn geheel."
       ]
     },
     {
@@ -47,10 +47,10 @@
       "datum_tot": 1999,
       "titel": "1970: de netten komen vol boven",
       "beeld": "assets/tijdlijn/20ste.jpg",
-      "beeldtekst": "Op de bodem van de Oosterschelde liggen de brokken van een tweede heiligdom.",
+      "beeldtekst": "In 1970 doet een visser op de Oosterschelde een belangrijke vondst.",
       "tekst": [
-        "Vissers op de Oosterschelde bij Colijnsplaat halen in 1970 brokken steen op in hun netten. Het blijkt een tweede heiligdom, nog grotendeels intact op de bodem.",
-        "In de jaren erna worden honderden fragmenten geborgen. Het is de grootste vondst van Romeinse altaren in Nederland."
+        "In de buurt van Colijnsplaat vist schipper Kees Bout in 1970 enkele brokstukken op. Het blijken de resten van een tweede heiligdom bij de verdronken stad Ganuenta.",
+        "Door de vondst van de tweede tempel groeit onze kennis over Nehalennia en het leven in het noorden van het Romeinse Rijk immens."
       ]
     },
     {
@@ -60,7 +60,7 @@
       "datum_tot": 2100,
       "titel": "Open data en een eigen altaar",
       "beeld": "assets/tijdlijn/vandaag.jpg",
-      "beeldtekst": "De zee heeft het land van toen ingenomen, maar de stenen zijn bewaard en worden nu opnieuw gelezen.",
+      "beeldtekst": "1800 jaar geschiedenis wordt opnieuw zichtbaar.",
       "tekst": [
         "Het grootste deel van de vondst ligt in het Rijksmuseum van Oudheden in Leiden, met stukken in Zeeuwse collecties. Prenten zijn onder andere te vinden in de collectie van het Rijksmuseum. Inscripties zijn gedigitaliseerd in een database. Alle informatie hierover is beschreven als open data.",
         "Daardoor kun je de handel van bijna tweeduizend jaar geleden nu doorzoeken op beroep, en er zelf een altaar bij bouwen."

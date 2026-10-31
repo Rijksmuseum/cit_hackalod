@@ -355,6 +355,10 @@ function hit(p) {
   }
   return -1;
 }
+// Op touch-schermen mag de pagina verder scrollen over het altaar; alleen een gebaar dat op een figuur begint, sleept die figuur.
+canvas.addEventListener('touchstart', (ev) => {
+  if (ev.touches.length === 1 && hit(toOrig(ev.touches[0])) >= 0) ev.preventDefault();
+}, { passive: false });
 canvas.addEventListener('pointerdown', (ev) => {
   const p = toOrig(ev), i = hit(p);
   if (i < 0) { select(-1); paint(); return; }
