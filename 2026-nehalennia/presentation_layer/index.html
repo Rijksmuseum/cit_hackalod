@@ -119,7 +119,8 @@
   <!-- III. Collectiestukken -->
   <section class="sectie collectie js-reveal" id="collectie" aria-labelledby="collectie-kop">
     <h2 class="sectie__kop" id="collectie-kop"><span class="sectie__nr">III</span>De collectiestukken</h2>
-    <p class="sectie__intro">Alle {{ alle.length }} objecten uit het Rijksmuseum van Oudheden en het Rijksmuseum Amsterdam rond Nehalennia. Objecten die via een inscriptie of onderzoek bij elkaar horen, zijn aan elkaar gekoppeld: een altaar en de prenten ervan, bijvoorbeeld.</p>
+    <p class="sectie__intro">De collectie bevat {{ alle.length }} objecten uit het Rijksmuseum van Oudheden en het Rijksmuseum Amsterdam rondom Nehalennia. Altaren en prenten zijn aan elkaar gekoppeld op basis van de inscripties op de altaren. <span class="concept">Concept: koppelingen en vertalingen zijn nog niet allemaal gecontroleerd.</span></p>
+    <p class="sectie__intro">Hiervoor hebben we dankbaar gebruik gemaakt van het werk van onderzoekers die altaar fragmenten bij elkaar hebben gepuzzeld. De koppelingen zijn gemaakt met “fuzzy matching”. In de objectbeschrijving zie je hoe nauwkeurig de match is.</p>
 
     <div class="filters" role="group" aria-label="Filter op soort object">
       <button v-for="f in filters" :key="f.sleutel" class="filter"
