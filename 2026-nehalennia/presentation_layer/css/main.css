@@ -2055,6 +2055,14 @@ img {
   height: 2.6rem;
   margin-top: clamp(2.5rem, 6vw, 4.5rem);
   overflow: hidden;
+}
+@supports (overflow: clip) {
+  .golven {
+    overflow-x: clip;
+    overflow-y: visible;
+  }
+}
+.golven {
   color: var(--accent-deep);
   opacity: 0.8;
 }
@@ -2072,6 +2080,13 @@ img {
   left: -4rem;
   width: 3rem;
   animation: zeil 28s linear infinite, deining 3.2s ease-in-out infinite;
+  cursor: pointer;
+}
+.golven__schip.is-springen {
+  animation: zeil 28s linear infinite, deining 3.2s ease-in-out infinite, spring 0.9s ease-out;
+}
+.golven__schip.is-duiken {
+  animation: zeil 28s linear infinite, deining 3.2s ease-in-out infinite, duik 1.8s ease-in-out;
 }
 
 .golven--rand {
@@ -2080,6 +2095,7 @@ img {
   left: 0;
   right: 0;
   margin: 0;
+  z-index: 2;
 }
 .golven--rand .golven__schip {
   left: auto;
@@ -2087,7 +2103,39 @@ img {
   scale: -1 1;
   animation: zeil-terug 28s linear infinite, deining 3.2s ease-in-out infinite;
 }
+.golven--rand .golven__schip.is-springen {
+  animation: zeil-terug 28s linear infinite, deining 3.2s ease-in-out infinite, spring 0.9s ease-out;
+}
+.golven--rand .golven__schip.is-duiken {
+  animation: zeil-terug 28s linear infinite, deining 3.2s ease-in-out infinite, duik 1.8s ease-in-out;
+}
 
+@keyframes spring {
+  0%, 100% {
+    transform: translateY(0) rotate(0);
+  }
+  45% {
+    transform: translateY(-2rem) rotate(-14deg);
+    animation-timing-function: ease-in;
+  }
+  75% {
+    transform: translateY(0) rotate(6deg);
+  }
+}
+@keyframes duik {
+  0% {
+    transform: translateY(0);
+    clip-path: inset(0 0 0 0);
+  }
+  35%, 60% {
+    transform: translateY(2.3rem);
+    clip-path: inset(0 0 3rem 0);
+  }
+  100% {
+    transform: translateY(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
 @keyframes zeil-terug {
   to {
     right: 105%;

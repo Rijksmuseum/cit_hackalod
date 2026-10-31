@@ -5,8 +5,11 @@ async function start() {
   const MAX_POGINGEN = 2
 
 
+  // data files get the same ?v= as this script, so a browser never serves an old copy after an update
+  const versie = new URL(import.meta.url).searchParams.get('v') || Date.now()
+
   async function laad(pad) {
-    const res = await fetch(pad)
+    const res = await fetch(`${pad}?v=${versie}`)
     if (!res.ok) throw new Error(`${pad} gaf ${res.status}`)
     return res.json()
   }
@@ -365,6 +368,49 @@ async function start() {
     },
   }).mount('#app')
 }
+
+// Gimmick: click a ship on the waves and it jumps or dives (independent of petite-vue).
+// Uses the Web Animations API, so it does not depend on any CSS keyframes. The click is
+// matched on the ship's position rather than on the event target, so nothing lying over
+// the ship (e.g. the colofon text) can swallow it.
+document.addEventListener('click', (event) => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  const marge = 12
+  const schip = [...document.querySelectorAll('.golven__schip')].find((s) => {
+    const r = s.getBoundingClientRect()
+    return event.clientX >= r.left - marge && event.clientX <= r.right + marge &&
+           event.clientY >= r.top - marge && event.clientY <= r.bottom + marge
+  })
+  if (!schip || schip.dataset.bezig) return
+  const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16
+  // alternate: first click jumps, the next one dives, and so on
+  const duik = schip.dataset.volgende === 'duik'
+  schip.dataset.volgende = duik ? 'spring' : 'duik'
+  schip.dataset.bezig = '1'
+  // let the ship rise above the wave strip (the strip clips sideways only)
+  schip.parentElement.style.overflowX = 'clip'
+  schip.parentElement.style.overflowY = 'visible'
+  const animatie = duik
+    ? schip.animate(
+        [
+          { transform: 'translateY(0)', clipPath: 'inset(0 0 0 0)' },
+          { transform: `translateY(${2.3 * rem}px)`, clipPath: `inset(0 0 ${3 * rem}px 0)`, offset: 0.35 },
+          { transform: `translateY(${2.3 * rem}px)`, clipPath: `inset(0 0 ${3 * rem}px 0)`, offset: 0.6 },
+          { transform: 'translateY(0)', clipPath: 'inset(0 0 0 0)' },
+        ],
+        { duration: 1800, easing: 'ease-in-out' },
+      )
+    : schip.animate(
+        [
+          { transform: 'translateY(0) rotate(0deg)' },
+          { transform: `translateY(${-2 * rem}px) rotate(-14deg)`, offset: 0.45, easing: 'ease-in' },
+          { transform: 'translateY(0) rotate(6deg)', offset: 0.75 },
+          { transform: 'translateY(0) rotate(0deg)' },
+        ],
+        { duration: 900, easing: 'ease-out' },
+      )
+  animatie.onfinish = animatie.oncancel = () => { delete schip.dataset.bezig }
+})
 
 // If petite-vue or a data file cannot be loaded (offline, or the page was opened
 // as a file:// URL, where fetch() is blocked), say so instead of showing nothing.

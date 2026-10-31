@@ -12,7 +12,7 @@
 <link rel="preload" href="assets/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/SourceSerif4-Light.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/main.css?v=67">
+<link rel="stylesheet" href="css/main.css?v=71">
 </head>
 <body>
 
@@ -28,7 +28,7 @@
 
 
 
-<div class="golven" aria-hidden="true"><div class="golven__baan"></div><svg class="golven__schip" viewBox="0 0 48 36" fill="none" stroke="#c9a46a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M24 3v22M24 5c8 3 13 10 14 18H24M24 8c-6 3-9 8-10 14h10"/><path d="M6 26h36l-5 7H11z" fill="#26221c"/></svg></div>
+<div class="golven" aria-hidden="true"><div class="golven__baan"></div><svg class="golven__schip" viewBox="0 0 48 36" fill="none" stroke="#c9a46a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><rect width="48" height="36" fill="transparent" stroke="none"/><path d="M24 3v22M24 5c8 3 13 10 14 18H24M24 8c-6 3-9 8-10 14h10"/><path d="M6 26h36l-5 7H11z" fill="#26221c"/></svg></div>
 
 <p class="laadfout" id="laadfout" hidden>
   Het verhaal, de tijdlijn en de collectiestukken konden niet worden geladen. Open de pagina via een webserver
@@ -119,8 +119,7 @@
   <!-- III. Collectiestukken -->
   <section class="sectie collectie js-reveal" id="collectie" aria-labelledby="collectie-kop">
     <h2 class="sectie__kop" id="collectie-kop"><span class="sectie__nr">III</span>De collectiestukken</h2>
-    <p class="sectie__intro">De collectie bevat {{ alle.length }} objecten uit het Rijksmuseum van Oudheden en het Rijksmuseum Amsterdam rondom Nehalennia. Altaren en prenten zijn aan elkaar gekoppeld op basis van de inscripties op de altaren. <span class="concept">Concept: koppelingen en vertalingen zijn nog niet allemaal gecontroleerd.</span></p>
-    <p class="sectie__intro">Hiervoor hebben we dankbaar gebruik gemaakt van het werk van onderzoekers die altaar fragmenten bij elkaar hebben gepuzzeld. De koppelingen zijn gemaakt met “fuzzy matching”. In de objectbeschrijving zie je hoe nauwkeurig de match is.</p>
+    <p class="sectie__intro">Alle {{ alle.length }} objecten uit het Rijksmuseum van Oudheden en het Rijksmuseum Amsterdam rond Nehalennia. Objecten die via een inscriptie of onderzoek bij elkaar horen, zijn aan elkaar gekoppeld: een altaar en de prenten ervan, bijvoorbeeld.</p>
 
     <div class="filters" role="group" aria-label="Filter op soort object">
       <button v-for="f in filters" :key="f.sleutel" class="filter"
@@ -458,7 +457,7 @@
 
 <!-- Colofon -->
 <footer class="colofon" id="colofon">
-  <div class="golven golven--rand" aria-hidden="true"><div class="golven__baan"></div><svg class="golven__schip" viewBox="0 0 48 36" fill="none" stroke="#c9a46a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><path d="M24 3v22M24 5c8 3 13 10 14 18H24M24 8c-6 3-9 8-10 14h10"/><path d="M6 26h36l-5 7H11z" fill="#26221c"/></svg></div>
+  <div class="golven golven--rand" aria-hidden="true"><div class="golven__baan"></div><svg class="golven__schip" viewBox="0 0 48 36" fill="none" stroke="#c9a46a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"><rect width="48" height="36" fill="transparent" stroke="none"/><path d="M24 3v22M24 5c8 3 13 10 14 18H24M24 8c-6 3-9 8-10 14h10"/><path d="M6 26h36l-5 7H11z" fill="#26221c"/></svg></div>
   <div class="colofon__motto">
     <p class="titel" aria-label="V S L M">V · S · L · M</p>
     <p>Votum solvit libens merito — de gelofte gaarne en naar verdienste ingelost.</p>
@@ -468,21 +467,18 @@
       <h3>Colofon</h3>
       <p>Gemaakt voor HackaLOD 2026 in Middelburg door team Rijksmuseum Collectie IT:
         <a href="https://www.linkedin.com/in/dignavannielen/" target="_blank" rel="noopener">Digna van Nielen</a>, <a href="https://www.linkedin.com/in/jeroen-de-meester-3ba6b2b/" target="_blank" rel="noopener">Jeroen De Meester</a>, <a href="https://www.linkedin.com/in/fricke-oosten-62a34b4a/" target="_blank" rel="noopener">Fricke Oosten</a> en <a href="https://www.linkedin.com/in/minh-phuong-tran-b71524131/" target="_blank" rel="noopener">Minh Phuong Tran</a>.</p>
-      <p>Gepubliceerd onder CC0 op <a href="https://github.com/Rijksmuseum/cit_hackalod" target="_blank" rel="noopener">https://github.com/Rijksmuseum/cit_hackalod</a>
-      </p>
     </div>
     <div>
       <h3>Bronnen</h3>
-      <p>
-        Objecten en afbeeldingen: <a href="https://www.rmo.nl/" target="_blank" rel="noopener">Rijksmuseum van Oudheden</a> (CC0), <a href="https://www.rijksmuseum.nl/" target="_blank" rel="noopener">Rijksmuseum Amsterdam</a> (public domain)<br/>
-        Inscripties: EDCS en EDH<br/>
-        Afbeeldingen tijdlijn: gebaseerd op A. Hondius-Crone, The temple of Nehalennia of Domburg p12 <a href ="https://resolver.kb.nl/resolve?urn=MMKB53:310209000" target="_blank" rel="noopener">figure 1</a> en bewerkt met AI<br/>       
-        Altaarfoto's in de bouwer: Rijksmuseum van Oudheden, CC0
-      </p>
+      <ul>
+        <li>Objecten en afbeeldingen: <a href="https://www.rmo.nl/" target="_blank" rel="noopener">Rijksmuseum van Oudheden</a> (CC0), <a href="https://www.rijksmuseum.nl/" target="_blank" rel="noopener">Rijksmuseum Amsterdam</a> (public domain)</li>
+        <li>Inscripties: EDCS en EDH</li>
+        <li>Altaarfoto's in de bouwer: CC0</li>
+      </ul>
     </div>
     <div>
       <h3>Techniek</h3>
-      <p>Lettertypen Source Serif 4 en Cinzel (SIL OFL). Interactie met petite-vue en canvas. Met hulp van Claude.ai. Geen cookies, geen tracking.</p>
+      <p>Lettertypen Source Serif 4 en Cinzel (SIL OFL). Interactie met petite-vue en canvas. Geen cookies, geen tracking.</p>
     </div>
     <div>
       <h3>Licentie</h3>
@@ -501,8 +497,8 @@
   <p style="padding:2rem">Deze pagina heeft JavaScript nodig om de objecten en de altaarbouwer te tonen.</p>
 </noscript>
 
-<script src="js/reveal.js?v=67" defer></script>
-<script type="module" src="js/app.js?v=67"></script>
-<script src="js/altaar.js?v=67" defer></script>
+<script src="js/reveal.js?v=71" defer></script>
+<script type="module" src="js/app.js?v=71"></script>
+<script src="js/altaar.js?v=71" defer></script>
 </body>
 </html>
